@@ -1,0 +1,54 @@
+<template data-should-teleport="#left-drawer-slot">
+  <div
+    x-show="$store.modals.leftDrawer.contents === '{{ sidebar_drawer_id }}'"
+    class="sidebar-nav text-scheme-text text-menu-drawer"
+  >
+    <div class="relative flex items-center justify-between mt-4 mb-2">
+      <h2 class="sr-only" tabindex="-1">
+        {{ link.title }}
+      </h2>
+      <button @click.prevent="$store.modals.close('{{ sidebar_drawer_id }}')" class="block ml-auto top-0">
+        <span class="sr-only">{{ 'general.accessibility.close_modal' | t }}</span>
+        <span class="inline-block w-4 h-4">{% render 'icon-close' %}</span>
+      </button>
+    </div>
+    <ul>
+      {%- for childlink in link.links -%}
+        <li>
+          <a
+            href="{{ childlink.url }}"
+            class="break-words hover:underline {% if childlink.current %} underline{% endif %}"
+            {% if childlink.current %}
+              aria-current="page"
+            {% endif %}
+          >
+            {{ childlink.title | escape }}
+          </a>
+          {%- if childlink.links != blank -%}
+            {%- liquid
+              assign padding = 'pl-5'
+              if settings.desktop_menu_drawer_heading_scale > 2
+                assign padding = 'pl-5 lg:pl-10'
+              endif
+            -%}
+            <ul role="list" class="{{ padding }}">
+              {%- for grandchildlink in childlink.links -%}
+                <li>
+                  <a
+                    href="{{ grandchildlink.url }}"
+                    class="break-words hover:underline  {% if grandchildlink.current %}underline{% endif %}"
+                    {% if grandchildlink.current %}
+                      aria-current="page"
+                    {% endif %}
+                  >
+                    {{ grandchildlink.title | escape }}
+                  </a>
+                </li>
+              {%- endfor -%}
+            </ul>
+          {%- endif -%}
+        </li>
+      {%- endfor -%}
+    </ul>
+  </div>
+</template>

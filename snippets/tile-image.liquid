@@ -1,0 +1,155 @@
+{%- liquid
+  assign labels_display = section.settings.labels_display | default: 'below_media'
+  assign show_caption = true
+  assign media_fill_space = true
+  assign always_show_labels_on_mobile = false
+  if section.settings.labels_show_titles_and_captions != nil
+    assign show_caption = section.settings.labels_show_titles_and_captions
+  endif
+  if section.settings.media_fill_space != nil
+    assign media_fill_space = section.settings.media_fill_space
+  endif
+  if section.settings.labels_always_show_on_mobile != nil
+    assign always_show_labels_on_mobile = section.settings.labels_always_show_on_mobile
+  endif
+  assign media_class = 'tile-media track-loaded'
+  if link
+    assign media_class = media_class | append: ' transition duration-300 scale-100 group-hover:scale-103'
+  endif
+
+  if media_classes != blank
+    assign media_class = media_class | append: ' ' | append: media_classes
+  endif
+
+  assign media_wrapper_aspect_ratio = media_wrapper_aspect_ratio | default: 'natural'
+  assign content_wrapper_classes = content_wrapper_classes | default: 'mt-2'
+
+  assign media_fit = 'object-cover'
+  if media_fill_space == true or media_fill_space == false
+    if media_fill_space
+      assign media_fit = 'object-cover'
+    else
+      assign media_fit = 'object-contain'
+    endif
+  endif
+
+
+  if media_wrapper_aspect_ratio != 'natural'
+    assign media_wrapper_classes = media_wrapper_classes | append: ' aspect-css-var'
+    assign media_wrapper_attrs = media_wrapper_attrs | append: ' style="--ratio: ' | append: media_wrapper_aspect_ratio | append: ';"'
+    assign media_class = media_class | append: ' absolute inset-0 w-full h-full ' | append: media_fit
+  endif
+
+  unless labels_display
+    assign labels_display = 'below_media'
+  endunless
+
+  assign render_labels_under_media = false
+  assign render_labels_in_footer = false
+  assign render_labels_in_overlay = false
+
+  if labels_display == 'below_media' or always_show_labels_on_mobile
+    unless context == 'slideshow'
+      assign render_labels_under_media = true
+    endunless
+  endif
+
+  if context == 'slideshow' and labels_display == 'footer'
+    assign render_labels_in_footer = true
+  endif
+
+  if labels_display == 'text_overlay_on_hover' or labels_display == 'follow_mouse_on_hover'
+    assign render_labels_in_overlay = true
+  endif 
+
+  if always_show_labels_on_mobile and labels_display != 'below_media'
+    assign content_wrapper_classes = content_wrapper_classes | append: ' lg:hidden'
+    if context == 'slideshow'
+      assign render_labels_in_footer = true
+    endif
+  endif
+
+  unless tag
+    assign tag = 'li'
+  endunless
+
+  unless sizes
+    assign sizes = '(min-width: 990px) 33vw, 50vw'
+  endunless
+-%}
+
+
+<{{ tag }}
+
+  class="relative group {% if class != blank %}{{ class }}{% endif %}"
+  {% if attributes %}
+    {{ attributes }}
+  {% endif %}
+  x-data='ThemeTile()'
+>
+  <a
+    aria-labelledby="Section-{{ section.id }}-Image-{{ image.id }}-label"
+    {% if link %}
+    href="{{ link }}"
+    {% endif %}
+    class="tile-link absolute inset-0 z-10 group"
+    {% if labels_display == 'text_overlay_on_hover' or labels_display == 'follow_mouse_on_hover' %}
+    x-ref="tileLink"
+    {% if show_caption and caption != '' %}
+    x-on:mouseenter="showLabel" x-on:mouseleave="hideLabel"
+    x-on:focus="showLabel" x-on:blur="hideLabel"
+    @keyup.escape="hideLabel"
+    {% endif %}
+    {% endif %}
+
+      {% if section.settings.enable_image_zoom
+      %}
+        role="button"
+        :class="`cursor-zoom-in`"
+        @click.prevent="openZoom({{ image.id }})"
+      {% endif %}
+  >
+    {%- if caption -%}
+    <span class="sr-only">{{ caption }}</span>
+    {%- endif -%}
+
+  </a>
+
+  <div class="tile-media-wrapper rounded-media overflow-hidden relative {{ media_wrapper_classes }}" {{ media_wrapper_attrs }}>
+    {{ image | image_url: width: 2000 | image_tag: class: media_class, loading: 'lazy', sizes: sizes }}
+  </div>
+
+  {%- if render_labels_under_media and show_caption and caption != blank -%}
+    <div class="tile-content-wrapper {{ content_wrapper_classes }}" id="Section-{{ section.id }}-Image-{{ image.id }}-label">
+      {%- if show_caption -%}
+        <div class="break-words" aria-hidden="true">
+          {{ caption }}
+        </div>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+
+
+  {%- if render_labels_in_footer and show_caption and caption != blank -%}
+    <template
+      x-teleport="#Section-{{ section.id }}-CaptionContainer"
+    >
+      <span x-show="current_slide === {{ index }}" id="Section-{{ section.id }}-Image-{{ image.id }}-label">
+        {{ caption }}
+      </span>
+    </template>
+  {%- endif -%}
+
+  {%- if render_labels_in_overlay and show_caption and caption != blank -%}
+  <template x-ref="labelContent">
+    <span id="Section-{{ section.id }}-Image-{{ image.id }}-label">
+      {{ caption }}
+    </span>
+  </template>
+  {%- endif -%}
+
+  {% unless request.design_mode %}
+    <script src="{{ 'tile.js' | asset_url }}" type="module"></script>
+  {% endunless %}
+
+</{{ tag }}>

@@ -1,0 +1,60 @@
+<div>
+  <h2 class="sr-only" id="country-heading">
+    {{ 'general.country.dropdown_label' | t }}
+  </h2>
+
+  <div
+    class="relative"
+    x-data="{ expanded: false }"
+    @keydown.escape.prevent.stop="expanded = false"
+    @click.outside="expanded = false"
+  >
+    <button
+      type="button"
+      class="flex justify-between items-center group"
+      :aria-expanded="expanded"
+      aria-controls="country-list"
+      aria-describedby="country-heading"
+      @click.prevent="expanded = ! expanded"
+    >
+      <span>{{- localization.country.name }} ({{ localization.country.currency.iso_code }} {{ localization.country.currency.symbol }})</span>
+      <div class="shrink-0 w-4 h-4 ml-2" x-show="! expanded">
+        {%- render 'icon-chevron-down' -%}
+      </div>
+      <div class="shrink-0 w-4 h-4 ml-2" x-show="expanded" x-cloak>
+        {%- render 'icon-chevron-up' -%}
+      </div>
+    </button>
+    <ul
+      id="country-list"
+      class="absolute border border-theme border-scheme-text bg-scheme-background left-0 right-auto md:left-auto md:right-0 max-h-[60vh] overflow-y-auto p-3 snap-y snap-mandatory z-30{% if position == 'menu-drawer' %} top-0{% endif %}{% if position == 'footer' %} bottom-[calc(100%_+_0.5rem)]{% endif %}"
+      x-show="expanded"
+      :aria-hidden="! expanded"
+      x-cloak
+    >
+      {% for country in localization.available_countries %}
+        <li class="w-40 first:-mt-2 last:-mb-2 snap-start">
+          <a
+            class="block py-2"
+            href="#"
+            {% if country.iso_code == localization.country.iso_code %}
+              aria-current="true"
+            {% endif %}
+            @click.prevent="$refs.input.value = '{{ country.iso_code }}'; $root.closest('form').submit();"
+          >
+            <span class="{% if country.iso_code == localization.country.iso_code %} underline {% endif %} underline-offset-basic">
+              {{- country.name }} ({{ country.currency.iso_code }} {{ country.currency.symbol }})
+            </span>
+          </a>
+        </li>
+      {%- endfor -%}
+    </ul>
+    <input
+      x-ref="input"
+      type="hidden"
+      name="country_code"
+      id="CountrySelector"
+      value="{{ localization.country.iso_code }}"
+    />
+  </div>
+</div>

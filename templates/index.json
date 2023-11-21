@@ -1,0 +1,397 @@
+{
+  "sections": {
+    "105e1b66-1a94-44c3-832f-2a59cb1169d2": {
+      "type": "collage",
+      "blocks": {
+        "bc830f03-1b0e-41bb-8a33-0a3531257f36": {
+          "type": "image",
+          "settings": {
+            "caption": "",
+            "link": ""
+          }
+        },
+        "a369f4db-e3d2-44fc-b411-d3275719fd06": {
+          "type": "image",
+          "settings": {
+            "caption": "",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "bc830f03-1b0e-41bb-8a33-0a3531257f36",
+        "a369f4db-e3d2-44fc-b411-d3275719fd06"
+      ],
+      "settings": {
+        "title": "",
+        "grid_type": "standard",
+        "mobile_columns": "2",
+        "desktop_columns": 2,
+        "standard_layout_align_items": "items-start",
+        "modular_layout_variation": 1,
+        "modular_grid_item_aspect_ratio": 1,
+        "irregular_layout_variation": 1,
+        "irregular_alignment_of_items": "items-center justify-center",
+        "media_aspect_ratio": "0.6667",
+        "media_fill_space": false,
+        "labels_show_titles_and_captions": false,
+        "labels_show_product_prices": false,
+        "labels_display": "below_media",
+        "labels_always_show_on_mobile": false,
+        "color_scheme": "",
+        "space_above": 0,
+        "space_below": 1,
+        "disable_left_and_right_margins": true,
+        "remove_grid_gaps": true
+      }
+    },
+    "b90d0582-1386-4ede-acfa-e726be1cf1f4": {
+      "type": "collage",
+      "blocks": {
+        "0023dfc3-bf11-461a-b909-ad2842d32b06": {
+          "type": "image",
+          "settings": {
+            "caption": "",
+            "link": ""
+          }
+        },
+        "fc1f9b4a-168c-4acd-b83c-e4fb7f92ee86": {
+          "type": "product",
+          "settings": {
+            "product": "chanel-in-love-heart-crossbody-bag-2022"
+          }
+        },
+        "b4a83b46-ad39-48e7-aab0-d7f3f983bed3": {
+          "type": "image",
+          "settings": {
+            "caption": "",
+            "link": ""
+          }
+        },
+        "2203cb1d-050d-4cfb-bcbf-52be295c4426": {
+          "type": "product",
+          "settings": {
+            "product": "gucci-maroon-s-m"
+          }
+        },
+        "6b61ed28-5476-4e4a-9d95-abc25dd52eb5": {
+          "type": "collection",
+          "settings": {
+            "collection": ""
+          }
+        },
+        "2d3296da-5e79-4cc0-81ab-7cc7b6dd4e2a": {
+          "type": "image",
+          "settings": {
+            "caption": "Test",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "0023dfc3-bf11-461a-b909-ad2842d32b06",
+        "fc1f9b4a-168c-4acd-b83c-e4fb7f92ee86",
+        "b4a83b46-ad39-48e7-aab0-d7f3f983bed3",
+        "2203cb1d-050d-4cfb-bcbf-52be295c4426",
+        "6b61ed28-5476-4e4a-9d95-abc25dd52eb5",
+        "2d3296da-5e79-4cc0-81ab-7cc7b6dd4e2a"
+      ],
+      "settings": {
+        "title": "",
+        "grid_type": "standard",
+        "mobile_columns": "1",
+        "desktop_columns": 3,
+        "standard_layout_align_items": "items-start",
+        "modular_layout_variation": 1,
+        "modular_grid_item_aspect_ratio": 1,
+        "irregular_layout_variation": 1,
+        "irregular_alignment_of_items": "items-center justify-center",
+        "media_aspect_ratio": "0.6667",
+        "media_fill_space": false,
+        "labels_show_titles_and_captions": true,
+        "labels_show_product_prices": true,
+        "labels_display": "text_overlay_on_hover",
+        "labels_always_show_on_mobile": true,
+        "color_scheme": "",
+        "space_above": 2,
+        "space_below": 1.5,
+        "disable_left_and_right_margins": true,
+        "remove_grid_gaps": true
+      }
+    },
+    "105903cc-d1ae-41c6-9335-76c5c5235186": {
+      "type": "feature-text",
+      "settings": {
+        "richtext": "<p>Featured Picks:<br\/>Holiday Party Dresses<\/p>",
+        "cta_link": "",
+        "cta_label": "",
+        "font": "font-heading",
+        "desktop_text_scale": 2,
+        "mobile_text_scale": 2,
+        "text_alignment": "text-left",
+        "content_width_on_desktop": "12",
+        "content_position_on_desktop": "left",
+        "show_top_border": false,
+        "color_scheme": "",
+        "space_above": 0.5,
+        "space_below": 0.5
+      }
+    },
+    "8f386aa6-a2c0-404b-aaa6-52c0ca860668": {
+      "type": "products-slideshow",
+      "settings": {
+        "title": "",
+        "product_list": [
+
+        ],
+        "section_height": "h-screen-80",
+        "max_width_of_slides": 40,
+        "labels_show_titles_and_captions": true,
+        "labels_show_product_prices": true,
+        "labels_display": "text_overlay_on_hover",
+        "labels_always_show_on_mobile": true,
+        "show_index_and_total_slides": true,
+        "auto_rotate": false,
+        "change_slides_speed": 3,
+        "quick_view": "disabled",
+        "color_scheme": "scheme1"
+      }
+    },
+    "scrolling-text": {
+      "type": "scrolling-text",
+      "settings": {
+        "text": "Chanel, Gucci, Prada, Alexander McQueen, Chloe,  Givenchy, Fendi, Christian Dior, Lagerfeld, Louis Vuitton, Tom Ford",
+        "repeat_text": true,
+        "link": "",
+        "desktop_text_scale": 7,
+        "mobile_text_scale": 4,
+        "font": "font-heading",
+        "speed": 120,
+        "direction": "",
+        "color_scheme": "",
+        "space_above": 2,
+        "space_below": 0.5
+      }
+    },
+    "ae8745c0-3f54-453b-85a7-f4905731bab9": {
+      "type": "rich-text",
+      "settings": {
+        "title": "Only the very best vintage makes it into our inventory",
+        "richtext": "<p>Notes about brand directory, entrupy, authentification, etc. Describe a product, share announcements, or welcome customers to your store.<\/p>",
+        "text_alignment": "text-left",
+        "cta_link": "shopify:\/\/pages\/contact",
+        "cta_label": "About FOXY",
+        "show_top_border": false,
+        "color_scheme": "scheme1",
+        "space_above": 0,
+        "space_below": 2
+      }
+    },
+    "94fa4807-c5a1-4f1d-b497-a4ba75caa07d": {
+      "type": "collage",
+      "blocks": {
+        "6befb905-06bd-4653-bb95-d30915f773aa": {
+          "type": "product",
+          "settings": {
+            "product": "chanel-in-love-heart-crossbody-bag-2022"
+          }
+        },
+        "531e6524-6a9b-4211-9c59-ae77922e1910": {
+          "type": "image",
+          "settings": {
+            "caption": "",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "6befb905-06bd-4653-bb95-d30915f773aa",
+        "531e6524-6a9b-4211-9c59-ae77922e1910"
+      ],
+      "settings": {
+        "title": "",
+        "grid_type": "standard",
+        "mobile_columns": "2",
+        "desktop_columns": 2,
+        "standard_layout_align_items": "items-start",
+        "modular_layout_variation": 1,
+        "modular_grid_item_aspect_ratio": 1,
+        "irregular_layout_variation": 1,
+        "irregular_alignment_of_items": "items-center justify-center",
+        "media_aspect_ratio": "0.6667",
+        "media_fill_space": false,
+        "labels_show_titles_and_captions": true,
+        "labels_show_product_prices": true,
+        "labels_display": "text_overlay_on_hover",
+        "labels_always_show_on_mobile": false,
+        "color_scheme": "",
+        "space_above": 0,
+        "space_below": 1,
+        "disable_left_and_right_margins": true,
+        "remove_grid_gaps": true
+      }
+    },
+    "686451f2-dd4e-4ed4-af6d-a6533046455d": {
+      "type": "feature-text",
+      "settings": {
+        "richtext": "<p>“It's like hanging out with your best girlfriend in the ultimate closet.”      - Nikki P<\/p>",
+        "cta_link": "",
+        "cta_label": "",
+        "font": "font-heading",
+        "desktop_text_scale": 2,
+        "mobile_text_scale": 2,
+        "text_alignment": "text-center",
+        "content_width_on_desktop": "6",
+        "content_position_on_desktop": "center",
+        "show_top_border": false,
+        "color_scheme": "",
+        "space_above": 0.5,
+        "space_below": 1
+      }
+    },
+    "3f3b8370-7d3d-4f0b-ab6b-84d75b0fea1e": {
+      "type": "collection-list",
+      "settings": {
+        "title": "",
+        "collection_list": [
+          "archive",
+          "dresses-gowns",
+          "frontpage"
+        ],
+        "grid_type": "standard",
+        "mobile_columns": "1",
+        "desktop_columns": 3,
+        "standard_layout_align_items": "items-baseline",
+        "modular_layout_variation": 1,
+        "modular_grid_item_aspect_ratio": 1,
+        "irregular_layout_variation": 1,
+        "irregular_alignment_of_items": "items-center justify-center",
+        "media_aspect_ratio": "0.6667",
+        "media_fill_space": false,
+        "labels_show_titles_and_captions": true,
+        "labels_display": "follow_mouse_on_hover",
+        "labels_always_show_on_mobile": false,
+        "color_scheme": "",
+        "space_above": 1,
+        "space_below": 1,
+        "disable_left_and_right_margins": false,
+        "remove_grid_gaps": true
+      }
+    },
+    "f1170993-eed5-4e7e-98cb-1ddb7f8a708a": {
+      "type": "feature-text-with-rich-text",
+      "settings": {
+        "feature_text": "<p><strong>“For any lover of vintage couture, plan to spend a few hours here marveling at all the wares.”<br\/><\/strong><\/p>",
+        "font": "font-heading",
+        "desktop_text_scale": 3,
+        "mobile_text_scale": 2,
+        "feature_text_position_on_desktop": "right",
+        "feature_text_width_on_desktop": "9",
+        "richtext": "<p>- VOGUE<\/p>",
+        "cta_link": "",
+        "cta_label": "",
+        "show_top_border": false,
+        "color_scheme": "",
+        "space_above": 1,
+        "space_below": 1
+      }
+    },
+    "34a77569-b513-4661-bac9-f9dfbc461d9c": {
+      "type": "feature-text",
+      "settings": {
+        "richtext": "<p>As Seen In<\/p>",
+        "cta_link": "",
+        "cta_label": "",
+        "font": "rte font-main",
+        "desktop_text_scale": 0,
+        "mobile_text_scale": 0,
+        "text_alignment": "text-center",
+        "content_width_on_desktop": "12",
+        "content_position_on_desktop": "left",
+        "show_top_border": false,
+        "color_scheme": "",
+        "space_above": 1,
+        "space_below": 0
+      }
+    },
+    "40e59f3a-391c-4dc3-921b-687def71a658": {
+      "type": "collage",
+      "blocks": {
+        "template--16399549497534__40e59f3a-391c-4dc3-921b-687def71a658-image-1": {
+          "type": "image",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/Vogue.svg",
+            "caption": "",
+            "link": ""
+          }
+        },
+        "a2232974-c4af-48db-8dd2-923576fe6980": {
+          "type": "image",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/InStyle.svg",
+            "caption": "",
+            "link": ""
+          }
+        },
+        "fb24de18-c191-4cd7-a315-4e4b09fab499": {
+          "type": "image",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/The_Knot.svg",
+            "caption": "",
+            "link": ""
+          }
+        },
+        "e3d4ac5b-5d6b-4e71-a212-38d6850262bf": {
+          "type": "image",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/Today.svg",
+            "caption": "",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "template--16399549497534__40e59f3a-391c-4dc3-921b-687def71a658-image-1",
+        "a2232974-c4af-48db-8dd2-923576fe6980",
+        "fb24de18-c191-4cd7-a315-4e4b09fab499",
+        "e3d4ac5b-5d6b-4e71-a212-38d6850262bf"
+      ],
+      "settings": {
+        "title": "",
+        "grid_type": "standard",
+        "mobile_columns": "2",
+        "desktop_columns": 4,
+        "standard_layout_align_items": "items-center",
+        "modular_layout_variation": 1,
+        "modular_grid_item_aspect_ratio": 1,
+        "irregular_layout_variation": 1,
+        "irregular_alignment_of_items": "items-center justify-center",
+        "media_aspect_ratio": "natural",
+        "media_fill_space": true,
+        "labels_show_titles_and_captions": true,
+        "labels_show_product_prices": false,
+        "labels_display": "below_media",
+        "labels_always_show_on_mobile": false,
+        "color_scheme": "",
+        "space_above": 0.5,
+        "space_below": 2,
+        "disable_left_and_right_margins": true,
+        "remove_grid_gaps": true
+      }
+    }
+  },
+  "order": [
+    "105e1b66-1a94-44c3-832f-2a59cb1169d2",
+    "b90d0582-1386-4ede-acfa-e726be1cf1f4",
+    "105903cc-d1ae-41c6-9335-76c5c5235186",
+    "8f386aa6-a2c0-404b-aaa6-52c0ca860668",
+    "scrolling-text",
+    "ae8745c0-3f54-453b-85a7-f4905731bab9",
+    "94fa4807-c5a1-4f1d-b497-a4ba75caa07d",
+    "686451f2-dd4e-4ed4-af6d-a6533046455d",
+    "3f3b8370-7d3d-4f0b-ab6b-84d75b0fea1e",
+    "f1170993-eed5-4e7e-98cb-1ddb7f8a708a",
+    "34a77569-b513-4661-bac9-f9dfbc461d9c",
+    "40e59f3a-391c-4dc3-921b-687def71a658"
+  ]
+}

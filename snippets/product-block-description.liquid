@@ -1,0 +1,51 @@
+{% liquid
+  assign should_truncate = false
+
+  if block.settings.truncate_description
+    assign truncated_description = product.description | strip_html | truncatewords: block.settings.max_words, '[TRUNCATED]'
+
+    if truncated_description contains '[TRUNCATED]'
+      assign should_truncate = true
+      assign truncated_description = truncated_description | replace: '[TRUNCATED]', '&hellip;'
+    endif
+  endif
+%}
+{%- if product.description != blank -%}
+  <div
+    {% if should_truncate %}
+      x-data="{ expanded: false }"
+    {% endif %}
+    class="{% if should_truncate %}no-js:hidden{% endif %} mt-spacer"
+    style="--spacing-adjust: {{ block.settings.space_above }};"
+    {{ block.shopify_attributes }}
+  >
+    {%- if should_truncate -%}
+      <div x-show="!expanded">
+        {{ truncated_description }}&nbsp;<a
+          @click="expanded = true; $dispatch('product-content-height-change')"
+          class="cursor-pointer theme-link"
+        >
+          {{- 'products.product.read_more' | t -}}
+        </a>
+      </div>
+      <div class="rte" x-show="expanded" style="display: none;">
+        {{ product.description }}
+      </div>
+    {%- else -%}
+      <div class="rte">
+        {{ product.description }}
+      </div>
+    {%- endif -%}
+  </div>
+{%- endif -%}
+
+{%- if product.description != blank and should_truncate -%}
+  <noscript>
+    <div
+      class="mt-spacer"
+      style="--spacing-adjust: {{ block.settings.space_above }};"
+    >
+      {{ product.description }}
+    </div>
+  </noscript>
+{%- endif -%}

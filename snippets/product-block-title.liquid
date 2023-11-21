@@ -1,0 +1,13 @@
+<div class="mt-spacer" style="--spacing-adjust: {{ block.settings.space_above }};" {{ block.shopify_attributes }}>
+  {% if context == 'featured-product' -%}
+  <a href="{{ product.url }}">
+  {%- endif -%}
+  {%- if product != blank -%}
+  <h1 class="font-heading text-heading-feature break-words">{{ product.title | escape }}</h1>
+  {%- else -%}
+  <h1 class="font-heading text-heading-feature break-words">{{ 'sections.onboarding.product_title' | t }}</h1>
+  {%- endif -%}
+  {% if context == 'featured-product' -%}
+  </a>
+  {%- endif -%}
+</div>

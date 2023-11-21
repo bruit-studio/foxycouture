@@ -1,0 +1,69 @@
+{
+  "type": "header",
+  "name": "Header",
+  "sections": {
+    "announcement-bar": {
+      "type": "announcement-bar",
+      "disabled": true,
+      "settings": {
+        "home_page_only": false,
+        "display": "scrolling_text",
+        "text": "Latest Drop",
+        "link": "shopify:\/\/collections\/archive",
+        "repeat_text": false,
+        "speed": 10,
+        "direction": "reverse",
+        "color_scheme": ""
+      }
+    },
+    "header": {
+      "type": "header",
+      "blocks": {
+        "1ebcbcbd-48cc-4c11-8881-395b9d4ec1c8": {
+          "type": "horizontal_menu",
+          "settings": {
+            "menu": "main-menu-02",
+            "nested_navigation_style": "mega_menu",
+            "desktop_text_alignment": "lg:justify-start",
+            "show_cart": false,
+            "separate_with_comma": false,
+            "show_block_on_mobile": false,
+            "block_width_on_mobile": "",
+            "block_width_on_desktop": "6",
+            "fill_remaining_space": false
+          }
+        }
+      },
+      "block_order": [
+        "1ebcbcbd-48cc-4c11-8881-395b9d4ec1c8"
+      ],
+      "settings": {
+        "logo_max_width": 500,
+        "cart": "s|s",
+        "drawer_menu": "s|h",
+        "enable_search": true,
+        "use_icons": false,
+        "logo_block_width_on_desktop": "3",
+        "utility_links_block_width_on_desktop": "3",
+        "padding": 1,
+        "align_content": "items-top",
+        "sticky_header": true,
+        "enable_overlay_on_homepage": true,
+        "enable_overlay_on_collection_pages": false,
+        "enable_overlay_on_product_pages": false,
+        "enable_overlay_on_article_pages": false,
+        "enable_overlay_on_page_templates": false,
+        "overlay_color_scheme": "",
+        "use_alternate_logo": false,
+        "color_scheme": "",
+        "desktop_text_scale": -1,
+        "mobile_text_scale": 0,
+        "show_grid_guidelines": false
+      }
+    }
+  },
+  "order": [
+    "announcement-bar",
+    "header"
+  ]
+}

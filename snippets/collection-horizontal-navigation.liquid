@@ -1,0 +1,14 @@
+<aside class="relative -mx-4 px-4 mb-8">
+  <div class="bg-gradient-to-l from-scheme-background w-20 absolute top-0 right-0 bottom-0 lg:hidden pointer-events-none"></div>
+  <nav class="overflow-x-auto">
+    <ul class="flex lg:flex-wrap items-center justify-start w-full -mx-2  whitespace-nowrap overflow-auto">
+      {% for link in linklist.links %}
+        <li class="p-2">
+          <a class="{% if link.active %}underline{% endif %} hover:underline break-words" href="{{ link.url }}">
+            {{- link.title -}}
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+  </nav>
+</aside>

@@ -1,0 +1,167 @@
+{% comment %}
+  * Renders a cropped image that fills the container width using `background-size: cover`.
+  * Height is defined by the optional aspect ratio. If aspect ratio is `false` or `nil`
+  * the image will use natural height and will not be cropped.
+  * Additionally, the container can be omitted by passing `is_background: true`, but doing this means that the image would rely on its parent container having a `position: relative`, so that the image can fill it
+
+  *  img_object {object} - The Image that would be used
+  *  aspect_ratio {float} - The aspect ratio of the image in the format {ratio}:1 (Optional)
+  *  is_background {boolean} - Defines whether the `.image-fill` wrapper would be used or not (Optional)
+  *  classes {string} - Classes and modifiers that would be used for the image and image-placeholder containers (Optional)
+  *  image_attributes {string} - Data attributes necessary for the image container (Optional)
+  *  alt {string} - Overrides image alt value (Optional)
+  *  styles {string} - Additional styles that can be added to the image or image container (Optional)
+  *  placeholder_svg {string} - SVG placeholder name (https://shopify.dev/api/liquid/filters#placeholder_svg_tag) (Optional)
+  *  loading {String} - Default: "lazy" (Optional)
+  *  preload {String} - "true" or "false". Default: "false" (Optional)
+  *  fetchpriority {String} - "auto", "high" or "low". Default: "auto" (Optional)
+
+  {% render 'image-fill', img_object: section.settings.image, aspect_ratio: section.settings.aspect_ratio, placeholder_svg: 'lifestyle-1' %}
+{% endcomment %}
+
+{%- liquid
+  assign default_image = 'blank.svg' | asset_url
+  assign image = img_object | default: default_image
+  assign image_aspect_ratio = image.aspect_ratio
+  assign aspect_ratio = aspect_ratio | default: image_aspect_ratio | default: 1
+  assign image_width = image.width | at_most: 4100 | default: 4100
+  assign width = width | default: image_width
+  assign height = height | default: width | divided_by: aspect_ratio
+  assign sizes = sizes | default: 'auto'
+  assign loading = loading | default: 'lazy'
+  assign fetchpriority = fetchpriority | default: nil
+  assign classes = classes | default: ''
+  assign image_classes = 'background-size-cover'
+  assign image_styles = ''
+  assign styles = styles | default: ''
+  assign image_attributes = image_attributes | default: ''
+  assign placeholder_svg = placeholder_svg | default: 'image'
+  assign placeholder_svg_tag = placeholder_svg_tag | default: 'placeholder-svg-filled'
+  assign has_image = true
+  assign is_background = is_background | default: false
+  assign alt = alt | default: image.alt | default: image | split: "/" | last
+  assign alt = alt | strip_html | escape
+
+  if cover != false
+    assign cover = true
+  endif
+
+  if image == blank or image contains 'blank.svg'
+    assign has_image = false
+    assign image_classes = image_classes | append: ' ' | append: 'placeholder-svg--overlayed'
+  else
+    assign image_classes = image_classes | append: ' ' | append: 'is-loading'
+
+    capture default_srcset
+      render 'image-srcset', image: image, widths: widths
+    endcapture
+
+    assign srcset = srcset | default: default_srcset
+  endif
+
+  capture padding_top_styles
+    assign percentage = 100
+
+    if has_image == false
+      echo 'padding-top: ' | append: percentage | append: '%; filter: brightness(.95);'
+    else
+      assign percentage = 1 | divided_by: aspect_ratio | times: 100 | round: 2
+      echo 'padding-top: ' | append: percentage | append: '%;'
+    endif
+  endcapture
+
+  if classes != '' and is_background
+    assign image_classes = image_classes | append: ' ' | append: classes
+  endif
+
+  assign image_fill_classes = 'image-fill' | append: ' ' | append: classes
+  assign image_fill_styles = padding_top_styles | append: ' ' | append: styles
+
+  if styles != '' and is_background
+    assign image_styles = styles
+  endif
+
+  if section.location == 'header' or section.location == 'aside' or section.location == 'template' and section.index < 3
+    assign loading = 'eager'
+    assign fetchpriority = 'high'
+
+    if section.index == 1
+      assign preload = true
+    endif
+  endif
+-%}
+
+{%- unless is_background -%}
+  <div class="{{ image_fill_classes }}" style="{{ image_fill_styles }}">
+{%- endunless -%}
+
+  {%- if has_image -%}
+    <figure class="lazy-image {{ image_classes }}"
+      style="{{ image_styles }}"
+      {{ image_attributes }}>
+      {{ image | image_url: width: width, height: height | image_tag:
+        loading: loading,
+        fetchpriority: fetchpriority,
+        preload: preload,
+        sizes: sizes,
+        alt: alt,
+        srcset: srcset,
+        class: 'is-loading'
+      }}
+    </figure>
+  {%- else -%}
+    {%- liquid
+      capture svg_classes
+        echo placeholder_svg_tag
+        if cover == true
+          echo ' img-object-cover'
+        else
+          echo ' img-object-contain'
+        endif
+      endcapture
+    -%}
+
+    <div class="{{ image_classes }}"
+      {% if image_styles != '' %}
+        style="{{ image_styles }}"
+      {% endif %}
+      {% if alt != '' %}
+        aria-label="{{ alt }}"
+      {% endif %}
+      role="img"
+      {{ image_attributes }}>
+      {% if placeholder_svg != '' %}
+        {%- liquid
+          capture svg_tag
+            echo placeholder_svg | placeholder_svg_tag: svg_classes
+          endcapture
+
+          capture svg_aspect_ratio
+            if cover == true
+              echo 'xMidYMid slice'
+            else
+              echo 'xMidYMid meet'
+            endif
+          endcapture
+
+          capture svg_tag_open
+            echo '<svg preserveAspectRatio="' | append: svg_aspect_ratio | append: '"'
+          endcapture
+          comment
+            Manually splice in attributes neccesary for an SVG to mimic `object-fit: cover or contain`
+          endcomment
+          assign parts = svg_tag | split: '<svg'
+        -%}
+
+        {{ parts[0] | prepend: svg_tag_open }}
+        {{ parts[1] }}
+      {% else %}
+        <svg preserveAspectRatio="xMidYMid slice" class="{{ svg_classes }}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 525.5 525.5">
+        </svg>
+      {% endif %}
+    </div>
+  {%- endif -%}
+
+{%- unless is_background -%}
+  </div>
+{%- endunless -%}

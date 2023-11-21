@@ -1,0 +1,36 @@
+{
+  "sections": {
+    "header": {
+      "type": "main-article-header",
+      "settings": {
+        "image_width_on_desktop": "12",
+        "media_aspect_ratio": "1.333",
+        "image_position_on_desktop": "right",
+        "enable_full_bleed": false,
+        "show_author": true,
+        "show_date": true,
+        "show_tags": true,
+        "text_alignment": "text-center",
+        "align_content": "items-end",
+        "color_scheme": "",
+        "space_above": 0,
+        "space_below": 1
+      }
+    },
+    "main": {
+      "type": "main-article",
+      "settings": {
+        "show_share_buttons": true,
+        "show_next_previous_links": true,
+        "content_alignment_on_desktop": "lg:col-start-4",
+        "color_scheme": "",
+        "space_above": 1,
+        "space_below": 1
+      }
+    }
+  },
+  "order": [
+    "header",
+    "main"
+  ]
+}

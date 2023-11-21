@@ -1,0 +1,288 @@
+{%- liquid
+  # Calculate sizes
+
+  if settings.enable_sidebar
+    assign sidebar_width = 100.00 | divided_by: 12 | times: settings.sidebar_width_on_desktop | round: 2
+    assign desktop_sizes_base = 100 | minus: sidebar_width
+  else
+    assign desktop_sizes_base = 100
+  endif
+
+  assign desktop_sizes_css_base = desktop_sizes_base | append: 'vw'
+
+  assign desktop_sizes = 'calc(' | append: desktop_sizes_css_base | append: ' / 100 * ' | append: section.settings.item_width_desktop | append: ')'
+
+  assign mobile_sizes = 'calc(1vw * ' | append: section.settings.item_width_mobile | append: ')'
+
+  assign sizes = '(min-width: 990px) ' | append: desktop_sizes | append: ', ' | append: mobile_sizes
+-%}
+
+<section
+  id="section-{{ section.id }}"
+  x-data="{ labelContent: '', focusVisible: false }"
+  class="section-container"
+  data-color-scheme="{{ section.settings.color_scheme }}"
+  style="--section-grid-cols-mobile: {{ section.settings.mobile_columns }}; --section-grid-cols-desktop: {{ section.settings.desktop_columns }}; --top-spacing-adjust: {{ section.settings.space_above }}; --bottom-spacing-adjust: {{ section.settings.space_below }};"
+>
+  <div class="text-scheme-text bg-scheme-background pt-top-section-vertical-spacing pb-bottom-section-vertical-spacing">
+
+    {%- liquid
+      if section.settings.title != blank
+        render 'section-title-horizontal', title: section.settings.title
+      endif
+      render 'carousel', content_source: 'blocks', sizes: sizes
+    -%}
+  </div>
+
+  {%- liquid
+    if section.settings.labels_display == 'text_overlay_on_hover' or section.settings.labels_display == 'follow_mouse_on_hover'
+      render 'overlay-labels' with  section.settings.labels_display as labels_display
+    endif
+  -%}
+
+</section>
+
+{% schema %}
+{
+  "name": "Video carousel",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "item_width_mobile",
+      "min": 60,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": "Width of items on mobile",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "item_width_desktop",
+      "min": 20,
+      "max": 80,
+      "step": 5,
+      "unit": "%",
+      "label": "Width of items on desktop",
+      "default": 40
+    },
+    {
+      "type": "radio",
+      "id": "snap_alignment",
+      "label": "Snap alignment",
+      "options": [
+        {
+          "value": "snap-start",
+          "label": "Start"
+        },
+        {
+          "value": "snap-center",
+          "label": "Center"
+        }
+      ],
+      "default": "snap-start"
+    },
+    {
+      "type": "select",
+      "id": "align_items",
+      "label": "Align items",
+      "options": [
+        {
+          "value": "items-start",
+          "label": "Top"
+        },
+        {
+          "value": "items-center",
+          "label": "Center"
+        },
+        {
+          "value": "items-end",
+          "label": "Bottom"
+        }
+      ],
+      "default": "items-start"
+    },
+    {
+      "type": "header",
+      "content": "Labels"
+    },
+    {
+      "type": "checkbox",
+      "id": "labels_show_titles_and_captions",
+      "label": "Show captions",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "labels_display",
+      "label": "Display",
+      "options": [
+        {
+          "value": "below_media",
+          "label": "Below media"
+        },
+        {
+          "value": "text_overlay_on_hover",
+          "label": "Text overlay on hover"
+        },
+        {
+          "value": "follow_mouse_on_hover",
+          "label": "Follow mouse on hover"
+        }
+      ],
+      "default": "below_media",
+      "info": "Customise overlay labels in [theme settings](/editor?context=theme&category=overlay+labels)."
+    },
+    {
+      "type": "checkbox",
+      "id": "labels_always_show_on_mobile",
+      "label": "Always show labels on mobile",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Controls"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_index_and_total_slides",
+      "label": "Show current index and total slides",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Color"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "default": "scheme_1",
+      "label": "Color scheme"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "space_above",
+      "min": 0,
+      "max": 2,
+      "step": 0.5,
+      "unit": "x",
+      "label": "Above",
+      "default": 1
+    },
+    {
+      "type": "range",
+      "id": "space_below",
+      "min": 0,
+      "max": 2,
+      "step": 0.5,
+      "unit": "x",
+      "label": "Below",
+      "default": 1
+    }
+  ],
+  "blocks": [
+    {
+      "name": "Video",
+      "type": "video",
+      "settings": [
+        {
+          "type": "video",
+          "id": "video",
+          "label": "Video"
+        },
+        {
+          "type": "radio",
+          "id": "mode",
+          "label": "Mode",
+          "options": [
+            {
+              "value": "preview",
+              "label": "Preview"
+            },
+            {
+              "value": "autoplay",
+              "label": "Autoplay"
+            }
+          ],
+          "default": "preview",
+          "info": "Autoplay will not play sound or show controls."
+        },
+        {
+          "type": "radio",
+          "id": "playback",
+          "label": "Playback",
+          "options": [
+            {
+              "value": "inline",
+              "label": "Inline"
+            },
+            {
+              "value": "modal",
+              "label": "Modal"
+            }
+          ],
+          "default": "inline",
+          "info": "Does not apply if mode is set to autoplay."
+        },
+        {
+          "type": "text",
+          "id": "caption",
+          "label": "Caption"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link",
+          "info": "This will disable video playback if mode is set to preview."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Video carousel",
+      "blocks": [
+        {
+          "type": "video"
+        },
+        {
+          "type": "video"
+        },
+        {
+          "type": "video"
+        },
+        {
+          "type": "video"
+        },
+        {
+          "type": "video"
+        },
+        {
+          "type": "video"
+        }
+      ]
+    }
+  ],
+  "disabled_on": {
+    "groups": [
+      "aside",
+      "header",
+      "footer",
+      "custom.hero"
+    ]
+  }
+}
+{% endschema %}

@@ -1,0 +1,445 @@
+{%- liquid
+  assign section_color = section.settings.color_scheme
+
+  assign media_class = 'track-loaded'
+  if section.settings.media_aspect_ratio != 'natural'
+    assign media_wrapper_classes = media_wrapper_classes | append: ' aspect-css-var'
+    assign media_wrapper_attrs = 'style="--ratio: ' | append: section.settings.media_aspect_ratio | append: ';"'
+    assign media_class = media_class | append: ' absolute inset-0 w-full h-full object-cover'
+  endif
+
+  assign image_desktop_cols = section.settings.image_width_on_desktop | plus: 0
+  assign content_desktop_cols = 12 | minus: image_desktop_cols
+
+  if section.settings.enable_full_bleed
+    assign image_column_classes = '-mx-wrapper-left-and-right-margin'
+    if section.settings.show_space_above
+      assign image_column_classes = image_column_classes | append: ' -mt-section-vertical-spacing'
+    endif
+    if section.settings.show_space_below
+      assign image_column_classes = image_column_classes | append: ' lg:-mb-section-vertical-spacing'
+    endif
+    if section.settings.image_position_on_desktop == 'right'
+      assign image_column_classes = image_column_classes | append: ' lg:ml-0'
+    else
+      assign image_column_classes = image_column_classes | append: ' lg:mr-0'
+    endif
+  endif
+
+  assign content_width = section.settings.content_width_on_desktop | plus: 0
+  assign content_cols = content_desktop_cols | times: content_width | ceil | times: 1
+
+  # Calculate sizes
+
+  if settings.enable_sidebar
+    assign sidebar_width = 100.00 | divided_by: 12 | times: settings.sidebar_width_on_desktop | round: 2
+    assign desktop_sizes_base = 100 | minus: sidebar_width
+  else
+    assign desktop_sizes_base = 100
+  endif
+
+  assign desktop_sizes_css_base = desktop_sizes_base | append: 'vw'
+
+  if settings.enable_max_site_width and section.settings.enable_full_bleed == false
+    assign desktop_sizes_css_base = 'min(' | append: settings.max_site_width | append: 'px, ' | append: desktop_sizes_base | append: 'vw)'
+  endif
+
+  assign desktop_sizes = 'calc((' | append: desktop_sizes_css_base | append: ' / 12) * ' | append: image_desktop_cols | append: ')'
+
+  assign mobile_sizes = '100vw'
+
+  assign sizes = '(min-width: 990px) ' | append: desktop_sizes | append: ', ' | append: mobile_sizes
+-%}
+
+{%- capture content -%}
+{% if section.settings.title != blank %}
+<div>
+  <h2 class="font-heading {{ section.settings.heading_size }} break-words">
+    {{ section.settings.title | strip }}
+  </h2>
+</div>
+{% endif %}
+
+{% if section.settings.richtext != blank %}
+<div class="rte mt-4">
+  {{ section.settings.richtext }}
+</div>
+{%- endif -%}
+
+{%- if section.settings.cta_link and section.settings.cta_label != blank -%}
+  <div class="mt-8">
+    <a class="btn" href="{{ section.settings.cta_link }}">
+      {{ section.settings.cta_label }}
+    </a>
+  </div>
+{% endif %}
+{%- endcapture -%}
+
+{%- capture media -%}
+{% if section.settings.image != blank %}
+  <div class="relative {{ media_wrapper_classes }}" {{ media_wrapper_attrs }}>
+  {{ section.settings.image | image_url: width: 3000 | image_tag: loading: 'lazy', sizes: sizes, class: media_class }}
+  </div>
+{% else %}
+  <div class="aspect-w-16 aspect-h-9">
+    {{ 'image' | placeholder_svg_tag: 'w-full h-full bg-scheme-placeholder-background text-scheme-placeholder-foreground fill-current' }}
+  </div>
+{% endif %}
+{%- endcapture -%}
+
+{%- style -%}
+  @media (min-width: 990px) {
+    #{{ section.id }} .content-container {
+      --item-col-span: {{ content_cols }};
+      --number-of-columns: {{ content_desktop_cols }};
+      --number-of-gutters: calc(var(--number-of-columns) - 1);
+      --total-gutter-size: calc(var(--theme-col-gap-desktop) * var(--number-of-gutters));
+      --column-width: calc((100% - var(--total-gutter-size))/var(--number-of-columns));
+      --item-gutter-span: calc( var(--item-col-span) - 1);
+      width: calc( (var(--column-width)*var(--item-col-span)) + (var(--theme-col-gap-desktop)*var(--item-gutter-span)));
+    }
+  }
+{%- endstyle -%}
+
+<section
+  id="{{ section.id }}"
+  class="section-container"
+  data-color-scheme="{{ section_color }}"
+  style="--top-spacing-adjust: {{ section.settings.space_above }}; --bottom-spacing-adjust: {{ section.settings.space_below }};"
+>
+  <div class="text-scheme-text bg-scheme-background pt-top-section-vertical-spacing pb-bottom-section-vertical-spacing">
+    {%- if section.settings.enable_full_bleed -%}
+      <div class="text-scheme-text bg-scheme-background">
+        <div class="grid lg:grid-cols-12 grid-flow-dense gap-theme lg:gap-0">
+          <div
+            class="lg:col-span-item {% if section.settings.image_position_on_desktop == 'right' %}lg:col-end-[-1]{% endif %}"
+            style="--item-col-span: {{ image_desktop_cols }};"
+          >
+            {{ media }}
+          </div>
+
+          <div
+            class="lg:col-span-item flex min-w-0 {{ section.settings.content_alignment }}"
+            style="--item-col-span: {{ content_desktop_cols }};"
+          >
+            <div class="content-container">
+              <div class="wrapper">
+                {%- if section.settings.show_top_border -%}
+                  <hr class="border-t-theme border-scheme-border mb-half-section-vertical-spacing">
+                {%- endif -%}
+                <div class="no-m-first content-container">
+                  {{ content }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    {%- else -%}
+      <div class="wrapper">
+        {%- if section.settings.show_top_border -%}
+          <hr class="border-t-theme border-scheme-border mb-half-section-vertical-spacing">
+        {%- endif -%}
+        <div class="grid lg:grid-cols-12 gap-theme grid-flow-dense">
+          <div
+            class="lg:col-span-item {% if section.settings.image_position_on_desktop == 'right' %}lg:col-end-[-1]{% endif %}"
+            style="--item-col-span: {{ image_desktop_cols }};"
+          >
+            {{ media }}
+          </div>
+
+          <div
+            class="lg:col-span-item flex min-w-0 {{ section.settings.content_alignment }}"
+            style="--item-col-span: {{ content_desktop_cols }};"
+          >
+            <div class="no-m-first content-container min-w-0 break-words">
+              {{ content }}
+            </div>
+          </div>
+        </div>
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Image with text",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "header",
+      "content": "Image settings"
+    },
+    {
+      "type": "select",
+      "id": "media_aspect_ratio",
+      "label": "Aspect ratio",
+      "options": [
+        {
+          "value": "natural",
+          "label": "Natural"
+        },
+        {
+          "value": "1",
+          "label": "Square (1:1)"
+        },
+        {
+          "value": "1.333",
+          "label": "Landscape (4:3)"
+        },
+        {
+          "value": "0.6667",
+          "label": "Portrait (2:3)"
+        },
+        {
+          "value": "1.778",
+          "label": "Widescreen (16:9)"
+        }
+      ],
+      "default": "natural"
+    },
+    {
+      "type": "radio",
+      "id": "image_position_on_desktop",
+      "label": "Position on desktop",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_full_bleed",
+      "label": "Enable full bleed",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Image with text"
+    },
+    {
+      "type": "radio",
+      "id": "heading_size",
+      "label": "Heading font size",
+      "options": [
+        {
+          "value": "text-heading-standard",
+          "label": "Standard"
+        },
+        {
+          "value": "text-heading-secondary",
+          "label": "Secondary"
+        }
+      ],
+      "default": "text-heading-standard"
+    },
+    {
+      "type": "richtext",
+      "id": "richtext",
+      "label": "Text",
+      "default": "<p>Use this text to share information about your brand with your customers.</p>"
+    },
+    {
+      "type": "header",
+      "content": "Call to action"
+    },
+    {
+      "type": "url",
+      "id": "cta_link",
+      "label": "Link"
+    },
+    {
+      "type": "text",
+      "id": "cta_label",
+      "label": "Label"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "image_width_on_desktop",
+      "label": "Image width on desktop",
+      "options": [
+        {
+          "value": "2",
+          "label": "One sixth (1/6)"
+        },
+        {
+          "value": "3",
+          "label": "One quarter (1/4)"
+        },
+        {
+          "value": "4",
+          "label": "One third (1/3)"
+        },
+        {
+          "value": "5",
+          "label": "Two fifths (2/5)"
+        },
+        {
+          "value": "6",
+          "label": "One half (1/2)"
+        },
+        {
+          "value": "7",
+          "label": "Three fifths (3/5)"
+        },
+        {
+          "value": "8",
+          "label": "Two thirds (2/3)"
+        },
+        {
+          "value": "9",
+          "label": "Three quarters (3/4)"
+        }
+      ],
+      "default": "6"
+    },
+    {
+      "type": "select",
+      "id": "content_width_on_desktop",
+      "label": "Max content width on desktop",
+      "info": "Max width rounds to nearest grid column in content container.",
+      "options": [
+        {
+          "value": "1.0",
+          "label": "Full width"
+        },
+        {
+          "value": "0.5",
+          "label": "One half (1/2)"
+        },
+        {
+          "value": "0.6",
+          "label": "Three fifths (3/5)"
+        },
+        {
+          "value": "0.667",
+          "label": "Two thirds (2/3)"
+        },
+        {
+          "value": "0.75",
+          "label": "Three quarters (3/4)"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "content_alignment",
+      "label": "Content alignment on desktop",
+      "options": [
+        {
+          "value": "lg:items-top lg:justify-start",
+          "label": "Top left"
+        },
+        {
+          "value": "lg:items-top lg:justify-center",
+          "label": "Top center"
+        },
+        {
+          "value": "lg:items-top lg:justify-end",
+          "label": "Top right"
+        },
+        {
+          "value": "lg:items-center lg:justify-start",
+          "label": "Center left"
+        },
+        {
+          "value": "lg:items-center lg:justify-center",
+          "label": "Center"
+        },
+        {
+          "value": "lg:items-center lg:justify-end",
+          "label": "Center right"
+        },
+        {
+          "value": "lg:items-end lg:justify-start",
+          "label": "Bottom left"
+        },
+        {
+          "value": "lg:items-end lg:justify-center",
+          "label": "Bottom center"
+        },
+        {
+          "value": "lg:items-end lg:justify-end",
+          "label": "Bottom right"
+        }
+      ],
+      "default": "lg:items-top lg:justify-start"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_top_border",
+      "label": "Show top border",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Color"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "default": "scheme_1",
+      "label": "Color scheme"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "space_above",
+      "min": 0,
+      "max": 2,
+      "step": 0.5,
+      "unit": "x",
+      "label": "Above",
+      "default": 1
+    },
+    {
+      "type": "range",
+      "id": "space_below",
+      "min": 0,
+      "max": 2,
+      "step": 0.5,
+      "unit": "x",
+      "label": "Below",
+      "default": 1
+    }
+  ],
+  "presets": [
+    {
+      "name": "Image with text"
+    }
+  ],
+  "disabled_on": {
+    "groups": [
+      "aside",
+      "header",
+      "footer",
+      "custom.hero"
+    ]
+  }
+}
+{% endschema %}

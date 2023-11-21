@@ -1,0 +1,203 @@
+{%- liquid
+  assign item_separator = '||__irregular-item__||'
+
+  capture irregular_items
+    case content_source
+      when 'collection'
+        for product in products limit: section.settings.products_to_show
+          render 'tile-product', product: product, class: 'w-full', tag: 'div', media_wrapper_aspect_ratio: section.settings.media_aspect_ratio, sizes: '[SIZES]'
+          echo item_separator
+        else
+          assign number_of_products_to_show = section.settings.products_to_show | default: 6
+          for i in (1..number_of_products_to_show)
+            render 'tile-placeholder', placeholder_index: forloop.index, type: 'product', class: 'w-full', tag: 'div', media_wrapper_aspect_ratio: section.settings.media_aspect_ratio
+            echo item_separator
+          endfor
+        endfor
+      when 'blocks'
+        for block in section.blocks
+          case block.type
+            when 'image'
+              assign media = block.settings.image
+              if media != blank
+                render 'tile-image', block: block, image: media, class: 'w-full', tag: 'div', media_wrapper_aspect_ratio: section.settings.media_aspect_ratio, caption: block.settings.caption, link: block.settings.link, sizes: '[SIZES]'
+                echo item_separator
+                continue
+              endif
+            when 'video'
+              assign media = block.settings.video
+              if media != blank
+                render 'tile-video', block: block, video: media, mode: block.settings.mode, playback: block.settings.playback, class: 'w-full', tag: 'div', media_wrapper_aspect_ratio: section.settings.media_aspect_ratio, caption: block.settings.caption, sizes: '[SIZES]'
+                echo item_separator
+                continue
+              endif
+            when 'collection'
+              assign media = block.settings.collection
+              if media != blank
+                render 'tile-collection', block: block, collection: media, class: 'w-full', tag: 'div', media_wrapper_aspect_ratio: section.settings.media_aspect_ratio, sizes: '[SIZES]'
+                echo item_separator
+                continue
+              endif
+            when 'product'
+              assign media = block.settings.product
+              if media != blank
+                render 'tile-product', product: media, class: 'w-full', tag: 'div', media_wrapper_aspect_ratio: section.settings.media_aspect_ratio, sizes: '[SIZES]'
+                echo item_separator
+                continue
+              endif
+          endcase
+          capture aspect_ratio
+            cycle 0.8, 1.2, 0.8, 1.8, 0.7, 2.2, 1.0, 2.0, 2.5, 0.7
+          endcapture
+          render 'tile-placeholder', block: block, placeholder_index: forloop.index, type: block.type, class: 'w-full', tag: 'div', media_wrapper_aspect_ratio: section.settings.media_aspect_ratio
+          echo item_separator
+        endfor
+      when 'collection_list'
+        for collection in collections
+          render 'tile-collection', collection: collection, class: 'w-full', tag: 'div', media_wrapper_aspect_ratio: section.settings.media_aspect_ratio, sizes: '[SIZES]'
+          echo item_separator
+        else
+          for i in (1..3)
+            capture aspect_ratio
+              cycle 0.8, 1.2, 0.8, 1.8, 0.7, 2.2, 1.0, 2.0, 2.5, 0.7
+            endcapture
+            render 'tile-placeholder', placeholder_index: forloop.index, type: 'collection', class: 'w-full', tag: 'div', media_wrapper_aspect_ratio: section.settings.media_aspect_ratio
+            echo item_separator
+          endfor
+        endfor
+      when 'articles'
+        for article in articles
+          render 'tile-article', article: article, class: 'w-full', tag: 'div', media_wrapper_aspect_ratio: section.settings.media_aspect_ratio, show_title: section.settings.show_title, show_author: section.settings.show_author, show_date: section.settings.show_date, show_excerpt: section.settings.show_excerpt, title_font: section.settings.title_font, sizes: '[SIZES]'
+          echo item_separator
+        else
+          render 'tile-placeholder', placeholder_index: forloop.index, type: 'image', class: 'w-full', tag: 'div', media_wrapper_aspect_ratio: section.settings.media_aspect_ratio
+          echo item_separator
+        endfor
+      when 'product_media'
+        for media in product.media
+          unless media.id == product.featured_media.id and section.settings.hide_featured_media
+            case media.media_type
+              when 'video', 'external_video'
+                render 'tile-video', video: media, mode: section.settings.video_mode, playback: section.settings.video_playback, class: 'w-full', tag: 'div', media_wrapper_aspect_ratio: section.settings.media_aspect_ratio, sizes: '[SIZES]'
+              when 'image'
+                render 'tile-image', image: media, class: 'w-full', tag: 'div', media_wrapper_aspect_ratio: section.settings.media_aspect_ratio, sizes: '[SIZES]'
+            endcase
+            echo item_separator
+          endunless
+        endfor
+    endcase
+  endcapture
+  assign irregular_items_array = irregular_items | split: item_separator
+-%}
+
+{%- style -%}
+  #section-{{ section.id }} .grid-wrapper {
+    --number-of-columns: {{ section.settings.desktop_columns }};
+    --number-of-gutters: calc(var(--number-of-columns) - 1);
+    --total-gutter-size: calc(var(--media-grid-col-gap) * var(--number-of-gutters));
+    {% if section.settings.disable_left_and_right_margins %}
+      --wrapper-left-and-right-margin: 0px;
+    {% endif %}
+    {% if section.settings.remove_grid_gaps %}
+      --media-grid-col-gap: 0px;
+      --media-grid-row-gap: 0px;
+      --media-grid-gap: 0px;
+    {% endif %}
+  }
+
+  .irregular-grid-item {
+    --total-gutter-size: var(--media-grid-col-gap)*5;
+    --column-width: calc((100% - var(--total-gutter-size))/6);
+    --item-gutter-span: calc( var(--item-col-span) - 1);
+    width: calc( (var(--column-width)*var(--item-col-span)) + (var(--media-grid-col-gap)*var(--item-gutter-span)));
+  }
+
+  .irregular-grid-item {
+    {% if section.settings.mobile_columns == '1' %}
+    width: 100%;
+    {% else %}
+    --column-width: calc((100% - var(--media-grid-col-gap))/2);
+    --item-gutter-span: calc( var(--item-col-span) - 1);
+    width: var(--column-width);
+    {% endif %}
+  }
+
+  @media (min-width: 990px) {
+
+    .irregular-grid-item {
+      --total-gutter-size: calc(var(--media-grid-col-gap) * 11);
+      --column-width: calc((100% - var(--total-gutter-size)) / 12);
+      --item-gutter-span: calc( var(--item-col-span) - 1);
+      width: calc( (var(--column-width)*var(--item-col-span)) + (var(--media-grid-col-gap)*var(--item-gutter-span)));
+    }
+  }
+{%- endstyle -%}
+
+<div class="grid-wrapper">
+  <ul class="flex flex-wrap gap-media-grid {{ section.settings.irregular_alignment_of_items }}">
+    {%- liquid
+      # Calculate sizes
+
+      if settings.enable_sidebar
+        assign sidebar_width = 100.00 | divided_by: 12 | times: settings.sidebar_width_on_desktop | round: 2
+        assign desktop_sizes_base = 100 | minus: sidebar_width
+      else
+        assign desktop_sizes_base = 100
+      endif
+
+      assign desktop_sizes_css_base = desktop_sizes_base | append: 'vw'
+
+      if settings.enable_max_grid_width
+        assign desktop_sizes_css_base = 'min(' | append: settings.max_grid_width | append: 'px, ' | append: desktop_sizes_base | append: 'vw)'
+      endif
+
+      assign mobile_sizes_in_vw = 100 | divided_by: section.settings.mobile_columns
+      assign mobile_sizes = mobile_sizes_in_vw | round: 2 | append: 'vw'
+    -%}
+    {%- for item in irregular_items_array -%}
+      {%- liquid
+        capture col_span
+          case section.settings.irregular_layout_variation
+            when 1
+              cycle 6, 4, 4
+            when 2
+              cycle 4, 6, 6
+            when 3
+              cycle 4, 6, 4
+            when 4
+              cycle 4, 7, 5
+            when 5
+              cycle 7, 5, 5
+            when 6
+              cycle 5, 7, 7
+            when 7
+              cycle 8, 6, 6
+            when 8
+              cycle 6, 6, 8
+            when 9
+              cycle 3, 7, 5
+            when 10
+              cycle 7, 3, 5
+            when 11
+              cycle 3, 5, 4, 5, 3, 4, 4, 3, 5
+            when 12
+              cycle 3, 5, 4, 5, 7, 4, 5, 3, 7, 5
+            when 13
+              cycle 3, 6, 2, 4, 5, 4, 6, 2, 6, 4
+            when 14
+              cycle 2, 8, 9, 3, 4, 7, 8, 3, 3, 9, 8, 3
+            when 15
+              cycle 3, 5, 4, 5, 4, 3, 3, 4, 5, 4, 4, 3
+          endcase
+        endcapture
+
+        assign desktop_sizes = 'calc((' | append: desktop_sizes_css_base | append: ' / 2) / 6' | append: ' * ' | append: col_span | append: ')'
+
+        assign sizes = '(min-width: 990px) ' | append: desktop_sizes | append: ', ' | append: mobile_sizes
+      -%}
+      <li class="irregular-grid-item" style="--item-col-span: {{ col_span }};">
+        {{ item | replace: '[SIZES]', sizes }}
+      </li>
+    {%- endfor -%}
+  </ul>
+</div>

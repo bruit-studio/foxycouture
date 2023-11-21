@@ -1,0 +1,75 @@
+
+{%- liquid
+  assign price = product.price | default: 1999
+-%}
+<span>
+  {% if sold_out %}
+    <span class="text-scheme-secondary {% if on_sale %} mr-2 {% endif %}">
+      {{- 'products.product.sold_out' | t -}}
+  </span>
+  {% else %}
+    <span {% if on_sale %}class="mr-2"{% endif %}>
+      {% liquid
+        if settings.currency_code_enable
+          if on_sale
+            if product.price_varies
+              assign sale_price = price | money_with_currency
+              echo 'products.general.from_text_html' | t: price: sale_price
+            else
+              echo price | money_with_currency
+            endif
+          else
+            if product.price_varies
+              assign price = price | money_with_currency
+              echo 'products.general.from_text_html' | t: price: price
+            else
+              echo price | money_with_currency
+            endif
+          endif
+        else
+          if on_sale
+            if product.price_varies
+              assign sale_price = price | money
+              echo 'products.general.from_text_html' | t: price: sale_price
+            else
+              echo price | money
+            endif
+          else
+            if product.price_varies
+              assign price = price | money
+              echo 'products.general.from_text_html' | t: price: price
+            else
+              echo price | money
+            endif
+          endif
+        endif
+      %}
+    </span>
+  {% endif %}
+  {% if on_sale and sold_out != true %}
+    <s class="text-scheme-text">
+      {% if settings.currency_code_enable %}
+        {{ product.compare_at_price | money_with_currency }}
+      {% else %}
+        {{ product.compare_at_price | money }}
+      {% endif %}
+    </s>
+  {% endif %}
+</span>
+
+{% if current_variant.unit_price %}
+  <span class="{% if on_sale %} text-scheme-accent {% endif %} m-0 text-sm" data-unit-price-wrapper>
+    <span data-unit-price>
+      {{- current_variant.unit_price | money -}}
+    </span>
+    <span>/</span>
+    <span data-unit-price-measurement-reference-value>
+    {%- if current_variant.unit_price_measurement.reference_value != 1 -%}
+      {{- current_variant.unit_price_measurement.reference_value -}}
+    {%- endif -%}
+    </span>
+    <span data-unit-price-measurement-reference-unit>
+      {{- current_variant.unit_price_measurement.reference_unit -}}
+    </span>
+  </span>
+{% endif %}

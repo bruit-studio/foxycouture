@@ -1,0 +1,334 @@
+{% liquid
+  assign section_color = section.settings.color_scheme
+  assign show_share_buttons = section.settings.show_share_buttons
+
+  assign new_comment = false
+  assign number_of_comments = article.comments_count
+
+  comment
+    In order to avoid showing "success" message when we post comments
+    with invalid format (eg. blank fields), we added logic to make
+    sure it doesn't show.
+
+    Comment help page:
+    http://docs.shopify.com/themes/liquid-variables/comment
+  endcomment
+
+  if comment and comment.created_at
+    assign new_comment = true
+    assign new_comment_id = comment.id
+  endif
+
+  if new_comment
+    comment
+      When you refresh the page with submitted comment, the comment is
+      duplicated so we added a flag to avoid this situation.
+    endcomment
+    assign duplicate_comment = false
+
+    for comment in article.comments
+      if comment.id == new_comment_id
+        assign duplicate_comment = true
+        break
+      endif
+    endfor
+
+    unless duplicate_comment
+      assign number_of_comments = article.comments_count | plus: 1
+    endunless
+  endif
+%}
+
+<article class="section-container" data-color-scheme="{{ section_color }}" style="--top-spacing-adjust: {{ section.settings.space_above }}; --bottom-spacing-adjust: {{ section.settings.space_below }};">
+  
+  <div class="text-scheme-text bg-scheme-background pt-top-section-vertical-spacing pb-bottom-section-vertical-spacing">
+    <div class="wrapper">
+      <div class="grid lg:grid-cols-12 gap-theme grid-flow-dense">
+        
+        <div
+          class="col-span-full lg:col-span-6 {{ section.settings.content_alignment_on_desktop }}"
+        >
+          <div
+            class="rte"
+            x-data="ThemeUtil_RTE"
+          >
+            {{ article.content | replace: '<meta charset="utf-8">', '' }}
+          </div>
+
+          {% if show_share_buttons %}
+            <div class="md:w-3/4  mt-8">
+              {% render 'social-share', share_title: article.title, share_permalink: article.url, share_image: article.image %}
+            </div>
+          {% endif %}
+
+          {% if blog.comments_enabled? %}
+            <div class="mt-8 lg:mt-16">
+              <h3 class="font-heading text-heading-secondary">
+                {{ 'blogs.comments.comments_with_count' | t: count: article.comments_count }}
+              </h3>
+    
+              {% paginate article.comments by 5 %}
+                <div id="comments">
+                  {% if number_of_comments > 0 %}
+                    <ul class="my-8">
+                      {% comment %}
+                        Display comment from URL parameters if it is
+                        awaiting moderation
+                      {% endcomment %}
+                      {% if comment and comment.status != 'published' %}
+                        <li class="py-4 border-b-theme border-scheme-border"id="{{ comment.id }}">
+                          <div class="rte">
+                            {{ comment.content }}
+                          </div>
+                          {% capture date %}{{ comment.created_at | time_tag: format: 'month_day_year' }}{% endcapture %}
+                          <p class="mt-2 text-sm">
+                            {{ 'blogs.article.comment_meta_html' | t: author: comment.author, date: date }}
+                          </p>
+                        </li>
+                      {% endif %}
+    
+                      {% for comment in article.comments %}
+                        <li class="py-4 border-b-theme border-scheme-border" id="{{ comment.id }}">
+                          <div class="rte">
+                            {{ comment.content }}
+                          </div>
+                          {% capture date %}{{ comment.created_at | time_tag: format: 'month_day_year' }}{% endcapture %}
+                          <p class="mt-2 text-sm">{{ 'blogs.article.comment_meta_html' | t: author: comment.author, date: date }}</p>
+                        </li>
+                      {% endfor %}
+                    </ul>
+    
+                    {% if paginate.pages > 1 %}
+                      {% render 'pagination', paginate: paginate %}
+                    {% endif %}
+                  {% endif %}
+                </div>
+              {% endpaginate %}
+    
+              {% form 'new_comment', article %}
+                {%- assign form_id = 'CommentForm' -%}
+                <h3 class="font-heading mt-8">
+                  {{ 'blogs.comments.title' | t }}
+                </h3>
+    
+                {%- liquid
+                  assign post_message_key = 'blogs.comments.success'
+    
+                  assign post_message_key = 'blogs.comments.success'
+                  if blog.moderated? and comment.status == 'unapproved'
+                    assign post_message_key = 'blogs.comments.success_moderated'
+                  endif
+                -%}
+    
+                {% render 'form-status',
+                  form: form,
+                  form_id: form_id,
+                  success_message: post_message_key,
+                %}
+    
+                <label for="{{ form_id }}-author" class="hidden">
+                  {{ 'blogs.comments.name' | t }}
+                </label>
+                <input
+                  type="text"
+                  name="comment[author]"
+                  id="{{ form_id }}-author"
+                  class="w-full my-4 {% if form.errors contains 'author' %}border-scheme-error {% endif %}"
+                  placeholder="{{ 'blogs.comments.name' | t }}"
+                  value="{{ form.author }}"
+                  autocapitalize="words"
+                  aria-required="true"
+                  required
+                />
+    
+                <label for="{{ form_id }}-email" class="hidden">
+                  {{ 'blogs.comments.email' | t }}
+                </label>
+                <input
+                  type="email"
+                  name="comment[email]"
+                  id="{{ form_id }}-email"
+                  class="w-full my-4 {% if form.errors contains 'email' %} border-scheme-error {% endif %}"
+                  placeholder="{{ 'blogs.comments.email' | t }}"
+                  value="{{ form.email }}"
+                  spellcheck="false"
+                  autocomplete="off"
+                  autocapitalize="off"
+                  aria-required="true"
+                  required
+                />
+    
+                <label for="{{ form_id }}-body" class="hidden">
+                  {{ 'blogs.comments.message' | t }}
+                </label>
+                <textarea
+                  name="comment[body]"
+                  id="{{ form_id }}-body"
+                  class="w-full my-4 {% if form.errors contains 'body' %}border-scheme-error {% endif %} "
+                  placeholder="{{ 'blogs.comments.message' | t }}"
+                  aria-required="true"
+                  required
+                >
+                  {{- form.body -}}
+                </textarea>
+    
+                {% if blog.moderated? %}
+                  <p>{{ 'blogs.comments.moderated' | t }}</p>
+                {% endif %}
+    
+                <button
+                  type="submit"
+                  class="btn btn--solid mt-4"
+                >
+                  <span class="text-base">
+                    {{ 'blogs.comments.post' | t }}
+                  </span>
+                </button>
+              {% endform %}
+            </div>
+          {% endif %}
+
+          {% if section.settings.show_next_previous_links %}
+            {% if blog.next_article or blog.previous_article %}
+              <div class="mt-8 flex justify-between items-center w-full">
+                {% if blog.next_article %}
+                  <a class="flex items-center" href="{{ blog.next_article }}">
+                    <div class="{% if settings.arrow_style == 'wide' %}w-12 h-6{% else %}w-6 h-6{% endif %} mr-1">
+                      {%- render 'icon-arrow-left' %}
+                    </div>
+                    <span class="sr-only">{{ 'blogs.article.newer_post' | t }}</span>
+                  </a>
+                {% endif %}
+    
+                {% if blog.previous_article %}
+                  <a class="ml-auto flex items-center" href="{{ blog.previous_article }}">
+                    <span class="sr-only">{{ 'blogs.article.older_post' | t }}</span>
+                    <div class="{% if settings.arrow_style == 'wide' %}w-12 h-6{% else %}w-6 h-6{% endif %} ml-1">
+                      {%- render 'icon-arrow-right' -%}
+                    </div>
+                  </a>
+                {% endif %}
+              </div>
+            {% endif %}
+          {% endif %}
+
+
+        </div>
+        
+      </div>
+    </div>
+  </div>
+</article>
+
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "Article",
+    "articleBody": {{ article.content | strip_html | json }},
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": {{ request.origin | append: page.url | json }}
+    },
+    "headline": {{ article.title | json }},
+    {% if article.excerpt != blank %}
+      "description": {{ article.excerpt | strip_html | json }},
+    {% endif %}
+    {% if article.image %}
+      "image": [
+        {{ article | image_url: width: 1920 | prepend: "https:" | json }}
+      ],
+    {% endif %}
+    "datePublished": {{ article.published_at | date: '%Y-%m-%dT%H:%M:%SZ' | json }},
+    "dateCreated": {{ article.created_at | date: '%Y-%m-%dT%H:%M:%SZ' | json }},
+    "author": {
+      "@type": "Person",
+      "name": {{ article.author | json }}
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": {{ shop.name | json }}
+    }
+  }
+</script>
+
+{% unless request.design_mode %}
+  <script src="{{ 'rte.js' | asset_url }}" type="module"></script>
+{% endunless %}
+
+{% schema %}
+{
+  "name": "Blog post content",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_share_buttons",
+      "label": "Show social media sharing buttons",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_next_previous_links",
+      "label": "Show links to next / previous articles",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "content_alignment_on_desktop",
+      "label": "Content alignment on desktop",
+      "options": [
+        {
+          "value": "lg:col-start-1",
+          "label": "Left"
+        },
+        {
+          "value": "lg:col-start-4",
+          "label": "Center"
+        },
+        {
+          "value": "lg:col-end-[-1]",
+          "label": "Right"
+        }
+      ],
+      "default": "lg:col-start-4"
+    },
+    {
+      "type": "header",
+      "content": "Color"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "default": "scheme_1",
+      "label": "Color scheme"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "space_above",
+      "min": 0,
+      "max": 2,
+      "step": 0.5,
+      "unit": "x",
+      "label": "Above",
+      "default": 1
+    },
+    {
+      "type": "range",
+      "id": "space_below",
+      "min": 0,
+      "max": 2,
+      "step": 0.5,
+      "unit": "x",
+      "label": "Below",
+      "default": 1
+    }
+  ]
+}
+{% endschema %}

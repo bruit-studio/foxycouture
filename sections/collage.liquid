@@ -1,0 +1,508 @@
+{%- liquid
+  assign section_color = section.settings.color_scheme
+-%}
+
+{%- style -%}
+  #section-{{ section.id }} .grid-wrapper {
+    --number-of-columns: {{ section.settings.desktop_columns }};
+    --number-of-gutters: calc(var(--number-of-columns) - 1);
+    --total-gutter-size: calc(var(--media-grid-col-gap) * var(--number-of-gutters));
+    {% if section.settings.disable_left_and_right_margins %}
+      --wrapper-left-and-right-margin: 0px;
+    {% endif %}
+    {% if section.settings.remove_grid_gaps %}
+      --media-grid-col-gap: 0px;
+      --media-grid-row-gap: 0px;
+      --media-grid-gap: 0px;
+    {% endif %}
+  }
+{%- endstyle -%}
+
+<section
+  id="section-{{ section.id }}"
+  x-data="{ labelContent: '', focusVisible: false }"
+  class="section-container"
+  data-color-scheme="{{ section_color }}"
+  style="--section-grid-cols-mobile: {{ section.settings.mobile_columns }}; --section-grid-cols-desktop: {{ section.settings.desktop_columns }}; --top-spacing-adjust: {{ section.settings.space_above }}; --bottom-spacing-adjust: {{ section.settings.space_below }};"
+>
+  <div class="text-scheme-text bg-scheme-background pt-top-section-vertical-spacing pb-bottom-section-vertical-spacing">
+
+    {%- liquid
+      if section.settings.title != blank
+        render 'section-title-horizontal', title: section.settings.title
+      endif
+
+      case section.settings.grid_type
+        when 'standard'
+          render 'grid-standard', content_source: 'blocks'
+        when 'masonry'
+          render 'grid-masonry', content_source: 'blocks'
+        when 'justified'
+          render 'grid-justified', content_source: 'blocks'
+        when 'modular'
+          render 'grid-modular', content_source: 'blocks'
+        when 'irregular'
+          render 'grid-irregular', content_source: 'blocks'
+      endcase
+    -%}
+  </div>
+
+  {%- liquid
+    if section.settings.labels_display == 'text_overlay_on_hover' or section.settings.labels_display == 'follow_mouse_on_hover'
+      render 'overlay-labels' with  section.settings.labels_display as labels_display
+    endif
+  -%}
+
+</section>
+
+{% schema %}
+{
+  "name": "Collage",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "grid_type",
+      "label": "Grid type",
+      "options": [
+        {
+          "value": "standard",
+          "label": "Standard"
+        },
+        {
+          "value": "masonry",
+          "label": "Masonry"
+        },
+        {
+          "value": "justified",
+          "label": "Justified"
+        },
+        {
+          "value": "modular",
+          "label": "Modular"
+        },
+        {
+          "value": "irregular",
+          "label": "Irregular"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "mobile_columns",
+      "label": "Mobile columns",
+      "options": [
+        {
+          "value": "1",
+          "label": "1 column"
+        },
+        {
+          "value": "2",
+          "label": "2 columns"
+        }
+      ],
+      "default": "1"
+    },
+    {
+      "type": "range",
+      "id": "desktop_columns",
+      "min": 1,
+      "max": 6,
+      "step": 1,
+      "label": "Number of columns on desktop",
+      "default": 5,
+      "info": "This setting does not apply if grid type is set to 'Modular' or 'Irregular'."
+    },
+    {
+      "type": "header",
+      "content": "Standard"
+    },
+    {
+      "type": "select",
+      "id": "standard_layout_align_items",
+      "label": "Alignment of items",
+      "options": [
+        {
+          "value": "items-start",
+          "label": "Top"
+        },
+        {
+          "value": "items-baseline",
+          "label": "Baseline"
+        },
+        {
+          "value": "items-center",
+          "label": "Center"
+        },
+        {
+          "value": "items-end",
+          "label": "Bottom"
+        }
+      ],
+      "default": "items-start"
+    },
+    {
+      "type": "header",
+      "content": "Modular"
+    },
+    {
+      "type": "range",
+      "id": "modular_layout_variation",
+      "min": 1,
+      "max": 12,
+      "step": 1,
+      "label": "Layout variation",
+      "default": 1
+    },
+    {
+      "type": "range",
+      "id": "modular_grid_item_aspect_ratio",
+      "min": 0.5,
+      "max": 1.8,
+      "step": 0.1,
+      "unit": ":1",
+      "label": "Grid base aspect ratio",
+      "default": 1,
+      "info": "Wide to tall"
+    },
+    {
+      "type": "header",
+      "content": "Irregular"
+    },
+    {
+      "type": "range",
+      "id": "irregular_layout_variation",
+      "min": 1,
+      "max": 15,
+      "step": 1,
+      "label": "Layout variation",
+      "default": 1
+    },
+    {
+      "type": "select",
+      "id": "irregular_alignment_of_items",
+      "label": "Alignment of items",
+      "options": [
+        {
+          "value": "items-top justify-start",
+          "label": "Top left"
+        },
+        {
+          "value": "items-top justify-center",
+          "label": "Top center"
+        },
+        {
+          "value": "items-top justify-end",
+          "label": "Top right"
+        },
+        {
+          "value": "items-top justify-between",
+          "label": "Top justified"
+        },
+        {
+          "value": "items-center justify-start",
+          "label": "Center left"
+        },
+        {
+          "value": "items-center justify-center",
+          "label": "Center"
+        },
+        {
+          "value": "items-center justify-end",
+          "label": "Center right"
+        },
+        {
+          "value": "items-center justify-between",
+          "label": "Center justified"
+        },
+        {
+          "value": "items-end justify-start",
+          "label": "Bottom left"
+        },
+        {
+          "value": "items-end justify-center",
+          "label": "Bottom center"
+        },
+        {
+          "value": "items-end justify-end",
+          "label": "Bottom right"
+        },
+        {
+          "value": "items-end justify-between",
+          "label": "Bottom justified"
+        }
+      ],
+      "default": "items-center justify-center"
+    },
+    {
+      "type": "header",
+      "content": "Media"
+    },
+    {
+      "type": "paragraph",
+      "content": "These settings only apply if grid type is set to 'Standard' or 'Irregular'."
+    },
+    {
+      "type": "select",
+      "id": "media_aspect_ratio",
+      "label": "Aspect ratio",
+      "options": [
+        {
+          "value": "natural",
+          "label": "Natural"
+        },
+        {
+          "value": "1",
+          "label": "Square (1:1)"
+        },
+        {
+          "value": "1.333",
+          "label": "Landscape (4:3)"
+        },
+        {
+          "value": "0.6667",
+          "label": "Portrait (2:3)"
+        },
+        {
+          "value": "1.778",
+          "label": "Widescreen (16:9)"
+        }
+      ],
+      "default": "natural"
+    },
+    {
+      "type": "checkbox",
+      "id": "media_fill_space",
+      "label": "Maximize size",
+      "default": false,
+      "info": "No effect when aspect ratio is set to 'Natural'."
+    },
+    {
+      "type": "header",
+      "content": "Labels"
+    },
+    {
+      "type": "checkbox",
+      "id": "labels_show_titles_and_captions",
+      "label": "Show titles and captions",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "labels_show_product_prices",
+      "label": "Show product prices",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "labels_display",
+      "label": "Display",
+      "options": [
+        {
+          "value": "below_media",
+          "label": "Below media"
+        },
+        {
+          "value": "text_overlay_on_hover",
+          "label": "Text overlay on hover"
+        },
+        {
+          "value": "follow_mouse_on_hover",
+          "label": "Follow mouse on hover"
+        }
+      ],
+      "default": "below_media",
+      "info": "Customise overlay labels in [theme settings](/editor?context=theme&category=overlay+labels)."
+    },
+    {
+      "type": "checkbox",
+      "id": "labels_always_show_on_mobile",
+      "label": "Always show labels on mobile",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Color"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "default": "scheme_1",
+      "label": "Color scheme"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "space_above",
+      "min": 0,
+      "max": 2,
+      "step": 0.5,
+      "unit": "x",
+      "label": "Above",
+      "default": 1
+    },
+    {
+      "type": "range",
+      "id": "space_below",
+      "min": 0,
+      "max": 2,
+      "step": 0.5,
+      "unit": "x",
+      "label": "Below",
+      "default": 1
+    },
+    {
+      "type": "checkbox",
+      "id": "disable_left_and_right_margins",
+      "label": "Disable left and right margins",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "remove_grid_gaps",
+      "label": "Remove grid gaps",
+      "default": false
+    }
+  ],
+  "blocks": [
+    {
+      "name": "Image",
+      "type": "image",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "caption",
+          "label": "Caption"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        }
+      ]
+    },
+    {
+      "name": "Video",
+      "type": "video",
+      "settings": [
+        {
+          "type": "video",
+          "id": "video",
+          "label": "Video"
+        },
+        {
+          "type": "radio",
+          "id": "mode",
+          "label": "Mode",
+          "options": [
+            {
+              "value": "preview",
+              "label": "Preview"
+            },
+            {
+              "value": "autoplay",
+              "label": "Autoplay"
+            }
+          ],
+          "default": "preview",
+          "info": "Autoplay will not play sound or show controls."
+        },
+        {
+          "type": "radio",
+          "id": "playback",
+          "label": "Playback",
+          "options": [
+            {
+              "value": "inline",
+              "label": "Inline"
+            },
+            {
+              "value": "modal",
+              "label": "Modal"
+            }
+          ],
+          "default": "inline",
+          "info": "Does not apply if mode is set to autoplay."
+        },
+        {
+          "type": "text",
+          "id": "caption",
+          "label": "Caption"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link",
+          "info": "This will disable video playback if mode is set to preview."
+        }
+      ]
+    },
+    {
+      "name": "Collection",
+      "type": "collection",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection"
+        }
+      ]
+    },
+    {
+      "name": "Product",
+      "type": "product",
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collage",
+      "settings": {
+        "grid_type": "modular",
+        "mobile_columns": "2"
+      },
+      "blocks": [
+        {
+          "type": "image"
+        },
+        {
+          "type": "video"
+        },
+        {
+          "type": "product"
+        }
+      ]
+    }
+  ],
+  "disabled_on": {
+    "groups": [
+      "aside",
+      "header",
+      "footer",
+      "custom.hero"
+    ]
+  }
+}
+{% endschema %}

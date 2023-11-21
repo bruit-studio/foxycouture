@@ -1,0 +1,35 @@
+<script src="{{ 'product-quick-view.js' | asset_url }}" type="module"></script>
+{% unless request.design_mode %}
+  <script
+    src="{{ 'vendor-product.bundle.min.js' | asset_url }}"
+    type="module"
+  ></script>
+  <script src="{{ 'product.js' | asset_url }}" type="module"></script>
+  <script src="{{ 'zoom.js' | asset_url }}" type="module"></script>
+  <script src="{{ 'product-content.js' | asset_url }}" type="module"></script>
+  <script
+    src="{{ 'modules-carousel.bundle.min.js' | asset_url }}"
+    type="module"
+  ></script>
+  <script
+    src="{{ 'vendor-store-availability.bundle.min.js' | asset_url }}"
+    type="module"
+  ></script>
+  <script
+    src="{{ 'store-availability.js' | asset_url }}"
+    type="module"
+  ></script>
+  <script src="{{ 'product-model.js' | asset_url }}" type="module"></script>
+  <script src="{{ 'video.js' | asset_url }}" type="module"></script>
+  <script
+    src="{{ 'youtube-embed.js' | asset_url }}"
+    type="module"
+  ></script>
+  <script
+    src="{{ 'vimeo-embed.js' | asset_url }}"
+    type="module"
+  ></script>
+  <script src="{{ 'html5-video.js' | asset_url }}" type="module"></script>
+  <link id="ModelViewerStyle" rel="stylesheet" href="https://cdn.shopify.com/shopifycloud/model-viewer-ui/assets/v1.0/model-viewer-ui.css" media="print" onload="this.media='all'">
+  {{ 'shopify-model-viewer-ui.css' | asset_url | stylesheet_tag }}
+{% endunless %}

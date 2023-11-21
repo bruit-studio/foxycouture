@@ -1,0 +1,328 @@
+{% paginate search.results by 12 %}
+  {%- liquid
+    assign results_col_span = 12
+
+    assign show_sort = section.settings.enable_sorting
+    assign show_filters = section.settings.enable_filtering
+
+    if show_filters or show_sort
+      assign total_active_values = 0
+      for filter in search.filters
+        assign total_active_values = total_active_values | plus: filter.active_values.size
+      endfor
+    endif
+
+    if search.performed
+      if search.results_count == 0
+        assign heading_text = 'general.search.no_results' | t: terms: search.terms
+      else
+        assign heading_text = 'general.search.results_with_count' | t: terms: search.terms, count: search.results_count
+      endif
+    else
+      assign heading_text = 'general.search.title' | t
+    endif
+
+    assign product_results = search.results | where: 'object_type', 'product'
+    assign article_results = search.results | where: 'object_type', 'article'
+    assign page_results = search.results | where: 'object_type', 'page'
+
+    # Calculate sizes
+
+    if settings.enable_sidebar
+      assign sidebar_width = 100.00 | divided_by: 12 | times: settings.sidebar_width_on_desktop | round: 2
+      assign desktop_sizes_base = 100 | minus: sidebar_width
+    else
+      assign desktop_sizes_base = 100
+    endif
+
+    assign desktop_sizes_css_base = desktop_sizes_base | append: 'vw'
+
+    if settings.enable_max_site_width
+      assign desktop_sizes_css_base = 'min(' | append: settings.max_site_width | append: 'px, ' | append: desktop_sizes_base | append: 'vw)'
+    endif
+
+    assign desktop_sizes = 'calc(' | append: desktop_sizes_css_base | append: ' / ' | append: section.settings.desktop_columns | append: ')'
+
+    assign mobile_sizes_in_vw = 100 | divided_by: section.settings.mobile_columns
+    assign mobile_sizes = mobile_sizes_in_vw | round: 2 | append: 'vw'
+
+    assign sizes = '(min-width: 990px) ' | append: desktop_sizes | append: ', ' | append: mobile_sizes
+
+    capture product_results_content
+      for item in product_results
+        render 'tile-product', product: item, sizes: sizes
+      endfor
+    endcapture
+
+    capture article_results_content
+      for item in article_results
+        render 'tile-article', article: item, show_title: true, show_author: section.settings.show_author, show_date: section.settings.show_date, show_excerpt: section.settings.show_excerpt, sizes: sizes
+      endfor
+    endcapture
+
+    capture page_results_content
+      for item in page_results
+        echo '<li>'
+        echo '<a href="' | append: item.url | append: '" class="theme-link">'
+        echo item.title
+        echo '</a>'
+        echo '</li>'
+      endfor
+    endcapture
+
+  -%}
+
+  {%- capture filter_drawer_toggle -%}
+  <button type="button" @click="$store.modals.open('filters')">
+    <span class="inline-block align-middle h-4 w-4 mr-1">
+      {%- render 'icon-filter' -%}
+    </span>
+    <span class="inline-block align-middle">
+      <span class="inline lg:hidden">
+        {%- liquid
+          if show_sort and show_filters
+            echo 'facets.filters.filter_and_sort' | t
+          elsif show_sort and show_filters == false
+            echo 'facets.sorting.title' | t
+          else
+            echo 'facets.filters.title_tags' | t
+          endif
+          if total_active_values > 0
+            echo '(' | append: total_active_values | append: ')'
+          endif
+        -%}
+      </span>
+      <span class="hidden lg:inline">
+        {%- liquid
+          echo 'facets.filters.title_tags' | t
+          if total_active_values > 0
+            echo '(' | append: total_active_values | append: ')'
+          endif
+        -%}
+      </span>
+    </span>
+  </button>
+{%- endcapture -%}
+
+  <section
+    id="section-{{ section.id }}"
+    class="section-container"
+    data-color-scheme="{{ section.settings.color_scheme }}"
+    style="--section-grid-cols-mobile: {{ section.settings.mobile_columns }}; --section-grid-cols-desktop: {{ section.settings.desktop_columns }}; --top-spacing-adjust: {{ section.settings.space_above }}; --bottom-spacing-adjust: {{ section.settings.space_below }};"
+    {% if show_filters or show_sort %}
+      x-data="ThemeSection_filterable('{{ section.id }}')"
+    {% endif %}
+  >
+    <div class="text-scheme-text bg-scheme-background pt-top-section-vertical-spacing pb-bottom-section-vertical-spacing">
+      <div class="wrapper mb-half-section-vertical-spacing">
+        <h1 class="font-heading text-heading-standard break-words">
+          {{ heading_text | strip }}
+        </h1>
+
+        <div class="mt-8">
+          <form action="{{ routes.search_url }}" method="get" role="search">
+            <label for="search" class="sr-only">
+              {{- 'general.search.submit' | t -}}
+            </label>
+            <div class="relative">
+              <input
+                type="search"
+                name="q"
+                class="border-scheme-text/0 border-b-theme border-b-scheme-border pl-0 pr-8 w-full focus:border rounded-[0]"
+                value="{{ search.terms | escape }}"
+                placeholder="{{ 'general.search.placeholder' | t }}"
+              >
+              <button
+                type="submit"
+                class="flex justify-center items-center absolute top-0 right-0 bottom-0 left-auto h-full"
+                aria-label="{{ 'general.search.submit' | t }}"
+              >
+                <div class="w-6 h-6">
+                  {%- render 'icon-search' -%}
+                </div>
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div id="facets-filterable" class="wrapper">
+        <div class="grid lg:grid-cols-12 gap-theme">
+
+
+
+          <div
+            class="col-span-full lg:col-span-item"
+            style="--item-col-span: {{ results_col_span }};"
+          >
+
+
+            {%- if search.performed -%}
+            {%- if show_sort or show_filters -%}
+            <div class="mb-4 lg:grid lg:grid-cols-12 gap-theme">
+              <div class="lg:col-span-2">
+              {{ filter_drawer_toggle }}
+              </div>
+
+              {% if show_filters %}
+                <div class="sr-only" id="facets-results-count">
+                  {%- if collection.products_count == 1 -%}
+                    {{ 'collections.general.items_with_count.one' | t: count: collection.products_count }}
+                  {%- else -%}
+                    {{ 'collections.general.items_with_count.other' | t: count: collection.products_count }}
+                  {%- endif -%}
+                </div>
+              {% endif %}
+
+              {% if show_sort %}
+                <div class="sw-hidden lg:block lg:col-span-4 lg:col-end-[-1] text-right">
+                  {%- render 'sort-dropdown', results: search -%}
+                </div>
+              {%- endif %}
+            </div>
+            {%- endif -%}
+            {%- endif -%}
+
+
+            <div id="facets-results">
+              <ul class="grid grid-cols-section-mobile lg:grid-cols-section-desktop  gap-theme">
+                {%- liquid
+                  for result in search.results
+                    case result.object_type
+                      when 'product'
+                        render 'tile-product', product: result, sizes: sizes
+                      when 'article'
+                        render 'tile-article', article: result, show_title: true, show_excerpt: true, title_font: 'font-heading text-heading-secondary', sizes: sizes
+                      when 'page'
+                        render 'tile-page', page: result, show_title: true, show_excerpt: true, title_font: 'font-heading text-heading-secondary', sizes: sizes
+                    endcase
+                  endfor
+                -%}
+              </ul>
+              {% if paginate.pages > 1 %}
+                <div class="my-20">
+                  {% render 'pagination', paginate: paginate %}
+                </div>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {% if show_filters or show_sort %}
+      {% render 'filters-mobile'
+        , results: search,
+        enable_color_swatch_filters: section.settings.enable_color_swatch_filters,
+        expand_filters: section.settings.expand_filters,
+        show_filter_count: section.settings.show_filter_count,
+        show_filters: show_filters,
+        show_sort: show_sort %}
+    {% endif %}
+
+  </section>
+{% endpaginate %}
+
+{% if show_filters or show_sort %}
+  <script src="{{ 'filterable.js' | asset_url }}" type="module"></script>
+{% endif %}
+
+{% schema %}
+{
+  "name": "Search",
+  "settings": [
+    {
+      "type": "select",
+      "id": "mobile_columns",
+      "label": "Mobile columns",
+      "options": [
+        {
+          "value": "1",
+          "label": "1 column"
+        },
+        {
+          "value": "2",
+          "label": "2 columns"
+        }
+      ],
+      "default": "1"
+    },
+    {
+      "type": "range",
+      "id": "desktop_columns",
+      "min": 1,
+      "max": 6,
+      "step": 1,
+      "label": "Number of columns on desktop",
+      "default": 5
+    },
+    {
+      "type": "header",
+      "content": "Filtering and sorting"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_filtering",
+      "label": "Enable filtering",
+      "info": "[Customize filters](/admin/menus)"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_sorting",
+      "label": "Enable sorting"
+    },
+    {
+      "type": "checkbox",
+      "id": "expand_filters",
+      "label": "Expand filters by default",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_filter_count",
+      "label": "Show filter counts",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_color_swatch_filters",
+      "label": "Enable color swatch filters",
+      "info": "[Learn how to set up swatches](https://help.switchthemes.co/exhibit/guides/color-swatches.html)"
+    },
+    {
+      "type": "header",
+      "content": "Color"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "default": "scheme_1",
+      "label": "Color scheme"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "space_above",
+      "min": 0,
+      "max": 2,
+      "step": 0.5,
+      "unit": "x",
+      "label": "Above",
+      "default": 1
+    },
+    {
+      "type": "range",
+      "id": "space_below",
+      "min": 0,
+      "max": 2,
+      "step": 0.5,
+      "unit": "x",
+      "label": "Below",
+      "default": 1
+    }
+  ]
+}
+{% endschema %}

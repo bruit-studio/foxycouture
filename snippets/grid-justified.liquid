@@ -1,0 +1,285 @@
+{%- style -%}
+  #section-{{ section.id }} .grid-wrapper {
+    {% if section.settings.disable_left_and_right_margins %}
+      --wrapper-left-and-right-margin: 0px;
+    {% endif %}
+    {% if section.settings.remove_grid_gaps %}
+      --media-grid-col-gap: 0px;
+      --media-grid-row-gap: 0px;
+      --media-grid-gap: 0px;
+    {% endif %}
+  }
+{%- endstyle -%}
+
+{%- liquid
+  # Set base for sizes on desktop
+
+  if settings.enable_sidebar
+    assign sidebar_width = 100.00 | divided_by: 12 | times: settings.sidebar_width_on_desktop | round: 2
+    assign desktop_sizes_base = 100 | minus: sidebar_width
+  else
+    assign desktop_sizes_base = 100
+  endif
+
+  assign desktop_sizes_css_base = desktop_sizes_base | append: 'vw'
+
+  if settings.enable_max_grid_width
+    assign desktop_sizes_css_base = 'min(' | append: settings.max_grid_width | append: 'px, ' | append: desktop_sizes_base | append: 'vw)'
+  endif
+
+  case content_source
+    when 'collection'
+      if products != blank
+        assign items = products
+      else
+        assign items = ''
+        for i in (1..max_items)
+          assign items = items | append: 'placeholder:product' | append: '|'
+        endfor
+        assign items = items | split: '|'
+      endif
+    when 'collection_list'
+      if collections != blank
+        assign items = collections
+      else
+        assign items = ''
+        for i in (1..3)
+          assign items = items | append: 'placeholder:collection' | append: '|'
+        endfor
+        assign items = items | split: '|'
+      endif
+    when 'articles'
+      if articles != blank
+        assign items = articles
+      else
+        assign items = ''
+        for i in (1..3)
+          assign items = items | append: 'placeholder:image' | append: '|'
+        endfor
+        assign items = items | split: '|'
+      endif
+    when 'product_media'
+      if section.settings.hide_featured_media and content_source == 'product_media' and product.featured_media
+        assign featured_media_position = product.featured_media.position
+        assign slice_index = featured_media_position | minus: 1
+        assign items_before = product.media | slice: 0, slice_index
+        assign items_after = product.media | slice: featured_media_position, product.media.size
+        assign items = items_before | concat: items_after
+      else
+        assign items = product.media
+      endif
+    when 'blocks'
+      assign items = section.blocks
+  endcase
+
+  if max_items
+    assign limit = max_items
+    if items.size < max_items
+      assign total_items = items.size
+    else
+      assign total_items = max_items
+    endif
+  else
+    assign limit = items.size
+    assign total_items = items.size
+  endif
+
+  assign desktop_remainder_items = total_items | modulo: section.settings.desktop_columns
+  assign mobile_remainder_items = total_items | modulo: section.settings.desktop_columns
+
+  assign desktop_aspect_ratios = ''
+  assign mobile_aspect_ratios = ''
+  assign desktop_aspect_ratio_total = 0.0
+  assign mobile_aspect_ratio_total = 0.0
+
+  for item in items limit: limit
+    comment
+      First we need to get the aspect ratio of the item
+    endcomment
+
+    capture placeholder_aspect_ratio
+      cycle 0.8, 1.2, 0.8, 1.8, 0.7, 2.2, 1.0, 2.0, 2.5, 0.7
+    endcapture
+
+    if content_source == 'blocks'
+      case item.type
+        when 'image'
+          assign media = item.settings.image
+        when 'video'
+          assign media = item.settings.video
+        when 'collection'
+          assign media = item.settings.collection.featured_image
+        when 'product'
+          assign media = item.settings.product.featured_media
+      endcase
+      assign aspect_ratio = media.aspect_ratio | default: placeholder_aspect_ratio
+    else
+      unless item contains 'placeholder:'
+        case content_source
+          when 'collection'
+            assign aspect_ratio = item.featured_media.aspect_ratio
+          when 'collection_list'
+            assign aspect_ratio = item.featured_image.aspect_ratio | default: 1.0
+          when 'articles'
+            assign aspect_ratio = item.image.aspect_ratio | default: 1.0
+          when 'product_media'
+            assign aspect_ratio = item.aspect_ratio
+        endcase
+      else
+        assign aspect_ratio = placeholder_aspect_ratio
+      endunless
+    endif
+
+    assign desktop_aspect_ratios = desktop_aspect_ratios | append: aspect_ratio | append: ':'
+    assign desktop_aspect_ratio_total = desktop_aspect_ratio_total | plus: aspect_ratio
+    assign mobile_aspect_ratios = mobile_aspect_ratios | append: aspect_ratio | append: ':'
+    assign mobile_aspect_ratio_total = mobile_aspect_ratio_total | plus: aspect_ratio
+
+    assign desktop_modulo = forloop.index | minus: desktop_remainder_items | modulo: section.settings.desktop_columns
+    if desktop_modulo == 0
+      assign desktop_aspect_ratios = desktop_aspect_ratios | append: '?' | append: desktop_aspect_ratio_total | append: '|'
+      assign desktop_aspect_ratio_total = 0.0
+    endif
+
+    assign mobile_modulo = forloop.index | minus: mobile_remainder_items | modulo: section.settings.mobile_columns
+    if mobile_modulo == 0
+      assign mobile_aspect_ratios = mobile_aspect_ratios | append: '?' | append: mobile_aspect_ratio_total | append: '|'
+      assign mobile_aspect_ratio_total = 0.0
+    endif
+  endfor
+
+  assign desktop_aspect_ratio_groups = desktop_aspect_ratios | split: '|'
+
+  for group in desktop_aspect_ratio_groups
+    assign total_aspect_ratio = group | split: '?' | last | plus: 0.0
+    assign ratios = group | split: '?' | first | split: ':'
+    assign items_in_row = ratios.size
+    for ratio in ratios
+      assign ratio_as_decimal = ratio | divided_by: total_aspect_ratio
+      assign desktop_item_keys = desktop_item_keys | append: ratio_as_decimal | append: ':' | append: items_in_row | append: ':' | append: ratio | append: '|'
+    endfor
+  endfor
+
+  assign desktop_item_keys = desktop_item_keys | split: '|'
+
+  assign mobile_aspect_ratio_groups = mobile_aspect_ratios | split: '|'
+  for group in mobile_aspect_ratio_groups
+    assign total_aspect_ratio = group | split: '?' | last | plus: 0.0
+    assign ratios = group | split: '?' | first | split: ':'
+    assign items_in_row = ratios.size
+    for ratio in ratios
+      assign ratio_as_decimal = ratio | divided_by: total_aspect_ratio
+      assign mobile_item_keys = mobile_item_keys | append: ratio_as_decimal | append: ':' | append: items_in_row | append: ':' | append: ratio | append: '|'
+    endfor
+  endfor
+
+  assign mobile_item_keys = mobile_item_keys | split: '|'
+-%}
+
+{%- style -%}
+  #JustifiedList-{{ section.id }} .ratio-item {
+    --ratio: var(--mobile-ratio);
+    --items-in-row: var(--mobile-items-in-row);
+    --gutters-in-row: calc(var(--items-in-row) - 1);
+    --total-gutter-size: calc(var(--gutters-in-row) * var(--media-grid-col-gap));
+    --base-width: calc(100% - var(--total-gutter-size));
+    width: calc(var(--base-width) * var(--ratio))
+  }
+
+  @media (min-width: 990px) {
+      #JustifiedList-{{ section.id }} .ratio-item {
+        --ratio: var(--desktop-ratio);
+        --items-in-row: var(--desktop-items-in-row);
+      }
+    }
+{%- endstyle -%}
+
+<div class="grid-wrapper">
+  <ul
+    class="flex flex-row gap-media-grid flex-wrap"
+    id="JustifiedList-{{ section.id }}"
+  >
+    {% for item in items limit: limit %}
+      {%- liquid
+        assign desktop_keys = desktop_item_keys[forloop.index0] | split: ':'
+        assign desktop_ratio = desktop_keys[0]
+        assign desktop_items_in_row = desktop_keys[1]
+
+        assign mobile_keys = mobile_item_keys[forloop.index0] | split: ':'
+        assign mobile_ratio = mobile_keys[0]
+        assign mobile_items_in_row = mobile_keys[1]
+
+        assign item_aspect_ratio = desktop_keys[2]
+
+        assign mobile_sizes = 'calc(100vw * ' | append: mobile_ratio | append: ')'
+
+        assign desktop_sizes = 'calc(' | append: desktop_sizes_css_base | append: ' * ' | append: desktop_ratio | append: ')'
+
+        assign sizes = '(min-width: 990px) ' | append: desktop_sizes | append: ', ' | append: mobile_sizes
+      -%}
+
+      <li
+        class="ratio-item relative"
+        style="--mobile-ratio: {{ mobile_ratio }}; --mobile-items-in-row: {{ mobile_items_in_row }}; --desktop-ratio: {{ desktop_ratio }}; --desktop-items-in-row: {{ desktop_items_in_row }};"
+      >
+        {%- liquid
+          if content_source == 'blocks'
+            case item.type
+              when 'image'
+                assign media = item.settings.image
+                if media != blank
+                  render 'tile-image', tag: 'div', image: media, sizes: sizes, link: block.settings.link, caption: block.settings.caption
+                  continue
+                endif
+              when 'video'
+                assign media = item.settings.video
+                if media != blank
+                  render 'tile-video', tag: 'div', block: item, video: media, mode: item.settings.mode, playback: item.settings.playback, caption: item.settings.caption, link: item.settings.link, sizes: sizes
+                  continue
+                endif
+              when 'collection'
+                assign media = item.settings.collection
+                if media != blank
+                  render 'tile-collection', tag: 'div', collection: media, sizes: sizes
+                  continue
+                endif
+              when 'product'
+                assign media = item.settings.product
+                if media != blank
+                  render 'tile-product', tag: 'div', product: media, sizes: sizes
+                  continue
+                endif
+            endcase
+            render 'tile-placeholder', placeholder_index: forloop.index, type: item.type, tag: 'div', media_wrapper_aspect_ratio: item_aspect_ratio
+          else
+            assign placeholder = false
+            if item contains 'placeholder:'
+              assign placeholder = true
+            endif
+
+            unless placeholder
+              case content_source
+                when 'collection'
+                  render 'tile-product', tag: 'div', product: item, sizes: sizes
+                when 'collection_list'
+                  render 'tile-collection', tag: 'div', collection: item, sizes: sizes
+                when 'articles'
+                  render 'tile-article', tag: 'div', article: item, show_title: section.settings.show_title, show_author: section.settings.show_author, show_date: section.settings.show_date, show_excerpt: section.settings.show_excerpt, title_font: section.settings.title_font, sizes: sizes
+                when 'product_media'
+                  case item.media_type
+                    when 'video', 'external_video'
+                      render 'tile-video', tag: 'div', video: item, mode: section.settings.video_mode, playback: section.settings.video_playback, sizes: sizes
+                    when 'image'
+                      render 'tile-image', tag: 'div', image: item, sizes: sizes
+                  endcase
+              endcase
+            else
+              assign placeholder_type = item | split: 'placeholder:' | last
+              render 'tile-placeholder', placeholder_index: forloop.index, type: placeholder_type, tag: 'div', media_wrapper_aspect_ratio: item_aspect_ratio
+            endunless
+          endif
+        -%}
+      </li>
+    {% endfor %}
+  </ul>
+</div>

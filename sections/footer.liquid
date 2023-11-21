@@ -1,0 +1,576 @@
+{% liquid
+  assign section_color = section.settings.color_scheme
+
+  assign locale_selector = false
+  assign country_selector = false
+
+  if section.settings.show_country_selector and localization.available_countries.size > 1
+    assign country_selector = true
+  endif
+
+  if section.settings.show_locale_selector and shop.published_locales.size > 1
+    assign locale_selector = true
+  endif
+
+  assign show_grid_guidelines = false
+  assign outline_class = ''
+  if section.settings.show_grid_guidelines and request.design_mode
+    assign show_grid_guidelines = true
+    assign outline_class = 'outline-dashed outline-pink-500'
+  endif
+
+%}
+
+<footer class="text-scheme-text bg-scheme-background pt-top-section-vertical-spacing pb-bottom-section-vertical-spacing" data-color-scheme="{{ section_color }}" style="--top-spacing-adjust: {{ section.settings.space_above }}; --bottom-spacing-adjust: {{ section.settings.space_below }};">
+  <div class="wrapper">
+    <div class="relative">
+      <div class="grid md:grid-cols-12 w-full gap-theme z-0 grid-flow-dense items-top">
+        {%- for block in section.blocks -%}
+          {%- case block.type -%}
+            {%- when 'menu'- %}
+              <div class="md:col-span-6 lg:col-span-item min-w-0 overflow-hidden {{ outline_class }}" style="--item-col-span: {{ block.settings.block_width_on_desktop }};">
+                {% if block.settings.show_menu_heading %}
+                  <h4 class="text-scheme-text font-heading mb-2">{{ block.settings.menu.title }}</h4>
+                {% endif %}
+                <nav>
+                  <ul class="menu {% unless block.settings.separate_with_comma %}-mx-2{% endunless %} {% if block.settings.layout == 'horizontal' %}flex flex-wrap {{ block.settings.desktop_text_alignment }}{% endif %} ">
+                    {%- for link in block.settings.menu.links -%}
+                      <li class="menu-link min-w-0 {% unless block.settings.separate_with_comma %}px-2{% endunless %}">
+                        <a href="{{ link.url }}" class="break-words">{{ link.title }}</a>
+                        {%- if block.settings.separate_with_comma and block.settings.layout == 'horizontal' -%}
+                          {%- unless forloop.last -%}
+                          &#44;&nbsp;
+                          {%- endunless -%}
+                        {%- endif -%}
+                      </li>
+                    {%- endfor -%}
+                  </ul>
+                </nav>
+              </div>
+            {%- when 'social_media' -%}
+              <div class="md:col-span-6 lg:col-span-item space-y-4 {{ block.settings.text_alignment }}" style="--item-col-span: {{ block.settings.block_width_on_desktop }};">
+                <div>
+                  {% if block.settings.heading != blank %}
+                    <h4 class="text-scheme-text font-heading mb-2">{{ block.settings.heading }}</h4>
+                  {% endif %}
+                  <div>{%- render 'social-media', display: block.settings.display, text_layout: block.settings.text_layout, text_alignment: block.settings.text_alignment -%}</div>
+                </div>
+                {%- if block.settings.enable_follow_on_shop -%}
+                <div>
+                  {% comment %} TODO: enable theme-check once `login_button` is accepted as valid filter {% endcomment %}
+                  {% # theme-check-disable %}
+                  {{ shop | login_button: action: 'follow' }}
+                  {% # theme-check-enable %}
+                </div>
+                {%- endif -%}
+              </div>
+            {%- when 'rich_text' -%}
+              <div class="md:col-span-6 lg:col-span-item {{ block.settings.text_alignment }}" style="--item-col-span: {{ block.settings.block_width_on_desktop }};">
+                <div>
+                  {% if block.settings.heading != blank %}
+                    <h4 class="text-scheme-text font-heading mb-2">{{ block.settings.heading }}</h4>
+                  {% endif %}
+                  <div class="rte">{{ block.settings.richtext }}</div>
+                </div>
+              </div>
+            {%- when 'spacer' -%}
+              <div class="hidden lg:block col-span-item {{ outline_class }}" style="--item-col-span: {{ block.settings.block_width_on_desktop }}">
+              </div>
+          {%- endcase -%}
+        {%- endfor -%}
+      </div>
+
+      <div class="text-base mt-half-section-vertical-spacing lg:mt-section-vertical-spacing grid md:grid-cols-6 lg:grid-cols-12 w-full gap-theme z-0 grid-flow-dense items-top">
+
+        {% if country_selector or locale_selector or section.settings.show_payment_icons %}
+        <div class="lg:order-4 md:col-span-6 first:lg:col-end-[-1] first:lg:flex first:lg:justify-end first:lg:items-start space-y-5">
+
+          <div class="space-y-5">
+            {% if country_selector or locale_selector %}
+            <div class="flex items-center lg:justify-end gap-x-4 text-scheme-secondary">
+              {%- if country_selector -%}
+                <div>
+                {%- form 'localization', id: 'FooterCountryForm', class: 'localization-form' -%}
+                  {%- render 'country-localization', position: 'footer' -%}
+                {%- endform -%}
+                </div>
+              {%- endif -%}
+              {%- if locale_selector -%}
+                  <div x-data="{}">
+                    {%- form 'localization', id: 'FooterLanguageFormNoScript', class: 'localization-form', x-ref: 'languageform' -%}
+                      {%- render 'language-localization', form: form, position: 'footer' -%}
+                    {%- endform -%}
+                  </div>
+              {%- endif -%}
+            </div>
+            {% endif %}
+
+            {%- if section.settings.show_payment_icons -%}
+            <ul class="-mt-1 list list-payment flex flex-wrap items-center justify-start -mx-1 {% if section.settings.grayscale_payment_icons %}grayscale{% endif %}" role="list">
+              {%- for type in shop.enabled_payment_types -%}
+                <li class="px-1 mt-1">
+                  {{ type | payment_type_svg_tag: class: 'icon icon--full-color' }}
+                </li>
+              {%- endfor -%}
+            </ul>
+            {%- endif -%}
+          </div>
+
+        </div>
+        {%- endif %}
+
+        <div class="lg:order-1 md:col-span-6 space-y-2 overflow-hidden">
+          {%- unless settings.sidebar_show_copyright and settings.enable_sidebar -%}
+          <p>&copy; {{ 'now' | date: '%Y' }} {{ shop.name | link_to: routes.root_url -}}</p>
+          {%- endunless -%}
+          {%- if section.settings.show_policies -%}
+          <ul class="policies flex flex-wrap -mx-2 text-scheme-secondary">
+            {%- for policy in shop.policies -%}
+              {%- if policy != blank -%}
+                <li>
+                  <a class="inline-block px-2 hover:underline" href="{{ policy.url }}">{{ policy.title }}</a>
+                </li>
+              {%- endif -%}
+            {%- endfor -%}
+          </ul>
+          {%- endif -%}
+          <p class="text-scheme-secondary">{{ powered_by_link }}</p>
+        </div>
+
+      </div>
+
+      {% if show_grid_guidelines %}
+        <div class="absolute inset-0 opacity-10 z-50 pointer-events-none grid grid-cols-2 lg:grid-cols-12 w-full gap-theme z-0 grid-flow-dense items-top">
+          {% for i in (1..12) %}
+            <div class="bg-pink-500 h-full"></div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
+  </div>
+
+</footer>
+
+{% schema %}
+{
+  "name": "Footer",
+  "class": "mt-auto",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Language selector",
+      "info": "To add a language, go to your [language settings.](/admin/settings/languages)"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_locale_selector",
+      "label": "Show language selector",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Country/region selector",
+      "info": "To add a country/region, go to your [payment settings.](/admin/settings/payments)"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_country_selector",
+      "label": "Show country/region selector",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Payment methods"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_payment_icons",
+      "label": "Show payment icons",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "grayscale_payment_icons",
+      "label": "Grayscale payment icons",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Policy links",
+      "info": "To add store policies, go to your [policy settings](/admin/settings/legal)."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_policies",
+      "label": "Show policy links",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Color"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "default": "scheme_1",
+      "label": "Color scheme"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "space_above",
+      "min": 0,
+      "max": 2,
+      "step": 0.5,
+      "unit": "x",
+      "label": "Above",
+      "default": 1
+    },
+    {
+      "type": "range",
+      "id": "space_below",
+      "min": 0,
+      "max": 2,
+      "step": 0.5,
+      "unit": "x",
+      "label": "Below",
+      "default": 1
+    },
+    {
+      "type": "header",
+      "content": "Theme Editor"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_grid_guidelines",
+      "label": "Show layout grid guidelines",
+      "default": false,
+      "info": "Enable to see layout grid guidelines. This will only appear in the theme editor."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "menu",
+      "name": "Menu",
+      "settings": [
+        {
+          "id": "menu",
+          "type": "link_list",
+          "label": "Menu",
+          "default": "footer",
+          "info": "This menu won’t show dropdown items"
+        },
+        {
+          "type": "radio",
+          "id": "layout",
+          "label": "Layout",
+          "options": [
+            {
+              "value": "vertical",
+              "label": "Vertical"
+            },
+            {
+              "value": "horizontal",
+              "label": "Horizontal"
+            }
+          ],
+          "default": "vertical"
+        },
+        {
+          "type": "select",
+          "id": "desktop_text_alignment",
+          "label": "Desktop text alignment",
+          "options": [
+            {
+              "value": "lg:justify-start",
+              "label": "Left"
+            },
+            {
+              "value": "lg:justify-center",
+              "label": "Center"
+            },
+            {
+              "value": "lg:justify-end",
+              "label": "Right"
+            },
+            {
+              "value": "lg:justify-between",
+              "label": "Justify"
+            }
+          ],
+          "default": "lg:justify-start"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_menu_heading",
+          "label": "Show menu heading",
+          "default": false
+        },
+        {
+          "type": "checkbox",
+          "id": "separate_with_comma",
+          "label": "Separate menu items with a comma",
+          "info": "Only applies with horizontal layout",
+          "default": false
+        },
+        {
+          "type": "header",
+          "content": "Layout"
+        },
+        {
+          "type": "select",
+          "id": "block_width_on_desktop",
+          "label": "Block width on desktop",
+          "options": [
+            {
+              "value": "2",
+              "label": "One sixth (1/6)"
+            },
+            {
+              "value": "3",
+              "label": "One quarter (1/4)"
+            },
+            {
+              "value": "4",
+              "label": "One third (1/3)"
+            },
+            {
+              "value": "5",
+              "label": "Five twelfths (5/12)"
+            },
+            {
+              "value": "6",
+              "label": "One half (1/2)"
+            }
+          ],
+          "default": "3"
+        }
+      ]
+    },
+    {
+      "name": "Rich text",
+      "type": "rich_text",
+      "settings": [
+        {
+          "id": "heading",
+          "type": "text",
+          "label": "Heading"
+        },
+        {
+          "type": "richtext",
+          "id": "richtext",
+          "label": "Paragraph",
+          "default": "<p>Use this to add additional information about your store, e.g. address / contact details.</p>"
+        },
+        {
+          "type": "select",
+          "id": "text_alignment",
+          "label": "Text alignment",
+          "options": [
+            {
+              "value": "text-left",
+              "label": "Left"
+            },
+            {
+              "value": "text-center",
+              "label": "Center"
+            },
+            {
+              "value": "text-right",
+              "label": "Right"
+            }
+          ],
+          "default": "text-left"
+        },
+        {
+          "type": "header",
+          "content": "Layout"
+        },
+        {
+          "type": "select",
+          "id": "block_width_on_desktop",
+          "label": "Block width on desktop",
+          "options": [
+            {
+              "value": "2",
+              "label": "One sixth (1/6)"
+            },
+            {
+              "value": "3",
+              "label": "One quarter (1/4)"
+            },
+            {
+              "value": "4",
+              "label": "One third (1/3)"
+            },
+            {
+              "value": "5",
+              "label": "Five twelfths (5/12)"
+            },
+            {
+              "value": "6",
+              "label": "One half (1/2)"
+            }
+          ],
+          "default": "3"
+        }
+      ]
+    },
+    {
+      "type": "social_media",
+      "name": "Social media",
+      "settings": [
+        {
+          "id": "heading",
+          "type": "text",
+          "label": "Heading"
+        },
+        {
+          "type": "radio",
+          "id": "display",
+          "label": "Display as",
+          "options": [
+            {
+              "value": "icons",
+              "label": "Icons"
+            },
+            {
+              "value": "text",
+              "label": "Text"
+            }
+          ],
+          "default": "icons"
+        },
+        {
+          "type": "radio",
+          "id": "text_layout",
+          "label": "Text layout",
+          "default": "vertical",
+          "options": [
+            {
+              "value": "vertical",
+              "label": "Vertical"
+            },
+            {
+              "value": "horizontal",
+              "label": "Horizontal"
+            }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "text_alignment",
+          "label": "Text alignment",
+          "options": [
+            {
+              "value": "text-left",
+              "label": "Left"
+            },
+            {
+              "value": "text-center",
+              "label": "Center"
+            },
+            {
+              "value": "text-right",
+              "label": "Right"
+            }
+          ],
+          "default": "text-left"
+        },
+        {
+          "type": "header",
+          "content": "Follow on Shop",
+          "info": "To allow customers to follow your store on the Shop app from your storefront, Shop Pay must be enabled. [Learn more](https://help.shopify.com/manual/online-store/themes/customizing-themes/follow-on-shop)"
+        },
+        {
+          "type": "checkbox",
+          "id": "enable_follow_on_shop",
+          "default": true,
+          "label": "Enable Follow on Shop"
+        },
+        {
+          "type": "header",
+          "content": "Layout"
+        },
+        {
+          "type": "select",
+          "id": "block_width_on_desktop",
+          "label": "Block width on desktop",
+          "options": [
+            {
+              "value": "2",
+              "label": "One sixth (1/6)"
+            },
+            {
+              "value": "3",
+              "label": "One quarter (1/4)"
+            },
+            {
+              "value": "4",
+              "label": "One third (1/3)"
+            },
+            {
+              "value": "5",
+              "label": "Five twelfths (5/12)"
+            },
+            {
+              "value": "6",
+              "label": "One half (1/2)"
+            }
+          ],
+          "default": "3"
+        }
+      ]
+    },
+    {
+      "type": "spacer",
+      "name": "Spacer",
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Spacer will only appear on desktop"
+        },
+        {
+          "type": "header",
+          "content": "Layout"
+        },
+        {
+          "type": "select",
+          "id": "block_width_on_desktop",
+          "label": "Block width on desktop",
+          "options": [
+            {
+              "value": "1",
+              "label": "One twelfth (1/12)"
+            },
+            {
+              "value": "2",
+              "label": "One sixth (1/6)"
+            },
+            {
+              "value": "3",
+              "label": "One quarter (1/4)"
+            },
+            {
+              "value": "4",
+              "label": "One third (1/3)"
+            },
+            {
+              "value": "5",
+              "label": "Five twelfths (5/12)"
+            },
+            {
+              "value": "6",
+              "label": "One half (1/2)"
+            }
+          ],
+          "default": "1"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

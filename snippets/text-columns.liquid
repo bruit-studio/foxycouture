@@ -1,0 +1,78 @@
+{%- liquid
+  assign section_color = section.settings.color_scheme
+  assign text_align = section.settings.text_alignment
+  assign media_wrapper_aspect_ratio = section.settings.crop | plus: 0
+  if media_wrapper_aspect_ratio != 0
+    assign media_wrapper_classes = media_wrapper_classes | append: ' aspect-css-var'
+    assign media_wrapper_attrs = media_wrapper_attrs | append: ' style="--ratio: ' | append: media_wrapper_aspect_ratio | append: ';"'
+    assign media_class = media_class | append: ' absolute inset-0 w-full h-full object-cover'
+  endif
+
+  capture type_classes
+    render 'type-scale-classes', mobile_text_scale: section.settings.mobile_text_scale, desktop_text_scale: section.settings.desktop_text_scale
+  endcapture
+-%}
+
+<section
+  class="section-container"
+  data-color-scheme="{{ section_color }}"
+  style="--section-grid-cols-desktop: {{ section.settings.desktop_columns }}; --top-spacing-adjust: {{ section.settings.space_above }}; --bottom-spacing-adjust: {{ section.settings.space_below }};"
+>
+  <div class="text-scheme-text bg-scheme-background pt-top-section-vertical-spacing pb-bottom-section-vertical-spacing">
+    <div class="wrapper">
+      {%- if section.settings.show_top_border -%}
+        <hr class="border-t-theme border-scheme-border mb-half-section-vertical-spacing">
+      {%- endif -%}
+      <div class="grid lg:grid-cols-section-desktop w-full gap-theme">
+        {%- for block in section.blocks -%}
+          <div class="{{ text_align }} no-m-first min-w-0">
+            {%- if has_images -%}
+            <div>
+              {% if block.settings.image != blank %}
+                <div class="relative {{ media_wrapper_classes }}" {{ media_wrapper_attrs }}>
+                {{ block.settings.image | image_url: width: 3000 | image_tag: loading: 'lazy', sizes: sizes, class: media_class }}
+                </div>
+              {% else %}
+                <div class="aspect-w-1 aspect-h-1">
+                  {{ 'image' | placeholder_svg_tag: 'w-full h-full bg-scheme-placeholder-background text-scheme-placeholder-foreground fill-current' }}
+                </div>
+              {% endif %}
+            </div>
+            {%- endif -%}
+
+            {%- if block.settings.icon != blank -%}
+              <div>
+                <span
+                  class="inline-block w-full"
+                  style="max-width: {{ section.settings.max_width_of_icons }}px;"
+                >
+                  {%- render 'content-icon', icon: block.settings.icon -%}
+                </span>
+              </div>
+            {%- endif -%}
+
+            {% if block.settings.title != blank %}
+              <h2 class="font-heading text-heading-secondary break-words {% if has_images %}mt-8{% else %}mt-4{% endif %}">
+                {{ block.settings.title | strip }}
+              </h2>
+            {% endif %}
+
+            {% if block.settings.text != blank %}
+              <div class="rte mt-4">
+                {{ block.settings.text }}
+              </div>
+            {%- endif -%}
+
+            {% if block.settings.cta_link %}
+              <div class="mt-8">
+                <a class="btn" href="{{ block.settings.cta_link }}">
+                  {{ block.settings.cta_label }}
+                </a>
+              </div>
+            {% endif %}
+          </div>
+        {%- endfor -%}
+      </div>
+    </div>
+  </div>
+</section>

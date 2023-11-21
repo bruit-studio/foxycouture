@@ -1,0 +1,170 @@
+{%- liquid
+  assign labels_display = section.settings.labels_display | default: 'below_media'
+  assign show_title = true
+  assign show_price = true
+  if section.settings.labels_show_titles_and_captions != nil
+    assign show_title = section.settings.labels_show_titles_and_captions    
+  endif
+  if section.settings.labels_show_product_prices != nil
+    assign show_price = section.settings.labels_show_product_prices
+  endif
+
+  assign placeholder_modulo = placeholder_index | minus: 1 | modulo: 5 | plus: 1
+  case type
+    when 'product'
+      assign placeholder_title = 'homepage.onboarding.product_title' | t
+      assign placeholder_image = 'product-' | append: placeholder_modulo
+    when 'collection'
+      assign placeholder_title = 'homepage.onboarding.collection_title' | t
+      assign placeholder_image = 'collection-' | append: placeholder_modulo
+    when 'image'
+      assign placeholder_title = caption
+      assign placeholder_image = 'image'
+    when 'video'
+      assign placeholder_title = caption
+      assign placeholder_image = 'lifestyle-1'
+  endcase
+
+  assign placeholder_svg_class = 'tile-placeholder-svg bg-scheme-placeholder-background text-scheme-placeholder-foreground fill-current'
+
+  if placeholder_svg_classes != blank
+    assign placeholder_svg_class = placeholder_svg_class | append: ' ' | append: placeholder_svg_classes
+  endif
+
+  assign media_wrapper_aspect_ratio = media_wrapper_aspect_ratio | default: 'natural'
+
+  if media_wrapper_aspect_ratio != 'natural'
+    assign media_wrapper_classes = media_wrapper_classes | append: ' aspect-css-var'
+    assign media_wrapper_attrs = media_wrapper_attrs | append: ' style="--ratio: ' | append: media_wrapper_aspect_ratio | append: ';"'
+    assign placeholder_svg_class  = placeholder_svg_class | append: ' absolute inset-0 w-full h-full '
+  endif
+
+  if media_wrapper_aspect_ratio == 'natural' and type == 'video'
+    assign media_wrapper_classes = media_wrapper_classes | append: ' aspect-css-var'
+    assign media_wrapper_attrs = media_wrapper_attrs | append: ' style="--ratio: 4/3;"'
+    assign placeholder_svg_class  = placeholder_svg_class | append: ' absolute inset-0 w-full h-full '
+  endif
+
+  unless labels_display
+    assign labels_display = 'below_media'
+  endunless
+  
+  assign render_labels_under_media = false
+  assign render_labels_in_footer = false
+  assign render_labels_in_overlay = false
+
+  if labels_display == 'below_media' or always_show_labels_on_mobile
+    unless context == 'slideshow'
+      assign render_labels_under_media = true
+    endunless
+  endif
+
+  if context == 'slideshow' and labels_display == 'footer'
+    assign render_labels_in_footer = true
+  endif
+
+  if labels_display == 'text_overlay_on_hover' or labels_display == 'follow_mouse_on_hover'
+    assign render_labels_in_overlay = true
+  endif 
+
+  if always_show_labels_on_mobile and labels_display != 'below_media'
+    assign content_wrapper_classes = content_wrapper_classes | append: ' lg:hidden'
+    if context == 'slideshow'
+      assign render_labels_in_footer = true
+    endif
+  endif 
+
+  assign has_label_content = false
+  if show_title and placeholder_title != blank
+    assign has_label_content = true
+  endif
+  if type == 'product' and show_price
+    assign has_label_content = true
+  endif
+
+  unless tag
+    assign tag = 'li'
+  endunless
+
+-%}
+
+<{{ tag }}
+  class="relative {% if class != blank %}{{ class }}{% endif %}"
+  {% if attributes %}
+    {{ attributes }}
+  {% endif %}
+  x-data='ThemeTile("", {{ placeholder_title | escape | json }})'
+>
+
+  <a
+    class="absolute inset-0 z-10 group"
+    {%- if labels_display == 'text_overlay_on_hover' or labels_display == 'follow_mouse_on_hover' -%}
+    x-ref="tileLink"
+    {% if show_title and placeholder_title != '' %}
+    x-on:mouseenter="showLabel" x-on:mouseleave="hideLabel"
+    x-on:focus="showLabel" x-on:blur="hideLabel"
+    @keyup.escape="hideLabel"
+    {% endif %}
+    {%- endif -%}
+  >
+  </a>
+
+  <div class="tile-media-wrapper rounded-media overflow-hidden relative {{ media_wrapper_classes }}" {{ media_wrapper_attrs }}>
+    {{ placeholder_image | placeholder_svg_tag: placeholder_svg_class }}
+    {%- if type == 'video' -%}
+      <span
+        class="z-40 absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 rounded-full w-14 h-14 lg:w-20 lg:h-20 bg-scheme-background text-scheme-background-overlay flex items-center justify-center group-hover/button:bg-scheme-accent group-hover/button:text-scheme-accent-overlay transition-opacity"
+      >
+        <span class="w-5 h-5 inline-block">
+          {%- render 'icon-play' -%}
+        </span>
+      </span>
+    {%- endif -%}
+  </div>
+
+
+  {%- if render_labels_under_media and has_label_content -%}
+    {%- if show_title or show_price -%}
+    <div class="mt-2" id="Section-{{ section.id }}-Placeholder-{{ product.id }}-label">
+      {%- if show_title -%}
+        <div class="break-words" aria-hidden="true">
+          {{ placeholder_title }}
+        </div>
+      {%- endif -%}
+      {%- if type == 'product' and show_price -%}
+        <div>
+          {% render 'product-price' %}
+        </div>
+      {%- endif -%}
+    </div>
+    {%- endif -%}
+  {%- endif -%}
+
+  {% if has_label_content and  render_labels_in_footer %}
+    <template
+      x-teleport="#Section-{{ section.id }}-CaptionContainer"
+    >
+      <span x-show="current_slide === {{ index }}" id="Section-{{ section.id }}-Placeholder-{{ product.id }}-label">
+        {%- if show_title -%}
+          {{ placeholder_title }}
+        {%- endif -%}
+      </span>
+    </template>
+  {%- endif -%}
+
+  {%- if render_labels_in_overlay -%}
+  <template x-ref="labelContent">
+    <span {% unless render_labels_under_media or render_labels_in_footer %}id="Section-{{ section.id }}-Placeholder-{{ index }}-label"{% endunless %}>
+      {%- if show_title -%}
+        {{ placeholder_title }}
+      {%- endif -%}
+    </span>
+  </template>
+  {%- endif -%}
+
+  {% unless request.design_mode %}
+    <script src="{{ 'tile.js' | asset_url }}" type="module"></script>
+  {% endunless %}
+
+</{{ tag }}>
+

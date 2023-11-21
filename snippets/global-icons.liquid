@@ -1,0 +1,80 @@
+{%- case icon_label -%}
+  {%- when 'close' -%}
+    <svg class="theme-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M37.5 10.5L10.5 37.5" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M37.5 37.5L10.5 10.5" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  {%- when 'in-stock' -%}
+    <svg aria-hidden="true" focusable="false" role="presentation" class="w-full h-full fill-current text-scheme-success" viewBox="0 0 12 12"><g fill-rule="evenodd"><path d="M1.55 6.5l.708-.707L5.086 8.62l-.707.707z"></path><path d="M3.671 8.621l6.364-6.364.708.708-6.364 6.364z"></path></g></svg>
+  {%- when 'minus' -%}
+    <svg class="theme-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M7.5 24H40.5" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  {%- when 'model' -%}
+    <svg aria-hidden="true" focusable="false" role="presentation" class="w-full h-full fill-current"  viewBox="0 0 26 26"><path d="M13,5.13,6.19,9.07v7.87L13,20.87l6.81-3.93V9.07Zm.62,7.07-.62.4v6.53L7.69,16.07V9.93L13,6.87l4.87,2.81Z" fill="currentColor"/></svg>
+  {%- when 'next' -%}
+    <svg class="theme-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M7.5 24H40.5" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M27 10.5L40.5 24L27 37.5" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  {%- when 'out-of-stock' -%}
+    <svg aria-hidden="true" focusable="false" role="presentation" class="w-full h-full fill-current text-scheme-error" viewBox="0 0 12 12"><g fill-rule="evenodd"><path d="M3.172 2.464l6.364 6.364-.708.708-6.364-6.364z"></path><path d="M9.536 3.172L3.172 9.536l-.708-.708 6.364-6.364z"></path></g></svg>
+  {%- when 'plus' -%}
+    <svg class="theme-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M7.5 24H40.5" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M24 7.5V40.5" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  {%- when 'previous' -%}
+    <svg class="theme-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M40.5 24H7.5" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M21 10.5L7.5 24L21 37.5" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  {%- when 'lock' -%}
+    <svg class="theme-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M39 16.5H9C8.17157 16.5 7.5 17.1716 7.5 18V39C7.5 39.8284 8.17157 40.5 9 40.5H39C39.8284 40.5 40.5 39.8284 40.5 39V18C40.5 17.1716 39.8284 16.5 39 16.5Z" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M17.25 16.5V9.75C17.25 7.95979 17.9612 6.2429 19.227 4.97703C20.4929 3.71116 22.2098 3 24 3C25.7902 3 27.5071 3.71116 28.773 4.97703C30.0388 6.2429 30.75 7.95979 30.75 9.75V16.5" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  {%- when 'rss' -%}
+    <svg aria-hidden="true" focusable="false" role="presentation" class="w-full h-full fill-current" viewBox="0 0 20 20">
+      <path d="M5.903 16.586a2.489 2.489 0 11-4.977 0 2.489 2.489 0 014.977 0zm7.053 2.489H9.43c0-4.688-3.817-8.505-8.505-8.505V7.044c6.638 0 12.031 5.393 12.031 12.031z"/>
+      <path d="M15.445 19.075c0-8.028-6.493-14.52-14.52-14.52V.925c10.019 0 18.15 8.131 18.15 18.15h-3.63z"/>
+    </svg>
+  {%- when 'chevron-down' -%}
+    <svg class="theme-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M39 18L24 33L9 18" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  {%- when 'chevron-up' -%}
+    <svg class="theme-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M9 30L24 15L39 30" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  {%- when 'chevron-left' -%}
+    <svg class="theme-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M30 39L15 24L30 9" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  {%- when 'chevron-right' -%}
+    <svg class="theme-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M18 9L33 24L18 39" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  {%- when 'search' -%}
+    <svg class="theme-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M21.75 37.5C30.4485 37.5 37.5 30.4485 37.5 21.75C37.5 13.0515 30.4485 6 21.75 6C13.0515 6 6 13.0515 6 21.75C6 30.4485 13.0515 37.5 21.75 37.5Z" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M32.8875 32.8875L42 42" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  {%- when 'filter' -%}
+    <svg class="theme-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M25.5 32.25H7.5" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M40.5 32.25H31.5" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M13.5 15.75H7.5" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M40.5 15.75H19.5" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M19.5 11.25V20.25" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M31.5 36.75V27.75" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  {%- when 'sort' -%}
+    <svg class="theme-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M21 33L15 39L9 33" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M15 9V39" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M27 15L33 9L39 15" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M33 39V9" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  {%- else -%}
+{%- endcase -%}

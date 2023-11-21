@@ -1,0 +1,214 @@
+{%- liquid
+  assign section_color = section.settings.color_scheme
+  assign heading_font = section.settings.heading_font
+-%}
+
+<section class="section-container" data-color-scheme="{{ section_color }}" style="--top-spacing-adjust: {{ section.settings.space_above }}; --bottom-spacing-adjust: {{ section.settings.space_below }};">
+  <div class="text-scheme-text bg-scheme-background pt-top-section-vertical-spacing pb-bottom-section-vertical-spacing">
+
+    {%- if section.settings.title != blank -%}
+      {%- render 'section-title-horizontal', title: section.settings.title -%}
+    {%- endif -%}
+    
+    <div class="wrapper">
+      <ul>
+        {% for block in section.blocks %}
+          <li {{ block.shopify_attributes }}>
+            <div
+              x-data="{ expanded: false }"
+              class="
+                border-t border-scheme-border
+                {% if forloop.last %}
+                  border-t-theme border-b-theme
+                {% else %}
+                  border-t-theme 
+                {% endif %}
+              "
+            >
+              <h2 class="{{ heading_font }}  break-words">
+                <button
+                  type="button"
+                  @click="expanded = ! expanded"
+                  aria-controls="answer-{{ section.id }}-{{ block.id }}"
+                  :aria-expanded="expanded ? true : 'false'"
+                  class="text-left cursor-pointer flex justify-between items-center w-full py-4 break-words"
+                >
+                  <span class="break-words">{{ block.settings.title | strip }}</span>
+                  <span
+                    class="w-5 h-5 shrink-0 inline-block transition-transform ease-gentle duration-[280ms]"
+                    x-cloak
+                  >
+                    {%- if settings.accordion_icon == 'plus_minus' -%}
+                    <span x-show="expanded">{% render 'icon-minus' %}</span>
+                    <span x-show="!expanded">{% render 'icon-plus' %}</span>
+                    {%- else -%}
+                    <span class="block rotate-180" x-show="expanded">{% render 'icon-chevron-down' %}</span>
+                    <span x-show="!expanded">{% render 'icon-chevron-down' %}</span>
+                    {%- endif -%}
+                  </span>
+                </button>
+              </h2>
+              <div
+                id="answer-{{ section.id }}-{{ block.id }}"
+                x-show="expanded"
+                x-collapse
+                x-cloak
+              >
+                <div class="rte richtext text-base break-words  pb-half-section-vertical-spacing {{ section.settings.expanded_content_max_width }}">
+                  {{ block.settings.expanded_content }}
+                </div>
+              </div>
+            </div>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>  
+</section>
+
+{% schema %}
+{
+  "name": "Collapsible rows",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Collapsible rows"
+    },
+    {
+      "type": "radio",
+      "id": "heading_font",
+      "label": "Heading font",
+      "options": [
+        {
+          "value": "font-heading text-secondary",
+          "label": "Heading"
+        },
+        {
+          "value": "font-main",
+          "label": "Body"
+        }
+      ],
+      "default": "font-heading text-secondary"
+    },
+    {
+      "type": "select",
+      "id": "expanded_content_max_width",
+      "label": "Max width of expanded content",
+      "options": [
+        {
+          "value": "",
+          "label": "None"
+        },
+        {
+          "value": "max-w-sm",
+          "label": "Small"
+        },
+        {
+          "value": "max-w-lg",
+          "label": "Medium"
+        },
+        {
+          "value": "max-w-xl",
+          "label": "Large"
+        }
+      ],
+      "default": ""
+    },
+    {
+      "type": "header",
+      "content": "Color"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "default": "scheme_1",
+      "label": "Color scheme"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "space_above",
+      "min": 0,
+      "max": 2,
+      "step": 0.5,
+      "unit": "x",
+      "label": "Above",
+      "default": 1
+    },
+    {
+      "type": "range",
+      "id": "space_below",
+      "min": 0,
+      "max": 2,
+      "step": 0.5,
+      "unit": "x",
+      "label": "Below",
+      "default": 1
+    }
+  ],
+  "blocks": [
+    {
+      "name": "Row",
+      "type": "row",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Heading",
+          "default": "Heading"
+        },
+        {
+          "type": "richtext",
+          "id": "expanded_content",
+          "label": "Expanded content",
+          "default": "<p>Use this text to share information about your brand with your customers.</p>"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collapsible rows",
+      "blocks": [
+        {
+          "type": "row"
+        },
+        {
+          "type": "row"
+        },
+        {
+          "type": "row"
+        },
+        {
+          "type": "row"
+        },
+        {
+          "type": "row"
+        },
+        {
+          "type": "row"
+        },
+        {
+          "type": "row"
+        },
+        {
+          "type": "row"
+        }
+      ]
+    }
+  ],
+  "disabled_on": {
+    "groups": [
+      "aside",
+      "header",
+      "footer",
+      "custom.hero"
+    ]
+  }
+}
+{% endschema %}

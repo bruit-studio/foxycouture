@@ -1,0 +1,8 @@
+<div class="wrapper mb-half-section-vertical-spacing flex justify-between items-center flex-wrap gap-4">
+  <h2 class="font-heading text-heading-standard break-words">
+    {{ title | strip }}
+  </h2>
+  {%- if view_all_button != blank -%}
+    {{ view_all_button }}
+  {%- endif -%}
+</div>

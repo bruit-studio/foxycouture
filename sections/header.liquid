@@ -1,0 +1,1224 @@
+{%- liquid
+  assign default_color_scheme = section.settings.color_scheme
+  assign overlay_color_scheme = section.settings.overlay_color_scheme
+  assign color_scheme = default_color_scheme
+
+  assign link_classes = ''
+  assign uppercase = settings.header_uppercase
+
+  if uppercase
+    assign link_classes = link_classes | append: ' uppercase'
+  endif
+
+  assign show_drawer_menu_on_mobile = section.settings.drawer_menu | split: '|' | first
+  assign show_drawer_menu_on_desktop = section.settings.drawer_menu | split: '|' | last
+
+  assign show_cart_on_mobile = section.settings.cart | split: '|' | first
+  assign show_cart_on_desktop = section.settings.cart | split: '|' | last
+
+  assign logo_columns = section.settings.logo_block_width_on_desktop | plus: 0
+  assign utility_links_columns = section.settings.utility_links_block_width_on_desktop | plus: 0
+  if show_drawer_menu_on_desktop == 'h' and show_cart_on_desktop == 'h' and section.settings.enable_search == false
+    assign utility_links_columns = 0
+    assign hide_utility_links_on_desktop = true
+  endif
+  if settings.sidebar_show_logo and settings.enable_sidebar
+    assign logo_columns = 0
+  endif
+  assign total_columns = logo_columns | plus: utility_links_columns
+  assign cols_remaining_in_row = 12 | minus: total_columns
+
+
+  assign overlay_header = false
+
+  if section.settings.enable_overlay_on_homepage and template == 'index'
+    assign overlay_header = true
+  endif
+
+  if section.settings.enable_overlay_on_collection_pages and template contains 'collection'
+    assign overlay_header = true
+  endif
+
+  if section.settings.enable_overlay_on_product_pages and template contains 'product'
+    assign overlay_header = true
+  endif
+
+  if section.settings.enable_overlay_on_article_pages and template contains 'article'
+    assign overlay_header = true
+  endif
+
+  if section.settings.enable_overlay_on_page_templates and template contains 'page'
+    assign overlay_header = true
+  endif
+
+
+  if overlay_header
+    assign color_scheme = overlay_color_scheme
+    assign overlay_color_classes = 'bg-transparent text-scheme-text'
+    if section.settings.use_alternate_logo and settings.logo_alternate != blank
+      assign overlay_color_classes = overlay_color_classes | append: ' show-alt-logo'
+    endif
+  endif
+
+  assign show_grid_guidelines = false
+  assign outline_class = ''
+  if section.settings.show_grid_guidelines and request.design_mode
+    assign show_grid_guidelines = true
+    assign outline_class = 'outline-dashed outline-pink-500'
+  endif
+
+  
+-%}
+
+<style>
+  #{{ section.id }},
+  #{{ section.id }}-logo  {
+    --spacing-adjust: {{ section.settings.padding }};
+    --padding: calc(var(--spacer) * var(--spacing-adjust, 1));
+    padding-top: var(--padding);
+    padding-bottom: var(--padding);
+  }
+
+  {%- if section.settings.sticky_header -%}
+  .shopify-section-header {
+    position: sticky;
+    top: 0;
+    z-index: 21;
+  }
+
+  :root {
+    --sticky-offset: var(--header-height);
+  }
+  {%- endif -%}
+</style>
+
+
+{%- capture menu_button_content -%}
+  {%- if section.settings.use_icons -%}
+    <span class="sr-only">{{ 'layout.navigation.menu' | t }}</span>
+    <div class="w-6 h-6">
+      {%- liquid
+        assign index = settings.menu_icon_variation
+        case index
+          when 1
+            render 'icon-menu-1'
+          when 2
+            render 'icon-menu-2'
+          when 3
+            render 'icon-menu-3'
+          when 4
+            render 'icon-menu-4'
+        endcase
+      -%}
+    </div>
+  {%- else -%}
+  <span class="hover:underline">
+    {{ 'layout.navigation.menu' | t }}
+  </span>
+  {%- endif -%}
+{%- endcapture -%}
+
+{%- capture cart_button_content -%}
+{%- if section.settings.use_icons -%}
+<span class="sr-only">{{ 'layout.cart.title' | t }}</span>
+<div class="w-6 h-6">
+  {%- liquid
+    case settings.cart_icon
+      when 'basket'
+        render 'icon-basket'
+      when 'bag'
+        render 'icon-bag'
+      when 'cart'
+        render 'icon-cart'
+    endcase
+  -%}
+</div>
+{%- else -%}
+<span class="hover:underline">{{ 'layout.cart.title' | t }} (<span x-text="$store.cart_count.count">{{ cart.item_count }}</span>)</span>
+{%- endif -%}
+{%- endcapture -%}
+
+{%- capture account_button_content -%}
+  {%- if section.settings.use_icons -%}
+    <span class="sr-only">
+      {%- liquid
+        if customer
+          echo 'customer.account_fallback' | t
+        else
+          echo 'customer.log_in' | t
+        endif
+      -%}
+    </span>
+    <div class="w-6 h-6">
+      {%- render 'icon-account' -%}
+    </div>
+  {%- else -%}
+    <span class="hover:underline">
+    {%- liquid
+      if customer
+        echo 'customer.account_fallback' | t
+      else
+        echo 'customer.log_in' | t
+      endif
+    -%}
+    </span>
+  {%- endif -%}
+{%- endcapture -%}
+
+<header
+  id="{{ section.id }}"
+  x-data="{}"
+  class="{% if overlay_header %}{{ overlay_color_classes }} absolute top-0 left-0 right-0 z-20 transition-colors duration-300 {% else %}bg-scheme-background text-scheme-text {% endif %} {% render 'type-scale-classes', mobile_text_scale: section.settings.mobile_text_scale, desktop_text_scale: section.settings.desktop_text_scale %}"
+  data-css-variable="--header-height"
+  data-color-scheme="{{ color_scheme }}"
+  data-theme-header
+>
+  <div class="wrapper">
+    <div class="relative">
+      {% if show_grid_guidelines %}
+        <div class="absolute inset-0 opacity-10 z-50 pointer-events-none grid grid-cols-2 lg:grid-cols-12 w-full gap-theme grid-flow-dense {{ section.settings.align_content }}">
+          {% for i in (1..12) %}
+            <div class="bg-pink-500 h-full"></div>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      <div
+        id="{{ section.id }}-main-grid"
+        class="grid grid-cols-2 row-start-1  lg:grid-cols-12 w-full gap-theme {{ section.settings.align_content }} {{ section.settings.text_size }} {{ link_classes }}"
+      >
+        <div
+          class="row-start-1 {{ outline_class }} lg:col-span-item {% if settings.sidebar_show_logo and settings.enable_sidebar %}lg:hidden{% endif %}"
+          style="--item-col-span: {{ section.settings.logo_block_width_on_desktop }};"
+        >
+          {%- render 'logo',
+            logo_max_width: section.settings.logo_max_width,
+            link: routes.root_url
+          -%}
+        </div>
+
+        {%- for block in section.blocks -%}
+          {%- liquid
+            if cols_remaining_in_row <= 0
+              assign cols_remaining_in_row = 12
+            endif
+            if forloop.last and block.settings.fill_remaining_space
+              assign col_span = cols_remaining_in_row
+            elsif forloop.first and block.settings.fill_remaining_space
+              assign col_span = cols_remaining_in_row
+              assign cols_remaining_in_row = 0
+            else
+              assign col_span = block.settings.block_width_on_desktop | plus: 0
+              if col_span <= cols_remaining_in_row
+                assign cols_remaining_in_row = cols_remaining_in_row | minus: col_span
+              else
+                assign cols_remaining_in_row = 12 | minus: col_span
+              endif
+            endif
+            assign mobile_class = 'hidden lg:block'
+            if block.settings.show_block_on_mobile
+              assign mobile_class = block.settings.block_width_on_mobile
+            endif
+          -%}
+          {%- case block.type -%}
+            {%- when 'horizontal_menu' -%}
+              {%- liquid
+                assign last_block = false
+                if hide_utility_links_on_desktop and forloop.last
+                  assign last_block = true
+                endif
+              -%}
+              <div
+                class="{{ mobile_class }} lg:col-span-item {{ outline_class }}"
+                style="--item-col-span: {{ col_span }};"
+              >
+                {%- liquid
+                  case block.settings.nested_navigation_style
+                    when 'dropdown'
+                      render 'header-horizontal-menu-dropdown', block: block, link_classes: link_classes, cart_button_content: cart_button_content, last_block: last_block
+                    when 'mega_menu'
+                      render 'header-horizontal-menu-mega-menu', block: block, link_classes: link_classes, cart_button_content: cart_button_content
+                    when 'drawer'
+                      render 'header-horizontal-menu-drawer', block: block, link_classes: link_classes, cart_button_content: cart_button_content
+                  endcase
+                -%}
+              </div>
+            {%- when 'vertical_menu' -%}
+              <div
+                class="{{ mobile_class }}  lg:col-span-item {{ outline_class }}"
+                style="--item-col-span: {{ col_span }};"
+              >
+                {%- render 'header-vertical-menu',
+                  menu: block.settings.menu,
+                  show_menu_heading: block.settings.show_menu_heading,
+                  link_classes: link_classes
+                -%}
+              </div>
+            {%- when 'rich_text' -%}
+              <div class="rte {{ mobile_class }} lg:col-span-item {{ outline_class }}" style="--item-col-span: {{ col_span }};">
+                {{ block.settings.richtext }}
+              </div>
+            {%- when 'localization' -%}
+              <div
+                class="{{ mobile_class }} col-span-item {{ outline_class }} {% if block.settings.display == 'horizontal' %}flex {{ block.settings.desktop_alignment }}{% else %}space-y-2 inline-block{% endif %}"
+                style="--item-col-span: {{ col_span }};"
+              >
+                <ul class="{% if block.settings.display == 'horizontal' %}flex flex-wrap {{ block.settings.desktop_alignment }}{% else %}space-y-2 inline-block{% endif %} gap-4">
+                  {%- if block.settings.show_country_selector -%}
+                    <li>
+                      {%- form 'localization',
+                        id: 'FooterCountryForm',
+                        class: 'localization-form'
+                      -%}
+                        {%- render 'country-localization',
+                          position: 'header'
+                        -%}
+                      {%- endform -%}
+                    </li>
+                  {%- endif -%}
+                  {%- if block.settings.show_locale_selector -%}
+                    <li x-data="{}">
+                      {%- form 'localization',
+                        id: 'FooterLanguageFormNoScript',
+                        class: 'localization-form',
+                        x-ref: 'languageform'
+                      -%}
+                        {%- render 'language-localization',
+                          form: form,
+                          position: 'header'
+                        -%}
+                      {%- endform -%}
+                    </li>
+                  {%- endif -%}
+                </ul>
+              </div>
+            {%- when 'spacer' -%}
+              <div
+                class="{{ mobile_class }} col-span-item {{ outline_class }}"
+                style="--item-col-span: {{ col_span }};"
+              ></div>
+          {%- endcase -%}
+        {%- endfor -%}
+
+        <div
+          class="row-start-1  lg:col-span-item lg:col-end-[-1] {{ outline_class }} {% if hide_utility_links_on_desktop %}lg:hidden{% endif %}"
+          style="--item-col-span: {{ section.settings.utility_links_block_width_on_desktop }}"
+        >
+          <div class="flex flex-wrap justify-end items-top gap-5">
+            {%- if show_drawer_menu_on_mobile == 's'
+              or show_drawer_menu_on_desktop == 's'
+            -%}
+              <button
+                class="{{ link_classes }} js-enabled {% if show_drawer_menu_on_mobile == 's' %}block{% else %}hidden{% endif %} {% if show_drawer_menu_on_desktop == 's' %}lg:block{% else %}lg:hidden{% endif %}"
+                type="button"
+                @click="$store.modals.open('menu-drawer')"
+              >
+                {{ menu_button_content }}
+              </button>
+            {%- endif -%}
+
+            {%- if section.settings.enable_search -%}
+              {% render 'header-search' %}
+            {%- endif -%}
+
+            {%- if shop.customer_accounts_enabled and show_drawer_menu_on_desktop != 's' -%}
+              <a href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}" class="hidden lg:block">
+                {{ account_button_content }}
+              </a>
+            {%- endif -%}
+
+            {%- if settings.cart_type == 'drawer' and template != 'cart' -%}
+              <button
+                class="{{ link_classes }} {% if show_cart_on_mobile == 's' %}block{% else %}hidden{% endif %} {% if show_cart_on_desktop == 's' %}lg:block{% else %}lg:hidden{% endif %}"
+                @click.prevent="$store.modals.open('cart')"
+              >
+                {{ cart_button_content }}
+              </button>
+            {%- else -%}
+              <a
+                class="{% if show_cart_on_mobile == 's' %}block{% else %}hidden{% endif %} {% if show_cart_on_desktop == 's' %}lg:block{% else %}lg:hidden{% endif %}"
+                href="{{ routes.cart_url }}"
+              >
+                {{ cart_button_content }}
+              </a>
+            {%- endif -%}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+{% if section.settings.sticky_header == true %}
+  {%- liquid
+    assign overlay_color_classes = overlay_color_classes | split: ' '
+    assign overlay_class_list = ''
+    for class in overlay_color_classes
+      assign overlay_class_list = overlay_class_list | append: "'" | append: class | append: "'"
+      unless forloop.last
+        assign overlay_class_list = overlay_class_list | append: ', '
+      endunless
+    endfor
+  -%}
+  <script>
+    const headerWrapper = document.getElementById("{{ section.id }}");
+    function stickyHeaderLeave(e) {
+      headerWrapper.classList.remove({{ overlay_class_list }});
+      headerWrapper.classList.add('text-scheme-text', 'bg-scheme-background');
+      headerWrapper.dataset.colorScheme = "{{ default_color_scheme }}";
+    }
+    function stickyHeaderEnter(e) {
+      headerWrapper.classList.remove('text-scheme-text', 'bg-scheme-background');
+      headerWrapper.classList.add({{ overlay_class_list }});
+      headerWrapper.dataset.colorScheme = "{{ overlay_color_scheme }}";
+    }
+  </script>
+  <div
+    x-data
+    {% if settings.enable_sidebar and settings.sidebar_desktop_layout == 'screen_height' %}
+    x-init="document.querySelector('.main-site-grid--container').insertBefore($root.firstElementChild, document.getElementById('shopify-section-{{ section.id }}')); $root.remove();"
+    {% else %}
+    x-init="document.body.insertBefore($root.firstElementChild, document.getElementById('shopify-section-{{ section.id }}')); $root.remove();"
+    {% endif %}
+  >
+    <div
+      id="HeaderSentinel"
+      x-data="{}"
+      x-intersect:leave="stickyHeaderLeave()"
+      x-intersect:enter="stickyHeaderEnter()"
+    ></div>
+  </div>
+{% endif %}
+
+
+{% unless request.design_mode %}
+  <script src="{{ 'cart-count.js' | asset_url }}" type="module"></script>
+  {% if settings.predictive_search_enabled %}
+    <script
+      src="{{ 'predictive-search.js' | asset_url }}"
+      type="module"
+    ></script>
+
+    <script src="{{ 'tile.js' | asset_url }}" type="module"></script>
+  {% endif %}
+{% endunless %}
+
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "Organization",
+    "name": {{ shop.name | json }},
+    {% if settings.logo %}
+      "logo": {{ settings.logo | image_url: width: 500 | prepend: "https:" | json }},
+    {% endif %}
+    "sameAs": [
+      {{ settings.social_twitter_link | json }},
+      {{ settings.social_facebook_link | json }},
+      {{ settings.social_pinterest_link | json }},
+      {{ settings.social_instagram_link | json }},
+      {{ settings.social_tiktok_link | json }},
+      {{ settings.social_tumblr_link | json }},
+      {{ settings.social_snapchat_link | json }},
+      {{ settings.social_youtube_link | json }},
+      {{ settings.social_vimeo_link | json }}
+    ],
+    "url": {{ request.origin | append: page.url | json }}
+  }
+</script>
+
+{% schema %}
+{
+  "name": "Header",
+  "class": "shopify-section-header",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Logo"
+    },
+    {
+      "type": "paragraph",
+      "content": "Edit your logo in [theme settings](/editor?context=theme&category=logo)."
+    },
+    {
+      "type": "range",
+      "id": "logo_max_width",
+      "min": 10,
+      "max": 500,
+      "step": 5,
+      "unit": "px",
+      "label": "Logo max width",
+      "default": 200,
+      "info": "Logo width will not exceed logo block width"
+    },
+    {
+      "type": "header",
+      "content": "Utility links"
+    },
+    {
+      "type": "select",
+      "id": "cart",
+      "label": "Cart",
+      "options": [
+        {
+          "value": "s|s",
+          "label": "Show on mobile and desktop"
+        },
+        {
+          "value": "s|h",
+          "label": "Show on mobile only"
+        },
+        {
+          "value": "h|s",
+          "label": "Show on desktop only"
+        },
+        {
+          "value": "h|h",
+          "label": "Hide"
+        }
+      ],
+      "default": "s|s",
+      "info": "Cart link can also be appended to a horizontal menu in section blocks."
+    },
+    {
+      "type": "select",
+      "id": "drawer_menu",
+      "label": "Drawer menu",
+      "options": [
+        {
+          "value": "s|s",
+          "label": "Show on mobile and desktop"
+        },
+        {
+          "value": "s|h",
+          "label": "Show on mobile only"
+        },
+        {
+          "value": "h|s",
+          "label": "Show on desktop only"
+        },
+        {
+          "value": "h|h",
+          "label": "Hide"
+        }
+      ],
+      "default": "s|s"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_search",
+      "label": "Enable search",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "use_icons",
+      "label": "Use icons",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "logo_block_width_on_desktop",
+      "label": "Logo block width on desktop",
+      "options": [
+        {
+          "value": "2",
+          "label": "One sixth (1/6)"
+        },
+        {
+          "value": "3",
+          "label": "One quarter (1/4)"
+        },
+        {
+          "value": "4",
+          "label": "One third (1/3)"
+        },
+        {
+          "value": "5",
+          "label": "Five twelfths (5/12)"
+        },
+        {
+          "value": "6",
+          "label": "One half (1/2)"
+        }
+      ],
+      "default": "2"
+    },
+    {
+      "type": "select",
+      "id": "utility_links_block_width_on_desktop",
+      "label": "Utility links block width on desktop",
+      "options": [
+        {
+          "value": "2",
+          "label": "One sixth (1/6)"
+        },
+        {
+          "value": "3",
+          "label": "One quarter (1/4)"
+        },
+        {
+          "value": "4",
+          "label": "One third (1/3)"
+        },
+        {
+          "value": "5",
+          "label": "Five twelfths (5/12)"
+        },
+        {
+          "value": "6",
+          "label": "One half (1/2)"
+        }
+      ],
+      "default": "2"
+    },
+    {
+      "type": "range",
+      "id": "padding",
+      "min": 0,
+      "max": 2,
+      "step": 0.5,
+      "unit": "x",
+      "label": "Padding",
+      "default": 1
+    },
+    {
+      "type": "radio",
+      "id": "align_content",
+      "label": "Align content",
+      "options": [
+        {
+          "value": "items-top",
+          "label": "Top"
+        },
+        {
+          "value": "items-center",
+          "label": "Center"
+        }
+      ],
+      "default": "items-top"
+    },
+    {
+      "type": "checkbox",
+      "id": "sticky_header",
+      "label": "Sticky header",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Overlay header"
+    },
+    {
+      "type": "paragraph",
+      "content": "When enabled header will be transparent and positioned over first section."
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_overlay_on_homepage",
+      "label": "Enable on home page",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_overlay_on_collection_pages",
+      "label": "Enable on collection pages",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_overlay_on_product_pages",
+      "label": "Enable on product pages",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_overlay_on_article_pages",
+      "label": "Enable on blog posts",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_overlay_on_page_templates",
+      "label": "Enable on page templates",
+      "default": false
+    },
+    {
+      "type": "color_scheme",
+      "id": "overlay_color_scheme",
+      "default": "scheme_1",
+      "label": "Color scheme when overlay is enabled"
+    },
+    {
+      "type": "checkbox",
+      "id": "use_alternate_logo",
+      "label": "Use alternate logo",
+      "default": true,
+      "info": "Add alternate logo in [theme settings](/editor?context=theme&category=logo)."
+    },
+    {
+      "type": "header",
+      "content": "Color"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "default": "scheme_1",
+      "label": "Color scheme"
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "range",
+      "id": "desktop_text_scale",
+      "min": -2,
+      "max": 4,
+      "step": 1,
+      "label": "Desktop font size scale",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "mobile_text_scale",
+      "min": -2,
+      "max": 2,
+      "step": 1,
+      "label": "Mobile font size scale",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Theme Editor"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_grid_guidelines",
+      "label": "Show layout grid guidelines",
+      "default": false,
+      "info": "Enable to see layout grid guidelines. This will only appear in the theme editor."
+    }
+  ],
+  "blocks": [
+    {
+      "name": "Horizontal menu",
+      "type": "horizontal_menu",
+      "settings": [
+        {
+          "id": "menu",
+          "type": "link_list",
+          "label": "Menu",
+          "default": "main-menu"
+        },
+        {
+          "type": "select",
+          "id": "nested_navigation_style",
+          "label": "Nested navigation style",
+          "options": [
+            {
+              "value": "dropdown",
+              "label": "Dropdown"
+            },
+            {
+              "value": "mega_menu",
+              "label": "Mega menu"
+            },
+            {
+              "value": "drawer",
+              "label": "Drawer"
+            }
+          ],
+          "default": "dropdown"
+        },
+        {
+          "type": "select",
+          "id": "desktop_text_alignment",
+          "label": "Desktop text alignment",
+          "options": [
+            {
+              "value": "lg:justify-start",
+              "label": "Left"
+            },
+            {
+              "value": "lg:justify-center",
+              "label": "Center"
+            },
+            {
+              "value": "lg:justify-end",
+              "label": "Right"
+            },
+            {
+              "value": "lg:justify-between",
+              "label": "Justify"
+            }
+          ],
+          "default": "lg:justify-start"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_cart",
+          "label": "Show cart link as last menu item",
+          "default": false
+        },
+        {
+          "type": "checkbox",
+          "id": "separate_with_comma",
+          "label": "Separate menu items with a comma",
+          "default": false
+        },
+        {
+          "type": "header",
+          "content": "Mobile layout"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_block_on_mobile",
+          "label": "Show on mobile",
+          "default": false
+        },
+        {
+          "type": "select",
+          "id": "block_width_on_mobile",
+          "label": "Block width on mobile",
+          "options": [
+            {
+              "value": "",
+              "label": "One half (1/2)"
+            },
+            {
+              "value": "col-span-full",
+              "label": "Full width"
+            }
+          ],
+          "default": ""
+        },
+        {
+          "type": "header",
+          "content": "Desktop layout"
+        },
+        {
+          "type": "select",
+          "id": "block_width_on_desktop",
+          "label": "Block width on desktop",
+          "options": [
+            {
+              "value": "2",
+              "label": "One sixth (1/6)"
+            },
+            {
+              "value": "3",
+              "label": "One quarter (1/4)"
+            },
+            {
+              "value": "4",
+              "label": "One third (1/3)"
+            },
+            {
+              "value": "5",
+              "label": "Five twelfths (5/12)"
+            },
+            {
+              "value": "6",
+              "label": "One half (1/2)"
+            }
+          ],
+          "default": "4"
+        },
+        {
+          "type": "checkbox",
+          "id": "fill_remaining_space",
+          "label": "Fill remaining space in row if first or last block in section",
+          "info": "Will override block width setting.",
+          "default": false
+        }
+      ]
+    },
+    {
+      "name": "Vertical Menu",
+      "type": "vertical_menu",
+      "settings": [
+        {
+          "id": "menu",
+          "type": "link_list",
+          "label": "Menu",
+          "default": "main-menu",
+          "info": "This menu won’t show dropdown items"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_menu_heading",
+          "label": "Show menu heading",
+          "default": false
+        },
+        {
+          "type": "header",
+          "content": "Mobile layout"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_block_on_mobile",
+          "label": "Show on mobile",
+          "default": false
+        },
+        {
+          "type": "select",
+          "id": "block_width_on_mobile",
+          "label": "Block width on mobile",
+          "options": [
+            {
+              "value": "",
+              "label": "One half (1/2)"
+            },
+            {
+              "value": "col-span-full",
+              "label": "Full width"
+            }
+          ],
+          "default": ""
+        },
+        {
+          "type": "header",
+          "content": "Desktop layout"
+        },
+        {
+          "type": "select",
+          "id": "block_width_on_desktop",
+          "label": "Block width on desktop",
+          "options": [
+            {
+              "value": "2",
+              "label": "One sixth (1/6)"
+            },
+            {
+              "value": "3",
+              "label": "One quarter (1/4)"
+            },
+            {
+              "value": "4",
+              "label": "One third (1/3)"
+            },
+            {
+              "value": "5",
+              "label": "Five twelfths (5/12)"
+            },
+            {
+              "value": "6",
+              "label": "One half (1/2)"
+            }
+          ],
+          "default": "4"
+        },
+        {
+          "type": "checkbox",
+          "id": "fill_remaining_space",
+          "label": "Fill remaining space in row if first or last block in section",
+          "info": "Will override block width setting.",
+          "default": false
+        }
+      ]
+    },
+    {
+      "name": "Rich text",
+      "type": "rich_text",
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "richtext",
+          "label": "Paragraph",
+          "default": "<p>Use this to add additional information about your store, e.g. address / contact details.</p>"
+        },
+        {
+          "type": "select",
+          "id": "text_alignment",
+          "label": "Text alignment",
+          "options": [
+            {
+              "value": "text-left",
+              "label": "Left"
+            },
+            {
+              "value": "text-center",
+              "label": "Center"
+            },
+            {
+              "value": "text-right",
+              "label": "Right"
+            }
+          ],
+          "default": "text-left"
+        },
+        {
+          "type": "header",
+          "content": "Mobile layout"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_block_on_mobile",
+          "label": "Show on mobile",
+          "default": false
+        },
+        {
+          "type": "select",
+          "id": "block_width_on_mobile",
+          "label": "Block width on mobile",
+          "options": [
+            {
+              "value": "",
+              "label": "One half (1/2)"
+            },
+            {
+              "value": "col-span-full",
+              "label": "Full width"
+            }
+          ],
+          "default": ""
+        },
+        {
+          "type": "header",
+          "content": "Desktop layout"
+        },
+        {
+          "type": "select",
+          "id": "block_width_on_desktop",
+          "label": "Block width on desktop",
+          "options": [
+            {
+              "value": "2",
+              "label": "One sixth (1/6)"
+            },
+            {
+              "value": "3",
+              "label": "One quarter (1/4)"
+            },
+            {
+              "value": "4",
+              "label": "One third (1/3)"
+            },
+            {
+              "value": "5",
+              "label": "Five twelfths (5/12)"
+            },
+            {
+              "value": "6",
+              "label": "One half (1/2)"
+            }
+          ],
+          "default": "4"
+        },
+        {
+          "type": "checkbox",
+          "id": "fill_remaining_space",
+          "label": "Fill remaining space in row if first or last block in section",
+          "info": "Will override block width setting.",
+          "default": false
+        }
+      ]
+    },
+    {
+      "type": "localization",
+      "name": "Localization",
+      "settings": [
+        {
+          "type": "header",
+          "content": "Language selector",
+          "info": "To add a language, go to your [language settings.](/admin/settings/languages)"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_locale_selector",
+          "label": "Show language selector",
+          "default": true
+        },
+        {
+          "type": "header",
+          "content": "Country/region selector",
+          "info": "To add a country/region, go to your [payment settings.](/admin/settings/payments)"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_country_selector",
+          "label": "Show country/region selector",
+          "default": false
+        },
+        {
+          "type": "header",
+          "content": "Mobile layout"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_block_on_mobile",
+          "label": "Show on mobile",
+          "default": false
+        },
+        {
+          "type": "select",
+          "id": "block_width_on_mobile",
+          "label": "Block width on mobile",
+          "options": [
+            {
+              "value": "",
+              "label": "One half (1/2)"
+            },
+            {
+              "value": "col-span-full",
+              "label": "Full width"
+            }
+          ],
+          "default": ""
+        },
+        {
+          "type": "header",
+          "content": "Desktop layout"
+        },
+        {
+          "type": "radio",
+          "id": "display",
+          "label": "Display",
+          "options": [
+            {
+              "value": "horizontal",
+              "label": "Horizontal"
+            },
+            {
+              "value": "vertical",
+              "label": "Vertical"
+            }
+          ],
+          "default": "horizontal"
+        },
+        {
+          "type": "select",
+          "id": "desktop_alignment",
+          "label": "Desktop alignment",
+          "options": [
+            {
+              "value": "lg:justify-start",
+              "label": "Left"
+            },
+            {
+              "value": "lg:justify-center",
+              "label": "Center"
+            },
+            {
+              "value": "lg:justify-end",
+              "label": "Right"
+            }
+          ],
+          "default": "lg:justify-start",
+          "info": "Only applies to horizontal display"
+        },
+        {
+          "type": "select",
+          "id": "block_width_on_desktop",
+          "label": "Block width on desktop",
+          "options": [
+            {
+              "value": "1",
+              "label": "One twelfth (1/12)"
+            },
+            {
+              "value": "2",
+              "label": "One sixth (1/6)"
+            },
+            {
+              "value": "3",
+              "label": "One quarter (1/4)"
+            },
+            {
+              "value": "4",
+              "label": "One third (1/3)"
+            },
+            {
+              "value": "5",
+              "label": "Five twelfths (5/12)"
+            },
+            {
+              "value": "6",
+              "label": "One half (1/2)"
+            }
+          ],
+          "default": "2"
+        },
+        {
+          "type": "checkbox",
+          "id": "fill_remaining_space",
+          "label": "Fill remaining space in row if first or last block in section",
+          "info": "Will override block width setting.",
+          "default": false
+        }
+      ]
+    },
+    {
+      "type": "spacer",
+      "name": "Spacer",
+      "settings": [
+        {
+          "type": "header",
+          "content": "Mobile layout"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_block_on_mobile",
+          "label": "Show on mobile",
+          "default": false
+        },
+        {
+          "type": "select",
+          "id": "block_width_on_mobile",
+          "label": "Block width on mobile",
+          "options": [
+            {
+              "value": "",
+              "label": "One half (1/2)"
+            },
+            {
+              "value": "col-span-full",
+              "label": "Full width"
+            }
+          ],
+          "default": ""
+        },
+        {
+          "type": "header",
+          "content": "Desktop layout"
+        },
+        {
+          "type": "select",
+          "id": "block_width_on_desktop",
+          "label": "Block width on desktop",
+          "options": [
+            {
+              "value": "1",
+              "label": "One twelfth (1/12)"
+            },
+            {
+              "value": "2",
+              "label": "One sixth (1/6)"
+            },
+            {
+              "value": "3",
+              "label": "One quarter (1/4)"
+            },
+            {
+              "value": "4",
+              "label": "One third (1/3)"
+            },
+            {
+              "value": "5",
+              "label": "Five twelfths (5/12)"
+            },
+            {
+              "value": "6",
+              "label": "One half (1/2)"
+            }
+          ],
+          "default": "1"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

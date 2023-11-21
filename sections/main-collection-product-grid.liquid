@@ -1,0 +1,671 @@
+{%- liquid
+  assign filter_and_sort = section.blocks | where: "type", "filter_and_sort" | first
+  assign linklist = section.settings.linklist
+
+  if filter_and_sort != blank
+
+    assign desktop_filter_layout = filter_and_sort.settings.desktop_filter_layout
+    assign show_filters = filter_and_sort.settings.enable_filtering
+    assign show_sort = filter_and_sort.settings.enable_sorting
+    assign stacked_style = filter_and_sort.settings.stacked_filter_style
+
+    if show_filters or show_sort
+      assign total_active_values = 0
+      for filter in collection.filters
+        assign total_active_values = total_active_values | plus: filter.active_values.size
+      endfor
+    endif
+
+  endif
+-%}
+
+{%- style -%}
+  #section-{{ section.id }}.grid-wrapper {
+    --number-of-columns: {{ section.settings.desktop_columns }};
+    --number-of-gutters: calc(var(--number-of-columns) - 1);
+    --total-gutter-size: calc(var(--media-grid-col-gap) * var(--number-of-gutters));
+    {% if section.settings.disable_left_and_right_margins %}
+      --wrapper-left-and-right-margin: 0;
+    {% endif %}
+    {% if section.settings.remove_grid_gaps %}
+      --media-grid-col-gap: 0px;
+      --media-grid-row-gap: 0px;
+      --media-grid-gap: 0px;
+    {% endif %}
+  }
+{%- endstyle -%}
+
+{%- capture filter_drawer_toggle -%}
+  <button type="button" @click="$store.modals.open('filters')">
+    <span class="inline-block align-middle h-4 w-4 mr-1">
+      {%- liquid
+        if filter_and_sort != blank
+          render 'icon-filter'
+        endif
+      -%}
+    </span>
+    <span class="inline-block align-middle">
+      <span class="inline lg:hidden">
+        {%- liquid
+          if show_sort and show_filters
+            echo 'facets.filters.filter_and_sort' | t
+          elsif show_sort and show_filters == false
+            echo 'facets.sorting.title' | t
+          else
+            echo 'facets.filters.title_tags' | t
+          endif
+          if total_active_values > 0
+            echo ' (' | append: total_active_values | append: ')'
+          endif
+        -%}
+      </span>
+      <span class="hidden lg:inline">
+        {%- liquid
+          echo 'facets.filters.title_tags' | t
+          if total_active_values > 0
+            echo ' (' | append: total_active_values | append: ')'
+          endif
+        -%}
+      </span>
+    </span>
+  </button>
+{%- endcapture -%}
+
+<section
+  id="section-{{ section.id }}"
+  {% if filter_and_sort != blank %}
+  {% if show_filters or show_sort %}
+  x-data="ThemeSection_filterable('{{ section.id }}')"
+  {% endif %}
+  {% endif %}
+  class="section-container"
+  data-color-scheme="{{ section.settings.color_scheme }}"
+  style="--section-grid-cols-mobile: {{ section.settings.mobile_columns }}; --section-grid-cols-desktop: {{ section.settings.desktop_columns }}; --top-spacing-adjust: {{ section.settings.space_above }}; --bottom-spacing-adjust: {{ section.settings.space_below }};">
+  <div class="text-scheme-text bg-scheme-background pt-top-section-vertical-spacing pb-bottom-section-vertical-spacing">
+
+
+    <div id="facets-filterable" class="wrapper overflow-hidden">
+
+      {% if linklist != blank %}
+        {% render 'collection-horizontal-navigation',
+          linklist: linklist
+        %}
+      {% endif %}
+
+      {%- if show_sort or show_filters -%}
+      <div class="collection-items lg:col-span-item mb-half-section-vertical-spacing">
+
+        <a class="in-page-link skip-link" href="#facets-results">{{ 'collections.general.title' | t }}</a>
+
+        {%- case desktop_filter_layout -%}
+          {%- when 'stacked' -%}
+            <div class="grid lg:grid-cols-12 gap-theme items-end">
+
+              {% if show_filters %}
+              <div class="hidden lg:block lg:col-span-9">
+                {% render 'filters-stacked',
+                  results: collection,
+                  enable_color_swatch_filters: filter_and_sort.settings.enable_color_swatch_filters,
+                  expand_filters: filter_and_sort.settings.expand_filters,
+                  show_filter_count: filter_and_sort.settings.show_filter_count,
+                  show_filters: show_filters,
+                  stacked_style: stacked_style
+                -%}
+              </div>
+              {%- endif %}
+
+              <div class="lg:hidden">
+              {{ filter_drawer_toggle }}
+              </div>
+
+              {% if show_filters %}
+                <div class="sr-only" id="facets-results-count">
+                  {%- if collection.products_count == 1 -%}
+                    {{ 'collections.general.items_with_count.one' | t: count: collection.products_count }}
+                  {%- else -%}
+                    {{ 'collections.general.items_with_count.other' | t: count: collection.products_count }}
+                  {%- endif -%}
+                </div>
+              {% endif %}
+
+              {% if show_sort %}
+                <div class="sw-hidden lg:block lg:col-span-3 lg:col-end-[-1] text-right">
+                  {%- render 'sort-dropdown', results: collection -%}
+                </div>
+              {%- endif %}
+            </div>
+          {%- when 'drawer' -%}
+          <div class="grid lg:grid-cols-12 gap-theme">
+
+            <div class="lg:col-span-2">
+            {{ filter_drawer_toggle }}
+            </div>
+
+            {% if show_filters %}
+              <div class="sr-only" id="facets-results-count">
+                {%- if collection.products_count == 1 -%}
+                  {{ 'collections.general.items_with_count.one' | t: count: collection.products_count }}
+                {%- else -%}
+                  {{ 'collections.general.items_with_count.other' | t: count: collection.products_count }}
+                {%- endif -%}
+              </div>
+            {% endif %}
+
+            {% if show_sort %}
+              <div class="sw-hidden lg:block lg:col-span-4 lg:col-end-[-1] text-right">
+                {%- render 'sort-dropdown', results: collection -%}
+              </div>
+            {%- endif %}
+          </div>
+        {%- endcase -%}
+
+
+
+      </div>
+      {%- endif -%}
+
+      <div x-data="{ labelContent: '', focusVisible: false }" class="collection-items  -mx-wrapper-left-and-right-margin">
+        {%- paginate collection.products by section.settings.products_to_show -%}
+        {%- if collection.products.size == 0 -%}
+          <p class="text-center">{{ 'collections.general.no_matches' | t }}</p>
+        {%- else -%}
+          <div id="facets-results">
+            {%- liquid
+              case section.settings.grid_type
+                when 'standard'
+                  render 'grid-standard', products: collection.products, content_source: 'collection'
+                when 'masonry'
+                  render 'grid-masonry', products: collection.products, content_source: 'collection'
+                when 'justified'
+                  render 'grid-justified', products: collection.products, content_source: 'collection'
+                when 'modular'
+                  render 'grid-modular', products: collection.products, content_source: 'collection'
+                when 'irregular'
+                  render 'grid-irregular', products: collection.products, content_source: 'collection'
+              endcase
+            -%}
+          </div>
+          {%- if paginate.pages > 1 -%}
+            <div class="wrapper mt-gap-theme">
+              {%- render 'pagination', paginate: paginate -%}
+            </div>
+          {%- endif -%}
+        {%- endif -%}
+        {%- endpaginate -%}
+        {%- liquid
+          if section.settings.labels_display == 'text_overlay_on_hover' or section.settings.labels_display == 'follow_mouse_on_hover'
+            render 'overlay-labels' with section.settings.labels_display as labels_display
+          endif
+        -%}
+      </div>
+
+      {% if filter_and_sort != blank %}
+        {% if show_filters or show_sort %}
+          {% render 'filters-mobile'
+           , results: collection,
+           enable_color_swatch_filters: filter_and_sort.settings.enable_color_swatch_filters,
+           expand_filters: filter_and_sort.settings.expand_filters,
+           show_filter_count: filter_and_sort.settings.show_filter_count,
+           show_filters: show_filters,
+           show_sort: show_sort %}
+        {% endif %}
+      {% endif %}
+
+
+    </div>
+  </div>
+</section>
+
+{% if filter_and_sort != blank %}
+  {% if show_filters or show_sort %}
+    <script src="{{ 'filterable.js' | asset_url }}" type="module"></script>
+    <script src="{{ 'price-range.js' | asset_url }}" type="module"></script>
+  {% endif %}
+{% endif %}
+
+{%- unless section.settings.quick_view == 'disabled' -%}
+  {%- render 'product-quick-view-scripts' -%}
+{%- endunless -%}
+
+{% schema %}
+{
+  "name": "Product grid",
+  "class": "main-collection main-collection--grid",
+  "max_blocks": 1,
+  "blocks": [
+    {
+      "type": "filter_and_sort",
+      "name": "Filtering and sorting",
+      "settings": [
+        {
+          "type": "radio",
+          "id": "desktop_filter_layout",
+          "label": "Desktop filter layout",
+          "info": "Drawer is the default mobile layout",
+          "options": [
+            {
+              "value": "stacked",
+              "label": "Stacked (horizontal)"
+            },
+            {
+              "value": "drawer",
+              "label": "Drawer"
+            }
+          ]
+        },
+        {
+          "type": "radio",
+          "id": "stacked_filter_style",
+          "label": "Stacked filter style",
+          "default": "text",
+          "options": [
+            {
+              "value": "text",
+              "label": "Text"
+            },
+            {
+              "value": "buttons",
+              "label": "Buttons"
+            }
+          ]
+        },
+        {
+          "type": "header",
+          "content": "Filtering and sorting"
+        },
+        {
+          "type": "checkbox",
+          "id": "enable_filtering",
+          "label": "Enable filtering",
+          "info": "[Customize filters](/admin/menus)",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "expand_filters",
+          "label": "Expand filters by default",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "show_filter_count",
+          "label": "Show filter counts",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "enable_color_swatch_filters",
+          "label": "Enable color swatch filters",
+          "info": "[Learn how to set up swatches](https://help.switchthemes.co/exhibit/guides/color-swatches.html)"
+        },
+        {
+          "type": "checkbox",
+          "id": "enable_sorting",
+          "label": "Enable sorting"
+        }
+      ]
+    }
+  ],
+  "settings": [
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "min": 2,
+      "max": 50,
+      "step": 1,
+      "label": "Maximum number of products per page",
+      "default": 12
+    },
+    {
+      "type": "header",
+      "content": "Collection menu"
+    },
+    {
+      "type": "link_list",
+      "id": "linklist",
+      "label": "Menu"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "grid_type",
+      "label": "Grid type",
+      "options": [
+        {
+          "value": "standard",
+          "label": "Standard"
+        },
+        {
+          "value": "masonry",
+          "label": "Masonry"
+        },
+        {
+          "value": "justified",
+          "label": "Justified"
+        },
+        {
+          "value": "modular",
+          "label": "Modular"
+        },
+        {
+          "value": "irregular",
+          "label": "Irregular"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "mobile_columns",
+      "label": "Mobile columns",
+      "options": [
+        {
+          "value": "1",
+          "label": "1 column"
+        },
+        {
+          "value": "2",
+          "label": "2 columns"
+        }
+      ],
+      "default": "1"
+    },
+    {
+      "type": "range",
+      "id": "desktop_columns",
+      "min": 1,
+      "max": 6,
+      "step": 1,
+      "label": "Number of columns on desktop",
+      "default": 5,
+      "info": "This setting does not apply if grid type is set to 'Modular' or 'Irregular'."
+    },
+    {
+      "type": "header",
+      "content": "Standard"
+    },
+    {
+      "type": "select",
+      "id": "standard_layout_align_items",
+      "label": "Alignment of items",
+      "options": [
+        {
+          "value": "items-start",
+          "label": "Top"
+        },
+        {
+          "value": "items-baseline",
+          "label": "Baseline"
+        },
+        {
+          "value": "items-center",
+          "label": "Center"
+        },
+        {
+          "value": "items-end",
+          "label": "Bottom"
+        }
+      ],
+      "default": "items-start"
+    },
+    {
+      "type": "header",
+      "content": "Modular"
+    },
+    {
+      "type": "range",
+      "id": "modular_layout_variation",
+      "min": 1,
+      "max": 12,
+      "step": 1,
+      "label": "Layout variation",
+      "default": 1
+    },
+    {
+      "type": "range",
+      "id": "modular_grid_item_aspect_ratio",
+      "min": 0.5,
+      "max": 1.8,
+      "step": 0.1,
+      "unit": ":1",
+      "label": "Grid base aspect ratio",
+      "default": 1,
+      "info": "Wide to tall"
+    },
+    {
+      "type": "header",
+      "content": "Irregular"
+    },
+    {
+      "type": "range",
+      "id": "irregular_layout_variation",
+      "min": 1,
+      "max": 15,
+      "step": 1,
+      "label": "Layout variation",
+      "default": 1
+    },
+    {
+      "type": "select",
+      "id": "irregular_alignment_of_items",
+      "label": "Alignment of items",
+      "options": [
+        {
+          "value": "items-top justify-start",
+          "label": "Top left"
+        },
+        {
+          "value": "items-top justify-center",
+          "label": "Top center"
+        },
+        {
+          "value": "items-top justify-end",
+          "label": "Top right"
+        },
+        {
+          "value": "items-top justify-between",
+          "label": "Top justified"
+        },
+        {
+          "value": "items-center justify-start",
+          "label": "Center left"
+        },
+        {
+          "value": "items-center justify-center",
+          "label": "Center"
+        },
+        {
+          "value": "items-center justify-end",
+          "label": "Center right"
+        },
+        {
+          "value": "items-center justify-between",
+          "label": "Center justified"
+        },
+        {
+          "value": "items-end justify-start",
+          "label": "Bottom left"
+        },
+        {
+          "value": "items-end justify-center",
+          "label": "Bottom center"
+        },
+        {
+          "value": "items-end justify-end",
+          "label": "Bottom right"
+        },
+        {
+          "value": "items-end justify-between",
+          "label": "Bottom justified"
+        }
+      ],
+      "default": "items-center justify-center"
+    },
+    {
+      "type": "header",
+      "content": "Media"
+    },
+    {
+      "type": "paragraph",
+      "content": "These settings only apply if grid type is set to 'Standard' or 'Irregular'."
+    },
+    {
+      "type": "select",
+      "id": "media_aspect_ratio",
+      "label": "Aspect ratio",
+      "options": [
+        {
+          "value": "natural",
+          "label": "Natural"
+        },
+        {
+          "value": "1",
+          "label": "Square (1:1)"
+        },
+        {
+          "value": "1.333",
+          "label": "Landscape (4:3)"
+        },
+        {
+          "value": "0.6667",
+          "label": "Portrait (2:3)"
+        },
+        {
+          "value": "1.778",
+          "label": "Widescreen (16:9)"
+        }
+      ],
+      "default": "natural"
+    },
+    {
+      "type": "checkbox",
+      "id": "media_fill_space",
+      "label": "Maximize size",
+      "default": false,
+      "info": "No effect when aspect ratio is set to 'Natural'."
+    },
+    {
+      "type": "header",
+      "content": "Labels"
+    },
+    {
+      "type": "checkbox",
+      "id": "labels_show_titles_and_captions",
+      "label": "Show titles",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "labels_show_product_prices",
+      "label": "Show prices",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "labels_display",
+      "label": "Display",
+      "options": [
+        {
+          "value": "below_media",
+          "label": "Below media"
+        },
+        {
+          "value": "text_overlay_on_hover",
+          "label": "Text overlay on hover"
+        },
+        {
+          "value": "follow_mouse_on_hover",
+          "label": "Follow mouse on hover"
+        }
+      ],
+      "default": "below_media",
+      "info": "Customise overlay labels in [theme settings](/editor?context=theme&category=overlay+labels)."
+    },
+    {
+      "type": "checkbox",
+      "id": "labels_show_product_vendor",
+      "label": "Show vendor",
+      "default": false,
+      "info": "Only enabled if Display is set to 'Below media'"
+    },
+    {
+      "type": "checkbox",
+      "id": "labels_always_show_on_mobile",
+      "label": "Always show labels on mobile",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Product tiles"
+    },
+    {
+      "type": "select",
+      "id": "quick_view",
+      "label": "Quick view",
+      "options": [
+        {
+          "value": "disabled",
+          "label": "Disabled"
+        },
+        {
+          "value": "enabled_on_desktop",
+          "label": "Enabled on desktop"
+        },
+        {
+          "value": "enabled_on_desktop_and_mobile",
+          "label": "Enabled on desktop and mobile"
+        }
+      ],
+      "default": "disabled"
+    },
+    {
+      "type": "header",
+      "content": "Color"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "default": "scheme_1",
+      "label": "Color scheme"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "space_above",
+      "min": 0,
+      "max": 2,
+      "step": 0.5,
+      "unit": "x",
+      "label": "Above",
+      "default": 1
+    },
+    {
+      "type": "range",
+      "id": "space_below",
+      "min": 0,
+      "max": 2,
+      "step": 0.5,
+      "unit": "x",
+      "label": "Below",
+      "default": 1
+    },
+    {
+      "type": "checkbox",
+      "id": "disable_left_and_right_margins",
+      "label": "Disable left and right margins",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "remove_grid_gaps",
+      "label": "Remove grid gaps",
+      "default": false
+    }
+  ]
+}
+{% endschema %}

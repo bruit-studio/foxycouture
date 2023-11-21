@@ -1,0 +1,51 @@
+{%- liquid
+  assign sort_by = results.sort_by | default: results.default_sort_by
+  for option in results.sort_options
+    if option.value == sort_by
+      assign current_sort_option = option.name | escape
+    endif
+  endfor
+-%}
+<div
+  class="relative inline-block"
+  x-cloak
+  x-data="{ expanded : false }"
+>
+  <button type="button"
+      class="flex items-center pb-2 text-left gap-2 ml-auto hover:underline"
+      :aria-expanded="expanded"
+      @click="expanded = ! expanded"
+      aria-controls="accordionSortDesktop">
+      {{ 'facets.sorting.title' | t | append: ': ' | append: current_sort_option }}
+    <span class="inline-block w-4 h-4 align-middle ml-auto transform origin-center transition">
+      {%- if settings.accordion_icon == 'plus_minus' -%}
+      <span x-show="expanded">{% render 'icon-minus' %}</span>
+      <span x-show="!expanded">{% render 'icon-plus' %}</span>
+      {%- else -%}
+      <span class="block rotate-180" x-show="expanded">{% render 'icon-chevron-down' %}</span>
+      <span x-show="!expanded">{% render 'icon-chevron-down' %}</span>
+      {%- endif -%}
+    </span>
+  </button>
+  <div id="accordionSortDesktop" x-show="expanded"  @click.away.prevent="expanded = false" class="border border-theme border-scheme-text bg-scheme-background z-50 absolute min-w-full min-w-[12rem] mt-2 -mx-1 right-0">
+    <ul class="p-5">
+      {%- for option in results.sort_options -%}
+        <li class="custom-radio flex justify-start mb-2">
+          <input type="radio"
+            class="sr-only absolute"
+            name="sort_by"
+            value="{{ option.value | escape }}"
+            @input.debounce="filterFormSubmit"
+            form="Facet-Filters-Form"
+            id="Filter-Sort-{{ forloop.index0 }}-desktop"
+            {% if option.value == sort_by %}checked{% endif %}
+          >
+          <label for="Filter-Sort-{{ forloop.index0 }}-desktop" class="cursor-pointer {% if settings.links_uppercase %} uppercase {% elsif capitalize_filters %} capitalize {% endif %} flex items-center {% if filter_value.count == 0 and filter_value.active == false -%} text-scheme-secondary line-through {%- endif %}" {% if filter_value.count == 0 and filter_value.active == false -%}disabled{% endif %}>
+            <span class="custom-radio__input"></span>
+            <span class="whitespace-nowrap">{{ option.name | escape }}</span>
+          </label>
+        </li>
+      {%- endfor -%}
+    </ul>
+  </div>
+</div>

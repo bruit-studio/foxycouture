@@ -1,0 +1,38 @@
+<template x-if="currentVariantInventoryData !== null">
+  <div class="mt-spacer" style="--spacing-adjust: {{ block.settings.space_above }};" {{ block.shopify_attributes }}>
+    <div>
+      <template x-if="currentVariantInventoryData.quantity <= inventoryData.threshold && currentVariantInventoryData.quantity > 0">
+        <span class="text-scheme-accent" x-text="inventoryData.lowStockMessage.replace('{% raw %}{{ count }}{% endraw %}', currentVariantInventoryData.quantity)"></span>
+      </template>
+      <template x-if="currentVariantInventoryData.quantity > inventoryData.threshold">
+        <span>{{ 'products.product.inventory_in_stock' | t }}</span>
+      </template>
+    </div>
+  </div>
+</template>
+
+
+{%- if current_variant.available -%}
+<div class="no-js mt-spacer" style="--spacing-adjust: {{ block.settings.space_above }};" {{ block.shopify_attributes }} >
+  <span class="font-secondary text-sm">
+    {%- if current_variant.inventory_quantity <= block.settings.threshold -%}
+    <span class="text-scheme-accent">{{ 'products.product.inventory_low_stock_html' | t: count: current_variant.inventory_quantity }}</span>
+    {%- else -%}
+    <span>{{ 'products.product.inventory_in_stock' | t }}</span>
+    {%- endif -%}
+  </span>
+</div>
+{%- endif -%}
+
+{%- assign inventory_variants = product.variants | where: 'inventory_management', 'shopify' -%}
+<script type="application/json" data-variant-inventory>
+  {
+  {%- for variant in inventory_variants -%}
+    "threshold": {{ block.settings.threshold | json }},
+    "lowStockMessage": {{ 'products.product.inventory_low_stock_html' | t | json }},
+    "{{ variant.id }}": {
+      "quantity": {{ variant.inventory_quantity | default: 0 | json }}
+    }{% unless forloop.last %},{% endunless %}
+  {%- endfor -%}
+  }
+</script>

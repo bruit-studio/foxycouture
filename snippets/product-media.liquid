@@ -1,0 +1,360 @@
+{%- liquid
+  assign mobile_sizes = '100vw'
+
+  unless context == 'quick-view'
+    unless section.settings.desktop_media_layout == 'two_columns'
+      assign desktop_sizes = 'calc((' | append: desktop_sizes_css_base | append: ' / 12) * ' | append: product_media_col_span | append: ')'
+      assign sizes = '(min-width: 990px) ' | append: desktop_sizes | append: ', ' | append: mobile_sizes
+    else
+      assign desktop_sizes = 'calc(((' | append: desktop_sizes_css_base | append: ' / 12) * ' | append: product_media_col_span | append: ') / 2)'
+      assign sizes = '(min-width: 990px) ' | append: desktop_sizes | append: ', ' | append: mobile_sizes
+    endunless
+  else
+    unless section.settings.desktop_media_layout == 'two_columns'
+      assign sizes = '(min-width: 990px) ' | append: desktop_sizes_css_base | append: ', ' | append: mobile_sizes
+    else
+      assign sizes = '(min-width: 990px) calc(' | append: desktop_sizes_css_base | append: ' / 2), ' | append: mobile_sizes
+    endunless
+  endunless
+
+  assign single_media_mode = false
+  if section.settings.single_media_mode or product.media.size == 1 or product == blank
+    assign single_media_mode = true
+  endif
+
+  if single_media_mode
+    unless full_bleed_on_mobile
+      assign product_media_list_classes = product_media_list_classes | append: ' max-lg:wrapper'
+    endunless
+  else
+    case section.settings.mobile_media_layout
+      when 'carousel', 'carousel_with_thumbnails'
+        assign product_media_wrapper_classes = 'max-lg:carousel-container '
+        assign product_media_list_container_classes = 'max-lg:max-w-[100vw] max-lg:overflow-hidden'
+        assign product_media_list_attributes = 'x-ref="carousel-track"'
+        assign product_media_list_classes = 'max-lg:carousel-track max-lg:snap-always max-lg:gap-css-var'
+        assign product_media_list_item_classes = 'max-lg:carousel-list-item  max-lg:max-w-screen'
+        unless full_bleed_on_mobile
+          assign product_thumbnails_classes = 'max-lg:mt-2'
+          assign product_thumbnails_list_classes = 'max-lg:gap-2'
+          assign product_thumbnails_list_item_classes = ''
+        endunless
+      when 'single_column'
+        assign product_media_list_classes = 'max-lg:grid max-lg:gap-css-var max-lg:grid-flow-dense'
+    endcase
+
+    if full_bleed_on_mobile
+      if section.settings.mobile_media_layout contains 'carousel'
+        assign product_media_list_item_classes = product_media_list_item_classes | append: ' max-lg:scroll-ml-0 max-lg:first:ml-0 max-lg:last:mr-0 max-lg:w-full'
+      endif
+    else
+      if section.settings.mobile_media_layout contains 'carousel'
+        assign product_media_list_item_classes = product_media_list_item_classes | append: ' max-lg:w-full-minus-wrapper'
+      else
+        assign product_media_list_classes = product_media_list_classes | append: ' max-lg:wrapper'
+      endif
+    endif
+
+    case section.settings.desktop_media_layout
+      when 'single_column'
+        assign product_media_list_classes = product_media_list_classes | append: ' lg:grid lg:gap-css-var lg:grid-flow-dense lg:overflow-anchor-none'
+      when 'two_columns'
+        assign product_media_list_classes = product_media_list_classes | append: ' lg:grid lg:gap-css-var lg:grid-cols-2 lg:grid-flow-dense lg:overflow-anchor-none'
+      when 'carousel', 'carousel_with_thumbnails'
+        assign product_media_wrapper_classes = product_media_wrapper_classes | append: ' lg:carousel-container '
+        assign product_media_list_container_classes = product_media_list_container_classes | append: ' lg:max-w-full lg:overflow-hidden'
+        assign product_media_list_attributes = 'x-ref="carousel-track"'
+        assign product_media_list_classes = product_media_list_classes | append: ' lg:carousel-track lg:snap-always lg:gap-0'
+        assign product_media_list_item_classes = product_media_list_item_classes | append: ' lg:carousel-list-item  lg:scroll-ml-0 lg:first:ml-0 lg:last:mr-0 lg:w-full'
+        unless full_bleed_on_desktop
+          assign product_thumbnails_classes = product_thumbnails_classes | append: ' lg:mt-2'
+          assign product_thumbnails_list_classes = product_thumbnails_list_classes | append: ' lg:gap-2'
+        endunless
+    endcase
+  endif
+
+  if full_bleed_on_desktop
+    if section.settings.desktop_media_position == 'right'
+      assign product_media_controls_classes = product_media_controls_classes | append: ' lg:pr-wrapper-left-and-right-margin'
+    else
+      assign product_media_controls_classes = product_media_controls_classes | append: ' lg:pl-wrapper-left-and-right-margin'
+    endif
+  endif
+
+  assign carousel_enabled = false
+  if section.settings.mobile_media_layout contains 'carousel' or section.settings.desktop_media_layout contains 'carousel'
+    assign carousel_enabled = true
+  endif
+
+  assign thumbnails_enabled = false
+  if section.settings.mobile_media_layout contains 'thumbnails' or section.settings.desktop_media_layout contains 'thumbnails'
+    assign thumbnails_enabled = true
+
+    if product.media.size > 5
+      unless context == 'quick-view'
+        assign desktop_thumbnail_sizes = 'calc(((' | append: desktop_sizes_css_base | append: ' / 12) * ' | append: product_media_col_span | append: ') / 8)'
+      else
+        assign desktop_thumbnail_sizes = 'calc(' | append: desktop_sizes_css_base | append: ' / 8)'
+      endunless
+
+      assign mobile_thumbnail_sizes = 'calc(100vw / 5)'
+
+      assign product_thumbnails_list_attributes = 'x-ref="thumbnail-track"'
+      assign product_thumbnails_list_classes = product_thumbnails_list_classes | append: ' carousel-track snap-always'
+      assign product_thumbnails_list_item_classes = product_thumbnails_list_item_classes | append: ' carousel-list-item w-1/5 lg:w-1/8 lg:first:ml-0 lg:last:mr-0 lg:scroll-ml-0'
+
+      if full_bleed_on_mobile
+        assign product_thumbnails_list_item_classes = product_thumbnails_list_item_classes | append: ' max-lg:scroll-ml-0 max-lg:first:ml-0 max-lg:last:mr-0'
+      endif
+
+      if product.media.size > 10
+        assign product_thumbnails_list_item_classes = product_thumbnails_list_item_classes | append: ' lg:w-5/12'
+      endif
+    else
+      unless context == 'quick-view'
+        assign desktop_thumbnail_sizes = 'calc(((' | append: desktop_sizes_css_base | append: ' / 12) * ' | append: product_media_col_span | append: ') / ' | append: product.media.size | append: ')'
+      else
+        assign desktop_thumbnail_sizes = 'calc(' | append: desktop_sizes_css_base | append: ' / ' | append: product.media.size | append: ')'
+      endunless
+
+      assign mobile_thumbnail_sizes = 'calc(100vw /' | append: product.media.size | append: ')'
+
+      assign product_thumbnails_list_item_classes = product_thumbnails_list_item_classes | append: ' w-full'
+    endif
+    assign thumbnail_counter = 1
+
+    assign thumbnail_sizes = '(min-width: 990px) ' | append: desktop_thumbnail_sizes | append: ', ' | append: mobile_thumbnail_sizes
+  endif
+
+  assign media_counter = 1
+-%}
+
+{%- style -%}
+  #ProductMedia-{{ section.id }} {
+    --gap: {% if full_bleed_on_mobile %}0{% else %}var(--theme-gap){% endif %};
+  }
+  @media (min-width: 990px) {
+    #ProductMedia-{{ section.id }} {
+      --gap: {% if full_bleed_on_desktop %}0{% else %}var(--theme-gap){% endif %};
+    }
+  }
+{%- endstyle -%}
+
+{%- if carousel_enabled -%}
+  {%- capture carousel_controls -%}
+  <div class="mt-4 {{ product_media_controls_classes }} {% unless section.settings.mobile_media_layout contains 'carousel' %}hidden{% endunless %} {% if section.settings.desktop_media_layout contains 'carousel' %}lg:block{% else %}lg:hidden{% endif %}" data-carousel-controls x-ref="product-media-carousel-controls">
+    <div class="grid grid-cols-12 grid-flow-dense gap-2 items-center {% unless context == 'quick-view' %}max-lg:wrapper{% endunless %}">
+      <div class="col-span-6 text-left">
+        <span x-text="`${current_slide}/${total_slides}`"></span>
+      </div>
+      <div class="col-span-6 text-right">
+        {%- if settings.use_arrow_icons_in_carousels_slideshows -%}
+          <div class="flex items-center justify-end gap-2">
+            <button aria-controls="CarouselTrack-{{ section.id }}" :aria-label="current_slide === 1 ? '{{ 'general.accessibility.slideshow.go_to_last_slide' | t }}' : '{{ 'general.accessibility.slideshow.previous_slide' | t }}'"  role="button" @click="prevSlide" class="flex items-center justify-center min-touch-target">
+              <span class="inline-block {% if settings.arrow_style == 'wide' %}w-12 h-6{% else %}w-6 h-6{% endif %}">{%- render 'icon-arrow-left' %}</span>
+            </button>
+            <button aria-controls="CarouselTrack-{{ section.id }}" :aria-label="current_slide === total_slides ? '{{ 'general.accessibility.slideshow.go_to_first_slide' | t }}' : '{{ 'general.accessibility.slideshow.next_slide' | t }}'"  role="button" @click="nextSlide" class="flex items-center justify-center min-touch-target">
+              <span class="inline-block {% if settings.arrow_style == 'wide' %}w-12 h-6{% else %}w-6 h-6{% endif %}">{%- render 'icon-arrow-right' %}</span>
+            </button>
+          </div>
+        {%- else -%}
+          <button aria-controls="CarouselTrack-{{ section.id }}"  :aria-label="current_slide === 1 ? '{{ 'general.accessibility.slideshow.go_to_last_slide' | t }}' : '{{ 'general.accessibility.slideshow.previous_slide' | t }}'" role="button" @click="prevSlide" class="hover:underline">Previous</button>
+          &nbsp;/&nbsp;
+          <button aria-controls="CarouselTrack-{{ section.id }}" :aria-label="current_slide === total_slides ? '{{ 'general.accessibility.slideshow.go_to_first_slide' | t }}' : '{{ 'general.accessibility.slideshow.next_slide' | t }}'"  role="button" @click="nextSlide" class="hover:underline">Next</button>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+  {%- endcapture -%}
+{%- endif -%}
+
+{%- if thumbnails_enabled -%}
+  {%- capture thumbnails -%}
+  <div @keyup.left="thumbnailKeyPress('left')" @keyup.right="thumbnailKeyPress('right')" x-ref="carousel-thumbnails" class="{{ product_thumbnails_classes }} {% unless section.settings.mobile_media_layout contains 'thumbnails' %}hidden{% endunless %} {% if section.settings.desktop_media_layout contains 'thumbnails' %}lg:block{% else %}lg:hidden{% endif %}">
+    <ul class="flex {{ product_thumbnails_list_classes }}" role="tablist" {{ product_thumbnails_list_attributes }}>
+    {%- if featured_media != null -%}
+      {%- assign media = featured_media -%}
+      <li x-ref="first-thumbnail" class="{{ product_thumbnails_list_item_classes }}" role="presentation" :class="{ 'is-active': current_slide === {{ thumbnail_counter }}}">
+        {%- render 'media-thumbnail',
+          media: media,
+          sizes: thumbnail_sizes,
+          class: 'w-full',
+          media_fit: section.settings.media_fit,
+          slide: 1
+        -%}
+      </li>
+    {%- endif -%}
+    {%- for media in product.media -%}
+      {%- unless media.id == featured_media.id -%}
+        {%- assign thumbnail_counter = thumbnail_counter | plus: 1 %}
+        <li class="{{ product_thumbnails_list_item_classes }}" role="presentation" :class="{ 'is-active': current_slide === {{ thumbnail_counter }}}">
+          {%- render 'media-thumbnail',
+            media: media,
+            sizes: thumbnail_sizes,
+            class: 'w-full',
+            media_fit: section.settings.media_fit,
+            slide: thumbnail_counter
+          -%}
+        </li>
+      {%- endunless -%}
+    {%- endfor -%}
+    </ul>
+  </div>
+  {%- endcapture -%}
+{%- endif -%}
+
+{% assign first_3d_model = models | first %}
+{%- if first_3d_model -%}
+  {%- capture view_in_space_module -%}
+  <button
+    aria-label="{{ 'products.media.view_in_your_space_label' | t }}"
+    class="mt-2 block product-single__view-in-space btn mx-auto text-center border-text border-scheme-text"
+    style="width: calc(100% - (var(--wrapper-left-and-right-margin)*2));"
+    data-shopify-xr
+    data-shopify-model3d-id="{{ first_3d_model.id }}"
+    data-shopify-title="{{ product.title }}"
+    data-shopify-xr-hidden
+  >
+    <span class="inline-block w-6 align-middle">
+      {%- render 'icon-3d-model' -%}</span
+    ><span class="text-sm">
+      {{- 'products.media.view_in_your_space' | t -}}
+    </span>
+  </button>
+  {%- endcapture -%}
+{%- endif -%}
+
+<div id="ProductMedia-{{ section.id }}" x-ref="product-media">
+  {%- if single_media_mode -%}
+    <div>
+      <ul
+        class="product-media-list {{ product_media_list_classes }}"
+        {{ product_media_list_attributes }}
+      >
+        {%- if product != blank -%}
+          {%- for media in product.media -%}
+            {% liquid
+              if media.id == featured_media.id
+                assign loading = 'eager'
+              endif
+            %}
+            <li
+              x-show="current_media_id === {{ media.id }}"
+              class="product-media-list-item {{ product_media_list_item_classes }}"
+            >
+              {%- render 'media',
+                media: media,
+                sizes: sizes,
+                shown: true,
+                always_shown: true,
+                loading: loading,
+                media_fit: section.settings.media_fit
+              -%}
+            </li>
+          {%- endfor -%}
+        {%- else -%}
+          {{
+            'product-1'
+            | placeholder_svg_tag: 'w-full h-full bg-scheme-placeholder-background text-scheme-placeholder-foreground fill-current'
+          }}
+        {%- endif -%}
+      </ul>
+    </div>
+  {%- else -%}
+    <div
+      class="product-media-wrapper {{ product_media_wrapper_classes }}"
+      {% if carousel_enabled %}
+        x-data='ThemeModule_Carousel({{ section.id | json }})'
+        x-init="mounted()"
+        role="presentation"
+      {% endif %}
+    >
+      <div class="product-media-list-container {{ product_media_list_container_classes }}">
+        <ul
+          class="product-media-list {{ product_media_list_classes }}"
+          {{ product_media_list_attributes }}
+        >
+          {%- if featured_media != null -%}
+            {%- assign media = featured_media -%}
+            <li
+              class="product-media-list-item {{ product_media_list_item_classes }}"
+              {% if carousel_enabled %}
+                id="product-media-slide-{{ media.id }}"
+                role="tabpanel"
+                aria-roledescription="slide"
+                aria-label="{{ 'general.accessibility.slideshow.current_slide_with_total' | t: slide: media_counter, total_slides: product.media.size }}"
+              {% endif %}
+              data-media-id="{{ media.id }}"
+              x-ref="first-media"
+              {% unless section.settings.desktop_media_layout
+                  contains 'carousel'
+              %}
+              
+                :class="{ 'lg:-order-1' : current_media_id === {{ media.id }} }"
+              {% endunless %}
+            >
+              {%- render 'media',
+                media: media,
+                sizes: sizes,
+                shown: true,
+                always_shown: true,
+                loading: loading,
+                media_fit: section.settings.media_fit
+              -%}
+            </li>
+          {%- endif -%}
+          {%- for media in product.media -%}
+            {%- unless media.id == featured_media.id -%}
+              {%- assign media_counter = media_counter | plus: 1 %}
+              <li
+                class="product-media-list-item {{ product_media_list_item_classes }}"
+                {% if carousel_enabled %}
+                  id="product-media-slide-{{ media.id }}"
+                  role="tabpanel"
+                  aria-roledescription="slide"
+                  aria-label="{{ 'general.accessibility.slideshow.current_slide_with_total' | t: slide: media_counter, total_slides: product.media.size }}"
+                {% endif %}
+                {% if media.id == featured_media.id %}
+                  data-initial-slide="true"
+                {% endif %}
+                data-media-id="{{ media.id }}"
+                {% unless section.settings.desktop_media_layout
+                    contains 'carousel'
+                %}
+                  :class="{ 'lg:-order-1' : current_media_id === {{ media.id }} }"
+                {% endunless %}
+              >
+                {%- render 'media',
+                  media: media,
+                  sizes: sizes,
+                  shown: true,
+                  always_shown: true,
+                  loading: loading,
+                  media_fit: section.settings.media_fit
+                -%}
+              </li>
+            {%- endunless -%}
+          {%- endfor -%}
+        </ul>
+        {%- if first_3d_model -%}
+          {{ view_in_space_module }}
+        {%- endif -%}
+        {%- if thumbnails_enabled -%}
+          {{ thumbnails }}
+        {%- endif -%}
+        {%- if carousel_enabled -%}
+          {{ carousel_controls }}
+        {%- endif -%}
+      </div>
+    </div>
+  {%- endif -%}
+</div>
+
+{% unless request.design_mode %}
+  {% if carousel_enabled %}
+    <script
+      src="{{ 'modules-carousel.bundle.min.js' | asset_url }}"
+      type="module"
+    ></script>
+  {% endif %}
+{% endunless %}

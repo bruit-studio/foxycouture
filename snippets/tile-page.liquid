@@ -1,0 +1,50 @@
+{%- liquid
+  if section.settings.labels_show_titles_and_captions != nil
+    assign show_title = section.settings.labels_show_titles_and_captions
+  endif
+
+  unless labels_display
+    assign labels_display = 'below_media'
+  endunless
+
+  unless tag
+    assign tag = 'li'
+  endunless
+
+  unless sizes
+    assign sizes = '(min-width: 990px) 33vw, 50vw'
+  endunless
+-%}
+
+<{{ tag }}
+  class="relative group {% if class != blank %}{{ class }}{% endif %}"
+  {% if attributes %}
+    {{ attributes }}
+  {% endif %}
+  x-data='ThemeTile()'
+>
+  <a
+    class="tile-link absolute inset-0 z-10 group"
+    href="{{ page.url }}"
+  >
+    <span class="sr-only">{{ page.title }}</span>
+
+  </a>
+
+  <div class="tile-content-wrapper bg-scheme-background text-scheme-text">
+
+    {% if show_title %}
+    <div class="{{ title_font }}" aria-hidden="true">
+      {{ page.title }}
+    </div>
+    {% endif %}
+
+
+    {% if show_excerpt %}
+      <div class="mt-2 lg:mt-4">
+        {{ page.content | strip_html | truncatewords: 10 }}
+      </div>
+    {% endif %}
+
+  </div>
+</{{ tag }}>

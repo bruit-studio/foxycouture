@@ -1,0 +1,104 @@
+{%- liquid
+  assign current_variant = product.selected_or_first_available_variant
+-%}
+
+<div
+  class="mt-spacer"
+  style="--spacing-adjust: {{ block.settings.space_above }};"
+  {% if product != blank %}
+    :class="{ 'invisible': !current_variant }"
+  {% endif %}
+  {% if block %}
+    {{ block.shopify_attributes }}
+  {% endif %}
+>
+  {% if product != blank %}
+    <span class="sr-only">{{ 'products.general.regular_price' | t }}</span>
+    <span
+      class="{% if product.compare_at_price_max > product.price %} text-scheme-accent {% else %} text-scheme-text {% endif %} text-base"
+      x-html="current_variant ? formatMoney(current_price) : ''"
+      :class="
+        {
+          'text-scheme-accent': current_variant && product.compare_at_price_max && current_variant.compare_at_price > current_variant.price, 'invisible': !current_variant
+        }"
+      data-product-price
+    >
+      {% if settings.currency_code_enable %}
+        {{ current_variant.price | money_with_currency }}
+      {% else %}
+        {{ current_variant.price | money }}
+      {% endif %}
+    </span>
+
+    {% if product.compare_at_price_max > product.price %}
+      <template x-if="current_variant && product.compare_at_price_max && current_variant.compare_at_price > current_variant.price">
+        <span class="text-base">
+          <span class="sr-only">{{ 'products.general.sale_price' | t }}</span>
+          <s data-compare-price
+            class="text-scheme-secondary"
+            x-html="formatMoney(current_variant.compare_at_price)">
+            {% if current_variant.compare_at_price > current_variant.price %}
+              {% if settings.currency_code_enable %}
+                {{ current_variant.compare_at_price | money_with_currency }}
+              {% else %}
+                {{ current_variant.compare_at_price | money }}
+              {% endif %}
+            {% endif %}
+          </s>
+        </span>
+      </template>
+    {% endif %}
+
+    <template x-if="current_variant && current_variant.unit_price">
+      <div class="text-sm text-scheme-secondary mt-2" data-unit-price-wrapper>
+        <span class="sr-only">
+          {{- 'products.product.unit_price_label' | t -}}
+        </span>
+        <span x-html="formatMoney(current_variant.unit_price)">
+          {{- current_variant.unit_price | money -}}
+        </span>
+        <span aria-hidden="true">
+          /
+        </span>
+        <span class="sr-only">
+          {{- 'general.accessibility.unit_price_separator' | t -}}
+        </span>
+        <span
+          x-html="
+            current_variant.unit_price_measurement.reference_value != 1 ? current_variant.unit_price_measurement.reference_value : ''
+          "
+        >
+          {%- if current_variant.unit_price_measurement.reference_value != 1 -%}
+            {{- current_variant.unit_price_measurement.reference_value -}}
+          {%- endif -%}
+        </span>
+        <span x-html="current_variant.unit_price_measurement.reference_unit">
+          {{- current_variant.unit_price_measurement.reference_unit -}}
+        </span>
+      </div>
+    </template>
+  {% else %}
+    <span class="sr-only">{{ 'products.general.regular_price' | t }}</span>
+    <span
+      class="text-scheme-text text-base"
+      data-product-price
+    >
+      {% if settings.currency_code_enable %}
+        {{ 1900 | money_with_currency }}
+      {% else %}
+        {{ 1900 | money }}
+      {% endif %}
+    </span>
+  {% endif %}
+  
+  {%- if cart.taxes_included or shop.shipping_policy.body != blank -%}
+    <div class="text-sm my-2">
+      {%- if cart.taxes_included -%}
+        {{ 'products.product.include_taxes' | t }}
+      {%- endif -%}
+      {%- if shop.shipping_policy.body != blank -%}
+        {{ 'products.product.shipping_policy_html' | t: link: shop.shipping_policy.url }}
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+</div>

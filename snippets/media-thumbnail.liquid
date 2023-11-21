@@ -1,0 +1,46 @@
+{%- liquid
+  assign class = 'absolute inset-0 w-full h-full object-cover'
+  if media_fit contains 'portrait'
+    assign ratio = '3/4'
+  elsif media_fit contains 'square'
+    assign ratio = 1.0
+  else
+    assign ratio = media.aspect_ratio
+  endif
+  capture media_tag_output
+    echo media | image_url: width: 600 | image_tag: sizes: sizes, loading: 'eager', class: class
+  endcapture
+  assign index = slide | minus: 1
+-%}
+<button
+  role="tab"
+  class="block w-full carousel-thumbnail-button relative z-[2] focus-visible:outline-2 focus-visible:outline-scheme-text focus-visible:outline-offset-[-2px]"
+  :class="{ 'is-active': current_slide === {{ slide }}}"
+  @focus="thumbnailFocus({{ index }})"
+  @click.prevent="thumbnailFocus({{ index }})"
+  aria-label="{{ 'general.accessibility.slideshow.go_to_slide_with_index' | t: slide: slide }}"
+  :aria-selected="current_slide === {{ slide }}"
+  :tabindex="current_slide === {{ slide }} ? 0 : -1"
+  data-slide="{{ slide }}"
+  aria-controls="product-media-slide-{{ media.id }}"
+  data-product-single-thumbnail-wrapper="{{ media.id }}"
+>
+{% if media.media_type != 'image' %}
+  <div class="absolute top-1 right-1 w-5 h-5 bg-scheme-background/90 border border-theme border-scheme-text/5 grid place-content-center">
+    <div class="opacity-70">
+      {% if media.media_type == 'model' %}
+        <svg aria-hidden="true" focusable="false" role="presentation" class="w-full h-full fill-current"  viewBox="0 0 26 26"><path d="M13,5.13,6.19,9.07v7.87L13,20.87l6.81-3.93V9.07Zm.62,7.07-.62.4v6.53L7.69,16.07V9.93L13,6.87l4.87,2.81Z" fill="currentColor"/></svg>
+      {% elsif media.media_type contains 'video' %}
+        <svg aria-hidden="true" focusable="false" role="presentation" class="w-full h-full fill-current" viewBox="0 0 26 26"><path fill-rule="evenodd" clip-rule="evenodd" d="M9 7V18.8286L18.2 12.5742L9 7Z" /></svg>
+      {% endif %}
+    </div>
+  </div>
+  <div class="relative aspect-css-var  z-[-1]" style="--ratio: {{ ratio }}">
+    {{ media_tag_output }}
+  </div>
+{% else %}
+  <div class="relative aspect-css-var  z-[-1]" style="--ratio: {{ ratio }}">
+    {{ media_tag_output }}
+  </div>
+{% endif %}
+</button>

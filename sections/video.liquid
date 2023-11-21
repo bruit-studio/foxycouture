@@ -1,0 +1,159 @@
+{%- liquid
+  assign section_color = section.settings.color_scheme
+
+  # Calculate sizes
+
+  if settings.enable_sidebar
+    assign sidebar_width = 100.00 | divided_by: 12 | times: settings.sidebar_width_on_desktop | round: 2
+    assign desktop_sizes_base = 100 | minus: sidebar_width
+  else
+    assign desktop_sizes_base = 100
+  endif
+
+  assign desktop_sizes_css_base = desktop_sizes_base | append: 'vw'
+
+  if settings.enable_max_site_width and section.settings.enable_full_bleed == false
+    assign desktop_sizes_css_base = 'min(' | append: settings.max_site_width | append: 'px, ' | append: desktop_sizes_base | append: 'vw)'
+  endif
+
+  assign desktop_sizes = desktop_sizes_css_base
+
+  assign mobile_sizes = '100vw'
+
+  assign sizes = '(min-width: 990px) ' | append: desktop_sizes | append: ', ' | append: mobile_sizes
+
+  assign show_caption = false
+  if section.settings.caption != blank
+    assign show_caption = true
+  endif
+-%}
+
+<section
+  x-data="{ labelContent: '', focusVisible: false }"
+  id="section-{{ section.id }}"
+  class="section-container"
+  data-color-scheme="{{ section_color }}"
+  style="--top-spacing-adjust: {{ section.settings.space_above }}; --bottom-spacing-adjust: {{ section.settings.space_below }};"
+>
+  <div class="text-scheme-text bg-scheme-background pt-top-section-vertical-spacing pb-bottom-section-vertical-spacing">
+    {%- if section.settings.title != blank -%}
+      {%- render 'section-title-horizontal', title: section.settings.title -%}
+    {%- endif -%}
+
+    <div class="{% unless section.settings.enable_full_bleed %}wrapper{% endunless %}">
+      {%- if section.settings.video != blank -%}
+        {%- render 'tile-video',
+          tag: 'div',
+          video: section.settings.video,
+          id: section.id,
+          playback: section.settings.playback,
+          mode: section.settings.mode,
+          media_wrapper_aspect_ratio: section.settings.media_aspect_ratio,
+          media_fill_space: true,
+          caption: section.settings.caption,
+          show_caption: show_caption,
+          index: 0,
+          sizes: sizes,
+          link: section.settings.link
+        -%}
+      {%- else -%}
+        {%- render 'tile-placeholder',
+          tag: 'div',
+          type: 'video',
+          caption: block.settings.caption,
+          labels_display: section.settings.labels_display,
+          show_title: section.settings.labels_show_titles_and_captions,
+          media_wrapper_aspect_ratio: 1.77
+        -%}
+      {%- endif -%}
+    </div>
+  </div>
+
+  {%- liquid
+    if section.settings.labels_display == 'text_overlay_on_hover' or section.settings.labels_display == 'follow_mouse_on_hover'
+      render 'overlay-labels' with section.settings.labels_display as labels_display
+    endif
+  -%}
+</section>
+
+{% schema %}
+{
+  "name": "Video",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading"
+    },
+    {
+      "type": "video",
+      "id": "video",
+      "label": "Video"
+    },
+    {
+      "type": "radio",
+      "id": "mode",
+      "label": "Mode",
+      "options": [
+        {
+          "value": "preview",
+          "label": "Preview"
+        },
+        {
+          "value": "autoplay",
+          "label": "Autoplay"
+        }
+      ],
+      "default": "preview",
+      "info": "Autoplay will not play sound or show controls."
+    },
+    {
+      "type": "radio",
+      "id": "playback",
+      "label": "Playback",
+      "options": [
+        {
+          "value": "inline",
+          "label": "Inline"
+        },
+        {
+          "value": "modal",
+          "label": "Modal"
+        }
+      ],
+      "default": "inline",
+      "info": "Does not apply if mode is set to autoplay."
+    },
+    {
+      "type": "text",
+      "id": "caption",
+      "label": "Caption"
+    },
+    {
+      "type": "url",
+      "id": "link",
+      "label": "Link",
+      "info": "This will disable video playback if mode is set to preview."
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_full_bleed",
+      "label": "Enable full bleed",
+      "default": false
+    }
+  ],
+  "presets": [
+    {
+      "name": "Video"
+    }
+  ],
+  "disabled_on": {
+    "groups": [
+      "aside",
+      "header",
+      "footer",
+      "custom.hero"
+    ]
+  }
+}
+{% endschema %}

@@ -1,0 +1,55 @@
+{% if block.settings.type == 'spr' %}
+  {{ 'spr-ratings.css' | asset_url | stylesheet_tag }}
+{% endif %}
+<div class="mt-spacer" style="--spacing-adjust: {{ block.settings.space_above }};" {{ block.shopify_attributes }}>
+  {%- if block.settings.type == 'spr' -%}
+    <div class="spr-star-rating">
+      <span class="shopify-product-reviews-badge" data-id="{{ product.id }}"></span>
+    </div>
+  {%- elsif block.settings.type == 'native' and product.metafields.reviews.rating.value != blank -%}
+    {% liquid
+      assign rating_decimal = 0
+      assign decimal = product.metafields.reviews.rating.value.rating | modulo: 1
+      if decimal >= 0.3 and decimal <= 0.7
+        assign rating_decimal = 0.5
+      elsif decimal > 0.7
+        assign rating_decimal = 1
+      endif
+    %}
+    <div
+      class="rating"
+      role="img"
+      aria-label="{{ 'general.accessibility.star_reviews_info' | t: rating_value: product.metafields.reviews.rating.value, rating_max: product.metafields.reviews.rating.value.scale_max }}"
+    >
+      <span
+        aria-hidden="true"
+        class="rating-star color--primary"
+        style="--rating: {{ product.metafields.reviews.rating.value.rating | floor }}; --rating-max: {{ product.metafields.reviews.rating.value.scale_max }}; --rating-decimal: {{ rating_decimal }};"
+      ></span>
+    </div>
+
+    {%- liquid 
+      assign full_stars = product.metafields.reviews.rating.value.rating | floor
+      assign remainder = product.metafields.reviews.rating.value.rating | modulo: 1
+    -%}
+    <div class="flex items-center justify-start">
+      <div class="relative">
+        <ul class="flex items-center justify-start gap-0.5">
+          {%- for i in (1..product.metafields.reviews.rating.value.scale_max) -%}
+            <li><span class="block w-4 h-4">{% render 'icon-star-outline' -%}</span></li>
+          {%- endfor -%}
+        </ul>
+        <ul class="flex items-center justify-start gap-0.5 absolute inset-0 z-10">
+          {%- for i in (1..full_stars) -%}
+            <li><span class="block w-4 h-4">{% render 'icon-star-full' -%}</span></li>
+          {%- endfor -%}
+          {%- if remainder > 0 -%}
+            <li><span class="block w-4 h-4">{% render 'icon-star-half' -%}</span></li>
+          {%- endif -%}
+        </ul>
+      </div>
+      <div class="ml-2" aria-hidden="true">({{ product.metafields.reviews.rating_count }})</div>
+    </div>
+    <span class="sr-only">{{ product.metafields.reviews.rating_count }} {{ "general.accessibility.total_reviews" | t }}</span>
+  {%- endif -%}
+</div>

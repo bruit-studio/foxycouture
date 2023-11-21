@@ -1,0 +1,25 @@
+{%- if block.settings.text_color == 'text' -%}
+  {% capture color_class %} text-scheme-text {% endcapture %}
+{%- else -%}
+  {% capture color_class %} text-scheme-secondary {% endcapture %}
+{%- endif -%}
+<div class="{{ color_class }} mt-spacer" style="--spacing-adjust: {{ block.settings.space_above }};" {{ block.shopify_attributes }}>
+  <ul class="space-y-2">
+    {%- for i in (1..5) -%}
+      {%- capture icon %}icon_{{ i }}{%- endcapture -%}
+      {%- capture text %}text_{{ i }}{%- endcapture -%}
+      {%- liquid
+        assign icon = block.settings[icon]
+        assign text = block.settings[text]
+      -%}
+      {%- if text != '' -%}
+        <li class="flex items-center justify-start text-base break-words gap-2 {% if block.settings.show_borders %}border-t-theme border-scheme-border last:border-b-theme{% endif %}">
+          <span class="block w-4 h-4 shrink-0">
+            {%- render 'content-icon', icon: icon -%}
+          </span>
+          {{- text | escape | strip -}}
+        </li>
+      {%- endif -%}
+    {%- endfor -%}
+  </ul>
+</div>

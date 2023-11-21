@@ -1,0 +1,234 @@
+{%- liquid
+  if block.settings.hide_option_labels
+    assign label_class = 'sr-only'
+  else
+    assign label_class = 'block mb-2'
+  endif
+-%}
+{% unless product.has_only_default_variant %}
+  <div
+    data-product-form-variant-container
+    class="space-y-4 mt-spacer" style="--spacing-adjust: {{ block.settings.space_above }};"
+    {% if block %}
+      {{ block.shopify_attributes }}
+    {% endif %}
+  >
+    {% assign option_style = block.settings.option_style %}
+    {% for option in product.options_with_values %}
+      {%- assign is_color = false -%}
+      {% liquid
+        if settings.enable_color_swatches
+          assign is_color = false
+          assign swatch_trigger = 'products.product.color_swatch_trigger' | t | downcase
+          assign option_downcase = option.name | downcase
+          if option_downcase contains swatch_trigger
+            assign is_color = true
+          elsif swatch_trigger == 'color' and option_downcase contains 'colour'
+            assign is_color = true
+          endif
+        endif
+      %}
+      {% assign option_array_index = forloop.index0 %}
+
+      <fieldset class="product-variant-picker-block {% if is_color %}-mx-color-fieldset-offset {% endif %} js-enabled">
+
+        {%- unless option_style == 'drop_down' and is_color == false -%}
+          <legend class="{{ label_class }}">
+            {{ option.name }}{% if is_color %}: <span x-text="options[{{ forloop.index0 }}]"></span>{% endif %}
+          </legend>
+        {%- endunless -%}
+
+        {%- if is_color -%}
+          <div class="flex flex-wrap gap-2">
+            {% for value in option.values %}
+              {%- liquid
+                assign variant_label_state = true
+                if product.options.size == 1
+                  unless product.variants[forloop.index0].available
+                    assign variant_label_state = false
+                  endunless
+                endif
+                assign color_image = value | handle | append: '.' | append: 'png' | file_img_url: '160x' | prepend: 'https:'
+                assign color_swatch_fallback = value | split: ' ' | last | handle
+              -%}
+              <div class="inline-block relative variant-input">
+                <input
+                  form="{{ product_form_id }}"
+                  class="custom-input color-swatchcursor-pointer absolute top-0 left-0 w-full h-full opacity-0 peer"
+                  @change="optionChange()"
+                  type="radio"
+                  id="{{ product_form_id }}-Option{{ option.position }}-{{ value | escape }}"
+                  name="options[{{ option.name }}]"
+                  value="{{ value | escape }}"
+                  data-handle="{{ value | handleize }}"
+                  x-model="currentOption{{ option_array_index | plus: 1 }}"
+                  {% if option.selected_value == value %} checked{% endif %} data-single-option-selector
+                >
+                <label
+                  class="
+                    relative block text-center break-words min-touch-target
+                    p-0.5 border-theme border-scheme-text/10 peer-checked:border-scheme-text
+                     cursor-pointer rounded-button
+                    {% unless variant_label_state %}
+                      line-through
+                    {% endunless %}
+                    cursor-pointer"
+                  for="{{ product_form_id }}-Option{{ option.position }}-{{ value | escape }}"
+                  title="{{ option.value }}"
+                  >
+                  <span class="block w-8 h-8 bg-cover rounded-button relative" style="background-image: url({{ color_image }}); background-color: {{ color_swatch_fallback }};">
+                    {%- unless variant_label_state -%}
+                      <span class="rounded-button absolute left-0 bottom-0 z-10 h-border w-full bg-scheme-text top-1/2 -translate-y-1/2 -rotate-45"></span>
+                    {%- endunless -%}
+                  </span>
+                  <span class="sr-only">{{ value }}</span>
+                </label>
+              </div>
+            {% endfor %}
+          </div>
+          {%- continue -%}
+        {%- endif -%}
+        {%- case option_style -%}
+          {%- when 'drop_down' -%}
+            <div>
+              <label class="{{ label_class }}" for="Option{{ option.position }}">
+                {{ option.name }}
+              </label>
+              <div class="select-wrapper relative">
+                <select
+                  id="Option{{ option.position }}-{{ section.id }}"
+                  name="options[{{ option.name | escape }}]"
+                  @change="optionChange()"
+                  class="single-option-selector font-main text-base focus:border-current"
+                  data-single-option-selector
+                  x-model="currentOption{{ forloop.index }}"
+                  
+                >
+                  {% for value in option.values %}
+                    <option
+                      value="{{ value | escape }}"
+                      data-handle="{{ value | handleize }}"
+                      {% if option.selected_value == value %}selected="selected"{% endif %}>
+                        {{ value }}
+                    </option>
+                  {% endfor %}
+                </select>
+                <span class="pointer-events-none w-4 h-4 inline-block absolute top-1/2 right-button-padding-x -translate-y-1/2">{% render 'icon-chevron-down' -%}</span>
+              </div>
+            </div>
+          {%- when 'buttons' -%}
+            <div class="flex flex-wrap gap-2">
+              {% for value in option.values %}
+                {%- liquid
+                  assign variant_label_state = true
+                  if product.options.size == 1
+                    unless product.variants[forloop.index0].available
+                      assign variant_label_state = false
+                    endunless
+                  endif
+                  assign color_image = value | handle | append: '.' | append: 'png' | file_img_url: '160x' | prepend: 'https:'
+                  assign color_swatch_fallback = value | split: ' ' | last | handle
+                -%}
+                <div class="inline-block relative variant-input">
+                  <input
+                    form="{{ product_form_id }}"
+                    class="custom-input cursor-pointer absolute top-0 left-0 w-full h-full opacity-0 peer"
+                    @change="optionChange()"
+                    type="radio"
+                    id="{{ product_form_id }}-Option{{ option.position }}-{{ value | escape }}"
+                    name="options[{{ option.name }}]"
+                    value="{{ value | escape }}"
+                    data-handle="{{ value | handleize }}"
+                    x-model="currentOption{{ option_array_index | plus: 1 }}"
+                    {% if option.selected_value == value %} checked{% endif %} data-single-option-selector
+                  >
+                  <label
+                    class="
+                      relative block text-center break-words min-touch-target border-theme border border-scheme-text btn min-w-[2.5rem] peer-checked:bg-scheme-text peer-checked:text-scheme-background  cursor-pointer rounded-button
+                      {% unless variant_label_state %}
+                        line-through
+                      {% endunless %}
+                      cursor-pointer"
+                    for="{{ product_form_id }}-Option{{ option.position }}-{{ value | escape }}"
+                    title="{{ option.value }}"
+                    >
+                    <span>{{ value }}</span>
+                  </label>
+                </div>
+              {% endfor %}
+            </div>
+          {%- when 'radio' -%}
+            <div>
+              {% for value in option.values %}
+                {%- liquid
+                  assign variant_label_state = true
+                  if product.options.size == 1
+                    unless product.variants[forloop.index0].available
+                      assign variant_label_state = false
+                    endunless
+                  endif
+                -%}
+                <div class="block relative variant-input">
+                  <input
+                    class="custom-input cursor-pointer absolute top-0 left-0 w-full h-full opacity-0"
+                    @change="optionChange()"
+                    type="radio"
+                    id="{{ product_form_id }}-Option{{ option.position }}-{{ value | escape }}"
+                    name="options[{{ option.name }}]"
+                    value="{{ value | escape }}"
+                    data-handle="{{ value | handleize }}"
+                    x-model="currentOption{{ option_array_index | plus: 1 }}"
+                    {% if option.selected_value == value %} checked{% endif %} data-single-option-selector
+                  >
+                  <label
+                    class="variant-radio-label flex items-center 
+                    {% unless variant_label_state %}text-scheme-secondary line-through{% else %}cursor-pointer{% endunless %}"
+                    for="{{ product_form_id }}-Option{{ option.position }}-{{ value | escape }}"
+                  >
+                    <template x-if="optionHandles[{{ option_array_index }}] === '{{ value | handleize }}'">
+                      <span class="w-3 h-3 mr-1 block rounded-full bg-scheme-text border border-theme border-scheme-text"></span>
+                    </template>
+                    <template x-if="optionHandles[{{ option_array_index }}] !== '{{ value | handleize }}'">
+                      <span class="w-3 h-3 mr-1 block rounded-full bg-transparent border border-theme border-scheme-text"></span>
+                    </template>
+                    <span>{{ value }}</span>
+                  </label>
+                </div>
+              {% endfor %}
+            </div>
+          {%- when 'text_underline' -%}
+            <div class="flex flex-wrap items-center justify-start gap-x-4 gap-y-2">
+              {% for value in option.values %}
+                {%- liquid
+                  assign variant_label_state = true
+                  if product.options.size == 1
+                    unless product.variants[forloop.index0].available
+                      assign variant_label_state = false
+                    endunless
+                  endif
+                -%}
+                <div class="relative variant-input">
+                  <input
+                    class="custom-input cursor-pointer absolute top-0 left-0 w-full h-full opacity-0"
+                    @change="optionChange()"
+                    type="radio"
+                    id="{{ product_form_id }}-Option{{ option.position }}-{{ value | escape }}"
+                    name="options[{{ option.name }}]"
+                    value="{{ value | escape }}"
+                    data-handle="{{ value | handleize }}"
+                    x-model="currentOption{{ option_array_index | plus: 1 }}"
+                    {% if option.selected_value == value %} checked{% endif %} data-single-option-selector
+                  >
+                  <label
+                    class="{% unless variant_label_state %}text-scheme-secondary line-through{% else %}cursor-pointer{% endunless %}" for="Option{{ option.position }}-{{ value | escape }}"
+                  >
+                    <span :class="{ 'underline': optionHandles[{{ option_array_index }}] === '{{ value | handleize }}' }">{{ value }}</span>
+                  </label>
+                </div>
+              {% endfor %}
+            </div>
+        {%- endcase -%}
+      </fieldset>
+    {% endfor %}
+  </div>
+{% endunless %}

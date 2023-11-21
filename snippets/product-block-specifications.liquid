@@ -1,0 +1,22 @@
+<div class="mt-spacer {{ block.settings.text_color }}" style="--spacing-adjust: {{ block.settings.space_above }};" {{ block.shopify_attributes }}>
+  <ul>
+    {%- for i in (1..5) -%}
+      {%- capture heading %}heading_{{ i }}{%- endcapture -%}
+      {%- capture content %}content_{{ i }}{%- endcapture -%}
+      {%- liquid
+        assign heading = block.settings[heading]
+        assign content = block.settings[content]
+      -%}
+      {%- if content != '' -%}
+        <li class="grid grid-cols-3 gap-theme py-2 {% if block.settings.show_borders %}border-t-theme border-scheme-border last:border-b-theme{% endif %}">
+         <div class="col-span-1 min-w-0 break-words">
+          {{- heading | escape | strip -}}
+          </div>
+          <div class="col-span-2 min-w-0 break-words {{ block.settings.content_text_alignment }}">
+          {{- content -}}
+          </div>
+        </li>
+      {%- endif -%}
+    {%- endfor -%}
+  </ul> 
+</div>

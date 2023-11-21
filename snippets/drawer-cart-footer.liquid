@@ -1,0 +1,67 @@
+<div
+  x-data="ThemeModule_CartFooter('drawer')"
+  data-cart-footer
+>
+  {% if cart != empty %}
+    <div class="border-t-theme border-scheme-border pt-4 lg:mt-8 pb-safe-area">
+
+      <div class="grid gap-4">
+
+        {% if settings.cart_notes_enable %}
+          <div>
+            <label class="block" for="CartSpecialInstructions">{{ 'cart.general.note' | t }}</label>
+            <textarea
+              name="note"
+              id="CartSpecialInstructions"
+              class="block mt-1 w-full border-theme border-scheme-text bg-scheme-background text-scheme-text transition-opacity"
+              :class="{ 'opacity-50 cursor-progress' : updating }"
+              :readonly="updating"
+              x-data="ThemeModule_CartNote"
+              @change="updateNote"
+              @keyup.debounce.750ms="$dispatch('change')"
+            >
+              {{- cart.note -}}
+            </textarea>
+          </div>
+        {% endif %}
+
+        <div>
+          <dl class="grid grid-cols-2 text-right items-center">
+            {%- for discount_application in cart.cart_level_discount_applications -%}
+              <dt class="text-scheme-accent text-left">
+                <span class="sr-only">{{ 'customer.order.discount' | t }}:</span><span>{{- discount_application.title -}}</span>
+              </dt>
+              <dd class="text-scheme-accent">
+                -{{ discount_application.total_allocated_amount | money }}
+              </dd>
+            {%- endfor -%}
+            <dt class="text-left">{{ 'cart.general.subtotal' | t }}</dt>
+            <dd class="">{{ cart.total_price | money }}</dd>
+          </dl>
+          <p class="mt-2 text-right text-sm">
+            {%- if cart.taxes_included -%}
+              {{ 'cart.general.taxes_included_but_shipping_at_checkout' | t }}
+            {%- else -%}
+              {{ 'cart.general.shipping_at_checkout' | t }}
+            {%- endif -%}
+          </p>
+        </div>
+
+        <div>
+          <button class="block btn btn--solid w-full" type="submit" name="checkout" form="cart">
+            {{ 'cart.general.checkout' | t }}
+          </button>
+        </div>
+
+        {% if additional_checkout_buttons and settings.cart_additional_buttons %}
+          <div class="-mt-2 additional-checkout-buttons [&_[data-shopify-buttoncontainer]]:justify-end">
+            {{ content_for_additional_checkout_buttons }}
+          </div>
+        {% endif %}
+
+      </div>
+
+      <div class="text-scheme-error" id="cart-errors"></div>
+    </div>
+  {% endif %}
+</div>

@@ -1,0 +1,167 @@
+{% liquid
+  assign speed_number = section.settings.speed | plus: 0
+  assign link = section.settings.link
+  assign text = section.settings.text
+  assign font = section.settings.font
+  assign section_color = section.settings.color_scheme
+  assign direction = section.settings.direction
+  assign repeat_text = section.settings.repeat_text
+  capture text_size_class
+    render 'type-scale-classes', mobile_text_scale: section.settings.mobile_text_scale, desktop_text_scale: section.settings.desktop_text_scale 
+  endcapture
+%}
+
+<section
+  class="pt-top-section-vertical-spacing pb-bottom-section-vertical-spacing text-scheme-text bg-scheme-background"
+  data-color-scheme="{{ section_color }}"
+  style="--top-spacing-adjust: {{ section.settings.space_above }}; --bottom-spacing-adjust: {{ section.settings.space_below }};"
+>
+  {% render 'scrolling-text',
+    id: section.id
+    text_size_class: text_size_class,
+    speed_number: speed_number,
+    link: link,
+    text: text,
+    font: font,
+    section_color: section_color,
+    direction: direction,
+    repeat_text: repeat_text
+  %}
+</section>
+
+{% schema %}
+{
+  "name": "Scrolling text",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "If a user has reduced motion enabled the marquee will not animate and display as a static banner as a fallback."
+    },
+    {
+      "type": "text",
+      "id": "text",
+      "label": "Text",
+      "default": "Use this text to share information about your brand with your customers. Describe a product, share announcements, or welcome customers to your store."
+    },
+    {
+      "type": "checkbox",
+      "id": "repeat_text",
+      "default": true,
+      "label": "Repeat text",
+      "info": "Automatically repeat text to create an infinity effect."
+    },
+    {
+      "type": "url",
+      "id": "link",
+      "label": "Link"
+    },
+    {
+      "type": "range",
+      "id": "desktop_text_scale",
+      "min": -2,
+      "max": 7,
+      "step": 1,
+      "label": "Desktop font size scale",
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "mobile_text_scale",
+      "min": -2,
+      "max": 4,
+      "step": 1,
+      "label": "Mobile font size scale",
+      "default": 2
+    },
+    {
+      "type": "radio",
+      "id": "font",
+      "label": "Text font",
+      "options": [
+        {
+          "value": "font-main",
+          "label": "Body"
+        },
+        {
+          "value": "font-heading",
+          "label": "Heading"
+        }
+      ],
+      "default": "font-main"
+    },
+    {
+      "type": "range",
+      "id": "speed",
+      "min": 10,
+      "max": 400,
+      "step": 10,
+      "unit": "sec",
+      "label": "Speed",
+      "default": 120
+    },
+    {
+      "type": "radio",
+      "id": "direction",
+      "label": "Direction",
+      "options": [
+        {
+          "value": "",
+          "label": "Right to left"
+        },
+        {
+          "value": "reverse",
+          "label": "Left to right"
+        }
+      ],
+      "default": ""
+    },
+    {
+      "type": "header",
+      "content": "Color"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "default": "scheme_1",
+      "label": "Color scheme"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "space_above",
+      "min": 0,
+      "max": 2,
+      "step": 0.5,
+      "unit": "x",
+      "label": "Above",
+      "default": 1
+    },
+    {
+      "type": "range",
+      "id": "space_below",
+      "min": 0,
+      "max": 2,
+      "step": 0.5,
+      "unit": "x",
+      "label": "Below",
+      "default": 1
+    }
+  ],
+  "presets": [
+    {
+      "name": "Scrolling text"
+    }
+  ],
+  "disabled_on": {
+    "groups": [
+      "aside",
+      "header",
+      "footer",
+      "custom.hero"
+    ]
+  }
+}
+{% endschema %}

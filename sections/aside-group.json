@@ -1,0 +1,14 @@
+{
+  "type": "aside",
+  "name": "Sidebar",
+  "sections": {
+    "sidebar": {
+      "type": "sidebar",
+      "settings": {
+      }
+    }
+  },
+  "order": [
+    "sidebar"
+  ]
+}

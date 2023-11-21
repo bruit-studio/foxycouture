@@ -1,0 +1,408 @@
+{%- liquid
+
+  assign link_classes = ''
+  assign uppercase = settings.header_uppercase
+
+  if uppercase
+    assign link_classes = link_classes | append: ' uppercase'
+  endif
+
+  assign side_bar_cols = settings.sidebar_width_on_desktop | plus: 0
+  assign main_content_cols = 12 | minus: side_bar_cols
+
+  if settings.sidebar_desktop_alignment == 'left'
+    assign sidebar_matrix = '"'
+    for i in (1..side_bar_cols)
+      assign sidebar_matrix = sidebar_matrix | append: 'sb '
+    endfor
+    for i in (1..main_content_cols)
+      assign sidebar_matrix = sidebar_matrix | append: 'x '
+    endfor
+    assign sidebar_matrix = sidebar_matrix | append: '"'
+  else
+    assign sidebar_matrix = '"'
+    for i in (1..main_content_cols)
+      assign sidebar_matrix = sidebar_matrix | append: 'x '
+    endfor
+    for i in (1..side_bar_cols)
+      assign sidebar_matrix = sidebar_matrix | append: 'sb '
+    endfor
+    assign sidebar_matrix = sidebar_matrix | append: '"'
+  endif
+
+  assign grid_areas = sidebar_matrix | replace: 'x', 'ct'
+-%}
+
+
+
+{%- style -%}
+
+#SectionSidebar {
+  max-width: {{ settings.sidebar_max_content_width }}px;
+}
+
+@media (min-width: 990px) {
+    :root {
+      --sidebar-width: {{ side_bar_cols | divided_by: 12.0 | times: 100.0 }}vw;
+      --main-grid-areas: {{ grid_areas }};
+      --main-grid-columns: repeat(12, minmax(0, 1fr));
+      --sidebar-display: block;
+    }
+
+    {%- if settings.sidebar_desktop_layout == 'screen_height' -%}
+
+    html, body {
+      position: fixed;
+      height: 100%;
+      width: 100%;
+      overflow: hidden;
+    }
+
+    .main-site-grid {
+      height: 100vh;
+      grid-template-rows:  1fr;
+    }
+
+    .main-site-grid--sidebar {
+      overflow-y: scroll;
+    }
+
+    .main-site-grid--container {
+      overflow-y: scroll;
+    }
+    .section-theme-sidebar {
+      height: 100%;
+    }
+    {%- else -%}
+    .main-site-grid--sidebar {
+      position: sticky;
+      top: var(--sticky-offset);
+      align-self: start;
+    }
+    {%- endif -%}
+
+  }
+{%- endstyle -%}
+
+<aside
+  id='SectionSidebar'
+  class="wrapper py-spacer {% if settings.sidebar_desktop_layout == 'screen_height' %}h-full flex flex-col items-top{% else %}bg-scheme-background text-scheme-text{% endif %}"
+  {%- if settings.sidebar_desktop_layout != 'screen_height' -%}
+  data-color-scheme="{{ settings.sidebar_color_scheme }}"
+  {%- endif -%}
+  style="--spacing-adjust: {{ section.settings.padding }}"
+>
+  <div class="space-y-spacer" style="--spacing-adjust: {{ section.settings.vertical_space_between_blocks }}">
+
+    {% if settings.sidebar_show_logo %}
+    <div>
+      {%- render 'logo',
+        logo_max_width: section.settings.logo_max_width,
+        link: routes.root_url
+      -%}
+    </div>
+    {% endif %}
+
+    {%- for block in section.blocks -%}
+      {%- case block.type -%}
+        {%- when 'menu' -%}
+          {%- render 'sidebar-menu-block'
+            menu: block.settings.menu,
+            nested_navigation_style: block.settings.nested_navigation_style,
+            id: block.id,
+            show_collection_products_count: block.settings.show_collection_products_count,
+            accordion_icon: settings.accordion_icon,
+            show_cart: block.settings.show_cart,
+            enable_main_navigation_semantics: section.settings.enable_main_navigation_semantics,
+            link_classes: link_classes
+          -%}
+        {%- when 'rich_text' -%}
+          <div class="rte {{ block.settings.text_alignment }}">
+            {{ block.settings.richtext }}
+          </div>
+        {%- when 'avatar' -%}
+          {%- liquid
+            assign max_width = block.settings.image_max_width | append: 'px'
+            assign image_class = ''
+            assign placeholder_class = 'tile-placeholder-svg bg-scheme-placeholder-background text-scheme-placeholder-foreground fill-current'
+            if block.settings.crop == 'circle'
+              assign placeholder_class = placeholder_class | append: ' rounded-full'
+              assign image_class = image_class | append: ' rounded-full'
+            endif
+          -%}
+          <div>
+            <a href="{{ routes.root_url }}">
+            {%- if block.settings.image != blank -%}
+              <div class="aspect-[1/1] {{ image_class }} overflow-hidden" style="max-width: {{ max_width }};">
+                {{ block.settings.image | image_url: width: 1000 | image_tag:
+                  class: 'object-cover object-center w-full h-full',
+                  width: block.settings.image.width,
+                  alt: block.settings.image,
+                  preload: true,
+                  sizes: max_width
+                }}
+              </div>
+            {%- else -%}
+            <div style="max-width: {{ max_width }};">
+            {{ 'image' | placeholder_svg_tag: placeholder_class }}
+            </div>
+            {%- endif -%}
+            </a>
+          </div>
+        {%- when 'button' -%}
+          {%- if block.settings.label != blank -%}
+          <div>
+            <a class="btn" href="{{ block.settings.link }}">
+              {{ block.settings.label }}
+            </a>
+          </div>
+          {%- endif -%}
+        {%- when 'social_media' -%}
+          <div>
+            {%- render 'social-media', display: block.settings.display, text_layout: block.settings.text_layout -%}
+          </div>
+      {%- endcase -%}
+    {%- endfor -%}
+    </div>
+    {%- if settings.sidebar_show_copyright -%}
+    <p class="mt-auto">&copy; {{ 'now' | date: '%Y' }} {{ shop.name | link_to: routes.root_url -}}</p>
+    {%- endif -%}
+</aside>
+
+{% schema %}
+{
+  "name": "Sidebar",
+  "class": "section-theme-sidebar",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Logo"
+    },
+    {
+      "type": "paragraph",
+      "content": "To show logo in sidebar, enable \"Show logo\" in [theme settings](/editor?context=theme&category=sidebar)."
+    },
+    {
+      "type": "range",
+      "id": "logo_max_width",
+      "min": 10,
+      "max": 500,
+      "step": 5,
+      "unit": "px",
+      "label": "Logo max width",
+      "default": 200,
+      "info": "Logo width will not exceed logo block width"
+    },
+    {
+      "type": "paragraph",
+      "content": "Edit your logo in [theme settings](/editor?context=theme&category=logo)."
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "paragraph",
+      "content": "Customise width and position of sidebar in [theme settings](/editor?context=theme&category=sidebar)."
+    },
+    {
+      "type": "range",
+      "id": "padding",
+      "min": 0,
+      "max": 2,
+      "step": 0.5,
+      "unit": "x",
+      "label": "Padding",
+      "default": 1
+    },
+    {
+      "type": "range",
+      "id": "vertical_space_between_blocks",
+      "min": 0,
+      "max": 2,
+      "step": 0.5,
+      "unit": "x",
+      "label": "Vertical spacing between blocks",
+      "default": 1
+    }
+  ],
+  "blocks": [
+    {
+      "name": "Menu",
+      "type": "menu",
+      "settings": [
+        {
+          "id": "menu",
+          "type": "link_list",
+          "label": "Main menu",
+          "default": "main-menu"
+        },
+        {
+          "type": "radio",
+          "id": "nested_navigation_style",
+          "label": "Nested navigation style",
+          "options": [
+            {
+              "value": "accordion",
+              "label": "Accordion"
+            },
+            {
+              "value": "contextual",
+              "label": "Contextual"
+            },
+            {
+              "value": "expanded",
+              "label": "Expanded"
+            }
+          ],
+          "default": "accordion"
+        },
+        {
+          "type": "checkbox",
+          "id": "enable_main_navigation_semantics",
+          "label": "Enable main navigation semantics",
+          "default": false,
+          "info": "Enable this setting if this is the main navigation for your store"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_cart",
+          "label": "Show cart link as last menu item",
+          "default": false
+        },
+        {
+          "type": "checkbox",
+          "id": "show_collection_products_count",
+          "label": "Show collection products count",
+          "default": false
+        }
+      ]
+    },
+    {
+      "name": "Rich text",
+      "type": "rich_text",
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "richtext",
+          "label": "Paragraph",
+          "default": "<p>Use this to add additional information about your store, e.g. address / contact details.</p>"
+        },
+        {
+          "type": "select",
+          "id": "text_alignment",
+          "label": "Text alignment",
+          "options": [
+            {
+              "value": "text-left",
+              "label": "Left"
+            },
+            {
+              "value": "text-center",
+              "label": "Center"
+            },
+            {
+              "value": "text-right",
+              "label": "Right"
+            }
+          ],
+          "default": "text-left"
+        }
+      ]
+    },
+    {
+      "type": "avatar",
+      "name": "Avatar",
+      "settings": [
+        {
+          "id": "image",
+          "type": "image_picker",
+          "label": "Image"
+        },
+        {
+          "type": "range",
+          "id": "image_max_width",
+          "min": 50,
+          "max": 600,
+          "step": 50,
+          "unit": "px",
+          "label": "Image max width",
+          "default": 100,
+          "info": "Image width will not exceed sidebar width"
+        },
+        {
+          "type": "radio",
+          "id": "crop",
+          "label": "Crop",
+          "options": [
+            {
+              "value": "circle",
+              "label": "Circle"
+            },
+            {
+              "value": "square",
+              "label": "Square"
+            }
+          ],
+          "default": "circle"
+        }
+      ]
+    },
+    {
+      "type": "button",
+      "name": "Button",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "Shop Now"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        }
+      ]
+    },
+    {
+      "type": "social_media",
+      "name": "Social media",
+      "settings": [
+        {
+          "type": "radio",
+          "id": "display",
+          "label": "Display as",
+          "options": [
+            {
+              "value": "icons",
+              "label": "Icons"
+            },
+            {
+              "value": "text",
+              "label": "Text"
+            }
+          ],
+          "default": "icons"
+        },
+        {
+          "type": "radio",
+          "id": "text_layout",
+          "label": "Text layout",
+          "default": "vertical",
+          "options": [
+            {
+              "value": "vertical",
+              "label": "Vertical"
+            },
+            {
+              "value": "horizontal",
+              "label": "Horizontal"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

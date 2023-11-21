@@ -1,0 +1,14 @@
+<div class="absolute -left-[10000px]" aria-hidden>
+  <div class="btn inline-block" id="buttonSizer">
+    {{ 'products.product.add_to_cart' | t }}
+  </div>
+</div>
+<script>
+//get height of buttonSizer
+var buttonSizer = document.getElementById('buttonSizer');
+var buttonSizerHeight = buttonSizer.offsetHeight;
+document.documentElement.style.setProperty(
+  '--add-to-cart-button-height',
+  `${buttonSizerHeight}px`
+);
+</script>

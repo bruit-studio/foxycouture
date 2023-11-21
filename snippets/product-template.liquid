@@ -1,0 +1,426 @@
+{% liquid
+  assign product_media_col_span = 12
+  assign product_content_col_span = 12
+
+  assign full_bleed_on_mobile = false
+  assign full_bleed_on_desktop = false
+  if section.settings.media_full_bleed contains 'mobile'
+    assign full_bleed_on_mobile = true
+  endif
+  if section.settings.media_full_bleed contains 'desktop'
+    assign full_bleed_on_desktop = true
+  endif
+
+  if section.settings.desktop_layout == 'two_column' or context == 'featured-product'
+    assign product_media_col_span = section.settings.media_width_on_desktop | plus: 0
+    assign product_content_col_span = 12 | minus: product_media_col_span
+  endif
+
+  assign section_color = section.settings.color_scheme
+
+  assign current_variant = product.selected_or_first_available_variant
+  assign featured_media = current_variant.featured_media | default: product.featured_media
+
+  assign models = product.media | where: 'media_type', 'model'
+
+  assign enable_image_zoom = section.settings.enable_image_zoom
+
+  assign product_form_id = 'product-form-' | append: section.id
+
+  assign media_col_classes = '-mx-wrapper-left-and-right-margin'
+  if section.settings.desktop_media_position == 'right'
+    assign media_col_classes = media_col_classes | append: ' lg:col-end-[-1]'
+  endif
+  if full_bleed_on_desktop
+    if section.settings.desktop_media_position == 'right'
+      assign media_col_classes = media_col_classes | append: ' lg:-mr-wrapper-left-and-right-margin lg:ml-0'
+    else
+      assign media_col_classes = media_col_classes | append: ' lg:-ml-wrapper-left-and-right-margin lg:mr-0'
+    endif
+  else
+    assign media_col_classes = media_col_classes | append: ' lg:mx-0'
+  endif
+
+  assign mobile_spacing = ''
+  assign desktop_media_spacing = ''
+  assign desktop_content_spacing = ''
+
+  unless full_bleed_on_mobile
+    assign mobile_spacing = mobile_spacing | append: ' max-lg:pt-top-section-vertical-spacing'
+  endunless
+  unless full_bleed_on_desktop
+    assign desktop_media_spacing = desktop_media_spacing | append: ' lg:pt-top-section-vertical-spacing'
+  endunless
+  assign desktop_content_spacing = desktop_content_spacing | append: ' lg:pt-top-section-vertical-spacing'
+
+  assign mobile_spacing = mobile_spacing | append: ' max-lg:pb-bottom-section-vertical-spacing'
+  unless full_bleed_on_desktop or section.settings.desktop_layout == 'single_column'
+    assign desktop_media_spacing = desktop_media_spacing | append: ' lg:pb-bottom-section-vertical-spacing'
+  endunless
+  assign desktop_content_spacing = desktop_content_spacing | append: ' lg:pb-bottom-section-vertical-spacing'
+
+  assign content_col_classes = ''
+  assign content_module_required = false
+  if section.settings.product_content_sticky
+    assign content_col_classes = 'lg:sticky lg:top-sticky-offset'
+  endif
+  assign content_wrapper_classes = 'lg:flex'
+  assign content_element_classes = ''
+  if section.settings.product_content_alignment contains 'left'
+    assign content_wrapper_classes = content_wrapper_classes | append: ' lg:justify-start'
+  elsif section.settings.product_content_alignment contains 'right'
+    assign content_wrapper_classes = content_wrapper_classes | append: ' lg:justify-end'
+  else
+    assign content_wrapper_classes = content_wrapper_classes | append: ' lg:justify-center'
+  endif
+  if section.settings.product_content_alignment contains 'center_' or section.settings.product_content_alignment == 'center' or section.settings.product_content_alignment contains 'bottom'
+    assign content_module_required = true
+    assign content_wrapper_classes = content_wrapper_classes | append: ' lg:h-full'
+  endif
+
+  if section.settings.product_content_alignment contains 'center_' or section.settings.product_content_alignment == 'center'
+    assign content_element_classes = content_element_classes | append: ' lg:my-auto'
+  elsif section.settings.product_content_alignment contains 'bottom'
+    assign content_element_classes = content_element_classes | append: ' lg:mt-auto'
+    if section.settings.show_space_below
+      assign content_element_classes = content_element_classes | append: ' lg:mb-0'
+    else
+      assign content_element_classes = content_element_classes | append: ' lg:mb-4'
+    endif
+  endif
+
+  assign content_width = section.settings.product_content_width_on_desktop | plus: 0
+  assign content_cols = product_content_col_span | times: content_width | ceil | times: 1
+
+  if context == 'quick-view'
+    assign content_cols = 12
+  endif
+
+  # Calculate sizes
+
+  unless context == 'quick-view'
+    if settings.enable_sidebar
+      assign sidebar_width = 100.00 | divided_by: 12 | times: settings.sidebar_width_on_desktop | round: 2
+      assign desktop_sizes_base = 100 | minus: sidebar_width
+    else
+      assign desktop_sizes_base = 100
+    endif
+
+    assign desktop_margins = settings.desktop_left_and_right_margin | times: 2
+
+    assign desktop_sizes_css_base = 'calc(' | append: desktop_sizes_base | append: 'vw - ' | append: desktop_margins | append: 'px)'
+
+    if settings.enable_max_site_width
+      assign desktop_sizes_css_base = 'min(' | append: settings.max_site_width | append: 'px, calc(' | append: desktop_sizes_base | append: 'vw - ' | append: desktop_margins | append: 'px))'
+    endif
+  else
+    assign desktop_sizes_css_base = 'calc(100vw / 12 * 7)'
+  endunless
+%}
+
+<section
+  id="{{ section.id }}"
+  class="section-container"
+  x-data="
+    Theme_Product({
+      product: {{ product | json | escape }},
+      variant: {{ current_variant | json | escape }},
+      featuredMediaID: {% if featured_media %}{{ featured_media.id }}{% else %}null{% endif %},
+    })
+  "
+  data-product-section
+  {% unless context == 'quick-view' -%}
+    data-color-scheme="{{ section_color }}"
+  {%- endunless %}
+  @product-url-update.stop="window.history.replaceState({ path: $event.detail.url }, '', $event.detail.url);"
+  style="--top-spacing-adjust: {{ section.settings.space_above }}; --bottom-spacing-adjust: {{ section.settings.space_below }};"
+>
+  <div class="text-scheme-text bg-scheme-background {{ mobile_spacing }}">
+    <div class="{% if context == 'quick-view' %}px-2 lg:px-4{% else %}wrapper{% endif %}">
+      <div class="grid lg:grid-cols-12 lg:grid-flow-dense lg:items-start gap-theme">
+        <div
+          class="product-media lg:col-span-item {{ media_col_classes }} {{ desktop_media_spacing }}"
+          style="--item-col-span: {{ product_media_col_span }};"
+        >
+          {%- render 'product-media',
+            product: product,
+            featured_media: featured_media,
+            full_bleed_on_mobile: full_bleed_on_mobile,
+            full_bleed_on_desktop: full_bleed_on_desktop,
+            models: models,
+            context: context,
+            desktop_sizes_css_base: desktop_sizes_css_base,
+            product_media_col_span: product_media_col_span
+          -%}
+        </div>
+
+        {% if content_module_required %}
+          {%- style -%}
+            @media (min-width: 990px) {
+              #{{ section.id }}-ProductContentColumn {
+                --product-content-column-height: 100%;
+                --product-content-column-max-height: 100vh;
+
+                max-height: var(--product-content-column-max-height);
+                height: var(--product-content-column-height);
+                margin-top: calc(var(--header-height) * -1);
+                padding-top: var(--header-height);
+              }
+            }
+          {%- endstyle -%}
+        {% endif %}
+
+        {%- liquid
+          assign content_width = section.settings.product_content_width_on_desktop | plus: 0
+        -%}
+
+        {%- style -%}
+          @media (min-width: 990px) {
+            #{{ section.id }}-productContentContainer {
+              --item-col-span: {{ content_cols }};
+              --number-of-columns: {{ product_content_col_span }};
+              --number-of-gutters: calc(var(--number-of-columns) - 1);
+              --total-gutter-size: calc(var(--theme-col-gap-desktop) * var(--number-of-gutters));
+              --column-width: calc((100% - var(--total-gutter-size))/var(--number-of-columns));
+              --item-gutter-span: calc( var(--item-col-span) - 1);
+              width: calc( (var(--column-width)*var(--item-col-span)) + (var(--theme-col-gap-desktop)*var(--item-gutter-span)));
+            }
+          }
+        {%- endstyle -%}
+
+        <div
+          id="{{ section.id }}-ProductContentColumn"
+          class="product-content lg:col-span-item  {{ content_col_classes }}"
+          style="--item-col-span: {{ product_content_col_span }};{% if content_module_required %}--product-content-height: 0px;{% endif %}"
+          {% if content_module_required %}
+            x-data="productContent()"
+          {% endif %}
+        >
+          <div class="{{ content_wrapper_classes }} {{ desktop_content_spacing }}">
+            <div
+              id="{{ section.id }}-productContentContainer"
+              class="{{ content_element_classes }}"
+              {% if content_module_required %}
+                x-ref="productContentContainer"
+              {% endif %}
+              data-product-form-container
+            >
+              <div class="blocks-container [&>div:first-child]:mt-0">
+                {%- liquid
+                  for block in section.blocks
+                    case block.type
+                      when '@app'
+                        render 'product-block-app', block: block
+                      when 'title'
+                        render 'product-block-title', product: product, block: block, context: context
+                      when 'price'
+                        render 'product-form-component-price', product: product, block: block
+                      when 'quantity_selector'
+                        render 'product-block-quantity', product_form_id: product_form_id, label_class: label_class, block: block
+                      when 'variant_picker'
+                        render 'product-form-component-variant-picker', product_form_id: product_form_id, product: product, block: block
+                      when 'buy_buttons'
+                        render 'product-block-buy-buttons', product_form_id: product_form_id, product: product, label_class: label_class, current_variant: current_variant, block: block
+                      when 'description'
+                        render 'product-block-description', product: product, block: block
+                      when 'star_rating'
+                        render 'product-block-star-rating', product: product, block: block
+                      when 'vendor'
+                        render 'product-block-vendor', product: product, block: block
+                      when 'text'
+                        render 'product-block-text', product: product, block: block
+                      when 'rich_text'
+                        render 'product-block-rich-text', product: product, block: block
+                      when 'specifications'
+                        render 'product-block-specifications', product: product, block: block
+                      when 'icon_list'
+                        render 'product-block-icon-list', product: product, block: block
+                      when 'collapsible_tabs'
+                        render 'product-block-collapsible-tabs', product: product, block: block
+                      when 'supporting_links'
+                        render 'product-block-supporting-links', product: product, block: block
+                      when 'popup'
+                        render 'product-block-popup', product: product, block: block
+                      when 'share'
+                        render 'product-block-share', product: product, block: block
+                      when 'inventory_status'
+                        render 'product-block-inventory-status', product: product, block: block, current_variant: current_variant
+                      when 'liquid'
+                        render 'product-block-liquid', product: product, block: block
+                    endcase
+                  endfor
+                  comment
+                    Assign complementary products as a variable, due to nesting snippets we will render out the liquid in the next step
+                  endcomment
+                  assign complementary_products = section.blocks | where: 'type', 'complementary'
+                -%}
+                {%- if complementary_products.size > 0 %}
+                  {% liquid
+                    assign block = complementary_products[0]
+                  %}
+                  {%- if recommendations.performed
+                    and recommendations.products_count > 0
+                  -%}
+                    {%- liquid
+                      if recommendations.products_count == 1
+                        assign grid_cols_class = 'grid-cols-1'
+
+                        assign complementary_desktop_sizes = 'calc((' | append: desktop_sizes_css_base | append: ' / 12) * ' | append: product_content_col_span | append: ')'
+
+                        assign complementary_mobile_sizes = '100vw'
+
+                      else
+                        assign grid_cols_class = 'grid-cols-2'
+
+                        assign complementary_desktop_sizes = 'calc(((' | append: desktop_sizes_css_base | append: ' / 12) * ' | append: product_content_col_span | append: ') / 2)'
+
+                        assign complementary_mobile_sizes = '50vw'
+                      endif
+
+                      unless context == 'quick-view'
+                        assign complementary_sizes = '(min-width: 990px) ' | append: complementary_desktop_sizes | append: ', ' | append: complementary_mobile_sizes
+                      else
+                        assign complementary_sizes = '(min-width: 768px) ' | append: complementary_desktop_sizes | append: ', ' | append: complementary_mobile_sizes
+                      endunless
+                    -%}
+                    <div class="product-recommendations">
+                      {%- if block.settings.heading != blank -%}
+                        <h2 class="font-heading break-words  mb-5">
+                          {{ block.settings.heading }}
+                        </h2>
+                      {%- endif -%}
+                      <ul class="grid {{ grid_cols_class }} gap-theme">
+                        {%- for product in recommendations.products -%}
+                          {%- render 'tile-product',
+                            product: product,
+                            sizes: complementary_sizes
+                          -%}
+                        {%- endfor -%}
+                      </ul>
+                    </div>
+                  {% else %}
+                    {% capture section_url %}{{ routes.product_recommendations_url }}?section_id={{ section.id }}&product_id={{ product.id }}&limit={{ block.settings.product_list_limit }}&intent=complementary{% endcapture %}
+                    <div
+                      {{ block.shopify_attributes }}
+                      class="product-recommendations mt-spacer"
+                      style="--spacing-adjust: {{ block.settings.space_above }};"
+                      x-data
+                      x-html="
+                        $fetchedSection(
+                          '{{ section_url }}',
+                          '.product-recommendations'
+                        )
+                      "
+                    ></div>
+                  {% endif %}
+                {%- endif -%}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% unless request.design_mode %}
+  <script
+    src="{{ 'vendor-product.bundle.min.js' | asset_url }}"
+    type="module"
+  ></script>
+  <script src="{{ 'product.js' | asset_url }}" type="module"></script>
+{% endunless %}
+
+{% if models.size %}
+  <script type="application/json" id="ModelJson-{{ section.id }}">
+    {{ product.media | where: 'media_type', 'model' | json }}
+  </script>
+  <script>
+    window.ProductModel = {
+      loadShopifyXR() {
+        Shopify.loadFeatures([
+          {
+            name: 'shopify-xr',
+            version: '1.0',
+            onLoad: this.setupShopifyXR.bind(this),
+          },
+        ]);
+      },
+
+      setupShopifyXR(errors) {
+        if (errors) return;
+
+        if (!window.ShopifyXR) {
+          document.addEventListener('shopify_xr_initialized', () =>
+            this.setupShopifyXR()
+          );
+          return;
+        }
+
+        document.querySelectorAll('[id^="ModelJson-"]').forEach((modelJSON) => {
+          window.ShopifyXR.addModels(JSON.parse(modelJSON.textContent));
+          modelJSON.remove();
+        });
+        window.ShopifyXR.setupXRElements();
+      },
+    };
+
+    window.addEventListener('DOMContentLoaded', () => {
+      if (Shopify.designMode) {
+        document
+          .querySelectorAll('[data-shopify-xr-hidden]')
+          .forEach((element) => element.classList.add('hidden'));
+      }
+      if (window.ProductModel) window.ProductModel.loadShopifyXR();
+    });
+  </script>
+{% endif %}
+
+{% if enable_image_zoom %}
+  {% liquid
+    assign modal_id = 'image-zoom-' | append: section.id
+    assign zoom_section_url = product.url | append: '?section_id=main-product-zoom'
+  %}
+  <div
+    x-data
+    x-init="initTeleport($root)"
+    x-cloak
+  >
+    <template data-should-teleport="#modal-slot">
+      <template x-if="$store.modals.modal.contents === '{{ modal_id }}'">
+        <div class="text-scheme-text bg-scheme-background">
+          <button
+            @click.prevent="$store.modals.close('{{ modal_id }}')"
+            class="block ml-auto fixed mt-5 pt-4 right-10"
+          >
+            <span class="sr-only">
+              {{- 'general.accessibility.close_modal' | t -}}
+            </span>
+            <span class="inline-block w-6 h-6 drop-shadow-[0.06rem_0.12rem_0_rgb(var(--color-scheme-background))]">
+              {%- render 'global-icons', icon_label: 'close' -%}
+            </span>
+          </button>
+          <div
+            id="{{ modal_id }}"
+            data-modal-label="{{ product.title }}, {{ 'products.media.media' | t }}"
+            x-html="
+              $fetchedSection(
+                '{{ zoom_section_url }}',
+                '.product-zoom'
+              )
+            "
+          ></div>
+        </div>
+      </template>
+    </template>
+  </div>
+  {% unless request.design_mode %}
+    <script src="{{ 'zoom.js' | asset_url }}" type="module"></script>
+  {% endunless %}
+{% endif %}
+
+{% unless request.design_mode %}
+  {%- if content_module_required -%}
+    <script src="{{ 'product-content.js' | asset_url }}" type="module"></script>
+  {%- endif -%}
+{% endunless %}

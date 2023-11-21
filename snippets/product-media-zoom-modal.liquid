@@ -1,0 +1,29 @@
+<div
+  x-data
+  x-init="initTeleport($root)"
+  x-cloak
+>
+  <template data-should-teleport="#modal-slot">
+    <template x-if="$store.modals.modal.contents === '{{ modal_id }}'">
+      <div class="text-scheme-text bg-scheme-background">
+        <button @click.prevent="$store.modals.close('{{ modal_id }}')" class="block ml-auto fixed mt-5 pt-4 right-10">
+          <span class="sr-only">{{ 'general.accessibility.close_modal' | t }}</span>
+          <span class="inline-block w-4 h-4 drop-shadow-[0.06rem_0.12rem_0_rgb(var(--color-scheme-background))]">{%- render 'icon-close' -%}</span>
+        </button>
+        <div
+          id="{{ modal_id }}"
+          data-modal-label="{{ product.title }}, {{ 'products.media.media' | t }}"
+          x-html="$fetchedSection(
+            '{{ zoom_section_url }}',
+            '.product-zoom'
+          )"
+        >
+        </div>
+      </div>
+    </template>
+  </template>
+</div>
+{% unless request.design_mode %}
+  <script src="{{ 'product-media-gallery.js' | asset_url }}" type="module"></script>
+  <script src="{{ 'zoom.js' | asset_url }}" type="module"></script>
+{% endunless %}

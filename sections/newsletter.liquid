@@ -1,0 +1,155 @@
+{%- assign section_color = section.settings.color_scheme -%}
+
+<section class="section-container" data-color-scheme="{{ section_color }}" style="--top-spacing-adjust: {{ section.settings.space_above }}; --bottom-spacing-adjust: {{ section.settings.space_below }};">
+  <div class="text-scheme-text bg-scheme-background pt-top-section-vertical-spacing pb-bottom-section-vertical-spacing">
+    <div class="wrapper">
+
+      {%- if section.settings.show_top_border -%}
+      <hr class="border-t-theme border-scheme-border mb-half-section-vertical-spacing">
+      {%- endif -%}
+
+      <div class="grid lg:grid-cols-12 gap-theme">
+
+        {%- unless section.settings.title == blank and section.settings.richtext == blank -%}
+        <div class="lg:col-span-section-title no-m-first">
+          <h2 class="font-heading text-heading-standard empty:hidden break-words">
+            {% if section.settings.title != blank %}
+              {{ section.settings.title | strip }}
+            {% endif %}
+          </h2>
+
+          {% if section.settings.richtext != blank %}
+            <div class="rte text-base mt-4 break-words">
+              {{ section.settings.richtext }}
+            </div>
+          {% endif %}
+        </div>
+        {%- endunless -%}
+
+        <div class="lg:col-span-section-content lg:col-end-[-1]">
+          {% assign form_id = 'customer-form-' | append: section.id %}
+          {% form 'customer', id: form_id %}
+            {% if form.posted_successfully? %}
+              <p class="mb-1 text-scheme-accent" id="Newsletter-success--{{ section.id }}">
+                {{ 'general.newsletter_form.confirmation' | t }}
+              </p>
+            {% endif %}
+            {% if form.errors %}
+              <p class="mb-1 text-scheme-error" id="Newsletter-error--{{ section.id }}">
+                {{ form.errors.translated_fields['email'] | capitalize }} {{ form.errors.messages['email'] }}
+              </p>
+            {% endif %}
+              <div class="input-group items-center gap-1">
+                <input type="hidden" name="contact[tags]" value="newsletter">
+                <label for="NewsletterForm-{{ section.id }}" class="sr-only">
+                  {{ 'general.newsletter_form.newsletter_email' | t }}
+                </label>
+                <input
+                  id="NewsletterForm-{{ section.id }}"
+                  type="email"
+                  name="contact[email]"
+                  class="input-group-field bg-transparent border text-scheme-text {% if form.errors %} border-scheme-error {% else %} border-scheme-text {% endif %}"
+                  value="{{ form.email }}"
+                  autocorrect="off"
+                  autocapitalize="off"
+                  autocomplete="email"
+                  {% if form.errors %}
+                    autofocus
+                    aria-invalid="true"
+                    aria-describedby="Newsletter-error--{{ section.id }}"
+                  {% elsif form.posted_successfully? %}
+                    aria-describedby="Newsletter-success--{{ section.id }}"
+                  {% endif %}
+                  placeholder="{{ 'general.newsletter_form.email_placeholder' | t }}"
+                  required
+                >
+                <div class="input-group-button">
+                  <button type="submit" class="btn" name="commit" id="Subscribe-{{ section.id }}">{{ 'general.newsletter_form.submit' | t }}</button>
+                </div>
+              </div>
+          {% endform %}
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+{% schema %}
+{
+  "name": "Newsletter",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Sign up to our newsletter"
+    },
+    {
+      "type": "richtext",
+      "id": "richtext",
+      "label": "Text",
+      "default": "<p>Receive special offers and first look at new products.</p>"
+    },
+    {
+      "type": "paragraph",
+      "content": "Customers who subscribe will have their email address added to the “accepts marketing” [customer list](/admin/customers?query=&accepts_marketing=1)."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_top_border",
+      "label": "Show top border",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Color"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "default": "scheme_1",
+      "label": "Color scheme"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "space_above",
+      "min": 0,
+      "max": 2,
+      "step": 0.5,
+      "unit": "x",
+      "label": "Above",
+      "default": 1
+    },
+    {
+      "type": "range",
+      "id": "space_below",
+      "min": 0,
+      "max": 2,
+      "step": 0.5,
+      "unit": "x",
+      "label": "Below",
+      "default": 1
+    }
+  ],
+  "presets": [
+    {
+      "name": "Newsletter"
+    }
+  ],
+  "disabled_on": {
+    "groups": [
+      "aside",
+      "header",
+      "footer",
+      "custom.hero"
+    ]
+  }
+}
+{% endschema %}

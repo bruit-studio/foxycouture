@@ -1,0 +1,210 @@
+{%- liquid
+  assign nested_navigation_style = nested_navigation_style | default: 'accordian'
+  assign link_classes = link_classes | append: ' min-w-[40%] break-words'
+-%}
+
+<nav
+  {% if enable_main_navigation_semantics %}
+  role="navigation" aria-label="Primary"
+  {% endif %}
+>
+  
+  <ul id="Menu-{{ id }}" class="menu {{ link_classes }}">
+    {%- for link in menu.links -%}
+      {% comment %}
+        First level
+      {% endcomment %}
+      {%- liquid
+
+        if nested_navigation_style == 'contextual' or nested_navigation_style == 'accordion'
+          assign render_child_links = false
+
+          if link.current
+            assign render_child_links = true
+          endif
+
+          assign current_child_links = link.links | where: 'current', true
+          if current_child_links.size > 0
+            assign render_child_links = true
+          endif
+
+          assign current_grandchild_links = link.links | map: 'links' | where: 'current', true
+          if current_grandchild_links.size > 0
+            assign render_child_links = true
+          endif
+
+          if nested_navigation_style == 'accordion'
+            assign expand_child_links = render_child_links
+            assign render_child_links = true
+          endif
+        else
+          assign render_child_links = true
+        endif
+
+        assign has_count = false
+        if show_collection_products_count and link.type == 'collection_link'
+          assign has_count = true
+          assign products_count = link.object.all_products_count
+        endif
+      -%}
+
+      {%- capture anchor_link -%}
+      <a href="{{ link.url }}" class="block flex justify-between hover:underline {% if link.current %}underline{% endif %} {% if nested_navigation_style == 'accordion' %}py-1{% endif %}">
+        <span>{{ link.title }}{% if has_count %}<sup class="pl-0.5">{{ products_count }}</sup>{% endif %}</span>
+      </a>
+      {%- endcapture -%}
+      <li class="menu-link menu-item-{{ forloop.index0 }}">
+
+        
+        {%- if link.links.size > 0 and render_child_links -%}
+
+          {%- if nested_navigation_style == 'accordion' -%}
+          <div
+            x-cloak
+            x-data="
+            {
+              expanded: {{ expand_child_links }}
+            }
+          "
+          >
+            <button
+              class="flex items-center justify-between w-full py-1 text-left {{ link_classes }} hover:underline"
+              @click="expanded = ! expanded"
+              :aria-expanded="expanded"
+            >
+              <span class=" {% if link.child_active %}underline{% endif %}">{{ link.title }}{% if has_count %}<sup class="pl-0.5">{{ products_count }}</sup>{% endif %}</span>
+              <div class="ml-auto js-enabled flex items-center">
+                <span
+                  class="w-4 h-4 inline-block transition-transform ease-gentle duration-[280ms]"
+                  x-cloak
+                >
+                 {%- if accordion_icon == 'plus_minus' -%}
+                 <span x-show="expanded">{% render 'icon-minus' %}</span>
+                 <span x-show="!expanded">{% render 'icon-plus' %}</span>
+                 {%- else -%}
+                 <span class="block rotate-180" x-show="expanded">{% render 'icon-chevron-down' %}</span>
+                 <span x-show="!expanded">{% render 'icon-chevron-down' %}</span>
+                 {%- endif -%}
+                </span>
+              </div>
+            </button>
+          {%- else -%}
+          {{ anchor_link }}
+          {%- endif -%}
+
+          {% comment %}
+            Second level
+          {% endcomment %}
+          <ul class="child-links menu dropdown-child pl-5" {% if nested_navigation_style == 'accordion' %}x-show="expanded"{% endif %}>
+            {%- for child_link in link.links -%}
+
+              <li class="menu-link">
+                
+                {%- liquid
+                  if nested_navigation_style == 'contextual' or nested_navigation_style == 'accordion'
+                    assign render_grandfather_links = false
+      
+                    if child_link.current
+                      assign render_grandfather_links = true
+                    endif
+      
+                    assign current_grandchild_links = child_link.links | where: 'current', true
+                    if current_grandchild_links.size > 0
+                      assign render_grandfather_links = true
+                    endif
+
+                    if nested_navigation_style == 'accordion'
+                      assign expand_grandchildchild_links = render_grandfather_links
+                      assign render_grandfather_links = true
+                    endif
+
+                  else
+                  assign render_grandfather_links = true
+                  endif 
+
+                  assign has_count = false
+                  if show_collection_products_count and child_link.type == 'collection_link'
+                    assign has_count = true
+                    assign child_link_products_count = child_link.object.all_products_count
+                  endif
+                -%}
+
+                {%- capture child_anchor_link -%}
+                <a class="block flex justify-between items-center hover:underline break-words {% if child_link.current %}underline{% endif %}" href="{{ child_link.url }}">
+                  <span class="min-w-[40%]">{{ child_link.title }}{% if has_count %}<sup class="pl-0.5">{{ child_link_products_count }}</sup>{% endif %}</span>
+                </a>
+                {%- endcapture %}
+
+                {%- if child_link.links.size > 0 and render_grandfather_links -%}
+                  {% comment %}
+                    Third level
+                  {% endcomment %}
+
+                  {%- if nested_navigation_style == 'accordion' -%}
+                    <div
+                      x-cloak
+                      x-data="
+                      {
+                        grandchild_expanded: {{ expand_grandchildchild_links }}
+                      }
+                    "
+                    >
+                      <button
+                        class="flex items-center justify-between w-full py-1 text-left hover:underline {{ link_classes }}"
+                        @click="grandchild_expanded = ! grandchild_expanded"
+                        :aria-expanded="grandchild_expanded"
+                      >
+                        <span class=" {% if child_link.child_active %}underline{% endif %}">{{ child_link.title }}{% if has_count and nested_navigation_style == 'accordion' %} ({{ products_count }}){% endif %}</span>
+                        <div class="ml-auto js-enabled flex items-center">
+                          <span
+                            class="w-4 h-4 inline-block transition-transform ease-gentle duration-[280ms]"
+                            x-cloak
+                          >
+                           {%- if accordion_icon == 'plus_minus' -%}
+                           <span x-show="grandchild_expanded">{% render 'icon-minus' %}</span>
+                           <span x-show="!grandchild_expanded">{% render 'icon-plus' %}</span>
+                           {%- else -%}
+                           <span class="block rotate-180" x-show="grandchild_expanded">{% render 'icon-chevron-down' %}</span>
+                           <span x-show="!grandchild_expanded">{% render 'icon-chevron-down' %}</span>
+                           {%- endif -%}
+                          </span>
+                        </div>
+                      </button>
+                  {%- else -%}
+                  {{ child_anchor_link }}
+                  {%- endif -%}
+                  <ul class="grandchild-links pl-5 menu dropdown-grandchild" {% if nested_navigation_style == 'accordion' %}x-show="grandchild_expanded"{% endif %}>
+                    {%- for grandchild_link in child_link.links -%}
+                      <li class="menu-link">
+                        <a class="flex items-center justify-between hover:underline {% if grandchild_link.current %}underline{% endif %}" href="{{ grandchild_link.url }}">
+                          <span class="min-w-[40%]">{{ grandchild_link.title }}{% if show_collection_products_count and grandchild_link.type == 'collection_link' %}<sup class="pl-0.5">{{ grandchild_link.object.all_products_count }}</sup>{% endif %}</span>
+                        </a>
+                      </li>
+                    {%- endfor -%}
+                  </ul>
+
+                  {%- if nested_navigation_style == 'accordion' -%}
+                  </div>
+                  {%- endif -%}
+                {%- else -%}
+                {{ child_anchor_link }}
+                {%- endif -%}
+              </li>
+            {%- endfor -%}
+          </ul>
+          {%- if nested_navigation_style == 'accordion' -%}
+          </div>
+          {%- endif -%}
+        {%- else -%}
+        {{ anchor_link }}
+        {%- endif -%}
+      </li>
+    {%- endfor -%}
+    {%- if show_cart -%}
+      <li class="menu-link" x-data>
+        <button class="block text-left hover:underline {% if nested_navigation_style == 'accordion' %}py-1{% endif %}"  @click.prevent="$store.modals.open('cart')">{{ 'layout.cart.title' | t }} (<span x-text="$store.cart_count.count">{{ cart.item_count }}</span>)</button>
+      </li>
+    {%- endif -%}
+  </ul>
+
+</nav>

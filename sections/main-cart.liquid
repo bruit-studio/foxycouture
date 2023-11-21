@@ -1,0 +1,85 @@
+{%- liquid
+  assign section_color = section.settings.color_scheme
+-%}
+
+<section class="section-container main-cart" data-color-scheme="{{ section_color }}" style="--top-spacing-adjust: {{ section.settings.space_above }}; --bottom-spacing-adjust: {{ section.settings.space_below }};">
+  <div class="text-scheme-text bg-scheme-background pt-top-section-vertical-spacing pb-bottom-section-vertical-spacing">
+    <div class="wrapper">
+      {% if cart != empty %}
+      <div class="lg:flex lg:items-center lg:justify-between">
+      <h1 class="font-heading text-heading-feature">{{ 'cart.general.title' | t }}</h1>
+      <a href="{{ routes.all_products_collection_url }}" class="hidden lg:inline-block btn">
+        {{ 'cart.general.continue_shopping' | t }}
+      </a>
+      </div>
+      {%- endif -%}
+
+      <div class="grid lg:grid-cols-12 gap-theme mt-8">
+        {% if cart != empty %}
+        <div class="hidden lg:block lg:col-span-8">
+          <div class="hidden lg:grid lg:grid-cols-12 lg:gap-theme items-end">
+            <p class="lg:col-span-8 justify-self-start">{{ 'cart.label.product' | t }}</p>
+            <p class="lg:col-span-2 justify-self-start">{{ 'cart.label.quantity' | t }}</p>
+            <p class="lg:col-span-2 justify-self-end">{{ 'cart.label.total' | t }}</p>
+          </div>
+        </div>
+        <div class="lg:col-span-8">
+          {% render 'cart-items' %}
+        </div>
+        <div class="lg:col-span-4">
+          {% render 'cart-footer' %}
+        </div>
+        {%- else -%}
+        <div class="text-center lg:col-span-full">
+          <h1 class="font-heading text-heading-feature break-words">{{ 'cart.general.empty' | t }}</h1>
+          <a href="{{ routes.all_products_collection_url }}" class="btn btn--solid mt-10">
+            {{ 'cart.general.continue_shopping' | t }}
+          </a>
+        </div>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Cart",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Color"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "default": "scheme_1",
+      "label": "Color scheme"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "space_above",
+      "min": 0,
+      "max": 2,
+      "step": 0.5,
+      "unit": "x",
+      "label": "Above",
+      "default": 1
+    },
+    {
+      "type": "range",
+      "id": "space_below",
+      "min": 0,
+      "max": 2,
+      "step": 0.5,
+      "unit": "x",
+      "label": "Below",
+      "default": 1
+    }
+  ]
+}
+{% endschema %}

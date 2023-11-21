@@ -1,0 +1,328 @@
+{%- liquid
+  assign section_color = section.settings.color_scheme
+-%}
+
+<section class="pt-top-section-vertical-spacing pb-bottom-section-vertical-spacing text-scheme-text bg-scheme-background" data-color-scheme="{{ section_color }}" style="--top-spacing-adjust: {{ section.settings.space_above }}; --bottom-spacing-adjust: {{ section.settings.space_below }};">
+  <div class="wrapper">
+
+    {%- if section.settings.show_top_border -%}
+    <hr class="border-t-theme border-scheme-border mb-half-section-vertical-spacing">
+    {%- endif -%}
+
+    <div class="flex flex-col lg:grid lg:grid-cols-12 gap-theme">
+
+      {% if section.settings.title != blank %}
+      <div class="lg:col-span-section-title min-w-0">
+        <h2 class="font-heading text-heading-standard break-words">
+          {{ section.settings.title | strip }}
+        </h2>
+      </div>
+      {% endif %}
+
+      <div
+        class="col-span-full lg:col-end-[-1] lg:col-span-section-content">
+
+        {%- if section.settings.enable_carousel -%}
+        <div
+          x-data='ThemeModule_Carousel({{ section.id | json }})'
+          x-init="mounted()"
+          class="w-full max-w-full overflow-hidden carousel-container"
+          >
+          <ul x-ref="carousel-track" role="list" class="carousel-track flex overflow-x-scroll scroll-smooth gap-theme snap-x snap-mandatory snap-always">
+            {% for block in section.blocks %}
+              <li class="shrink-0 snap-start w-full scroll-ml-0  overflow-hidden" {{ block.shopify_attributes }}>
+                <div class="mx-auto {{ block.settings.text_align }} text-left relative">
+                  {%- liquid
+                    assign footer = false
+                    if block.settings.image
+                      assign footer = true
+                    endif
+                    if  block.settings.source != blank
+                      assign footer = true
+                    endif
+                  -%}
+
+                  <blockquote>
+                    {%- if block.settings.rating != 'none' -%}
+                      {%- assign stars = block.settings.rating | split: '_' | first | plus: 0 -%}
+                      <div class="{{ block.settings.text_align }} mb-5 tracking-[0.1rem]">
+                        {%- for i in (1..stars) -%}★{%- endfor -%}
+                      </div>
+                    {%- endif -%}
+                    <div class="rte richtext break-words" style="hanging-punctuation: first;">
+                      {%- if section.settings.wrap_text_in_quotes -%}
+                      {{ block.settings.quote | replace: '<p>', '<p>&#8220;' | replace: '</p>', '&#8221;</p>' }}
+                      {%- else -%}
+                      {{ block.settings.quote }}
+                      {%- endif -%}
+                    </div>
+                    {% if footer %}
+                      <footer class="mt-8 break-words space-y-2">
+                        {% if block.settings.image and block.settings.image_style == 'photo' %}
+                        <p>{{ block.settings.image | image_url: width: 600 | image_tag: loading: 'lazy', sizes: '5rem', class: 'inline-block w-12 h-12 aspect-1 rounded-full object-cover object-center' }}</p>
+                        {% endif %}
+                        <p>{{ block.settings.source | strip }}</p>
+                        {% if block.settings.image and block.settings.image_style == 'logo' %}
+                        <p>{{ block.settings.image | image_url: width: 600 | image_tag: loading: 'lazy', sizes: '4rem', class: 'inline-block max-w-[8rem] h-auto' }}</p>
+                        {% endif %}
+                      </footer>
+                    {% endif %}
+                  </blockquote>
+                </div>
+              </li>
+            {% endfor %}
+          </ul>
+          <div class="grid grid-cols-12 grid-flow-dense gap-2 mt-8">
+            <div class="col-span-6 text-left">
+              <span x-text="`${current_slide}/${total_slides}`"></span>
+            </div>
+            <div class="col-span-6 text-right">
+              {%- render 'carousel-buttons' -%}
+            </div>
+          </div>
+        </div>
+        {%- else -%}
+        <ul class="carousel-track grid grid-cols-1 gap-theme">
+          {% for block in section.blocks %}
+            <li {{ block.shopify_attributes }}>
+              <div class="mx-auto {{ block.settings.text_align }} text-left relative">
+                {%- liquid
+                  assign footer = false
+                  if block.settings.image
+                    assign footer = true
+                  endif
+                  if  block.settings.source != blank
+                    assign footer = true
+                  endif
+                -%}
+
+                <blockquote>
+                  {%- if block.settings.rating != 'none' -%}
+                    {%- assign stars = block.settings.rating | split: '_' | first | plus: 0 -%}
+                    <div class="{{ block.settings.text_align }} mb-5 tracking-[0.1rem]">
+                      {%- for i in (1..stars) -%}★{%- endfor -%}
+                    </div>
+                  {%- endif -%}
+                  <div class="rte richtext break-words" style="hanging-punctuation: first;">
+                    {%- if section.settings.wrap_text_in_quotes -%}
+                    {{ block.settings.quote | replace: '<p>', '<p>&#8220;' | replace: '</p>', '&#8221;</p>' }}
+                    {%- else -%}
+                    {{ block.settings.quote }}
+                    {%- endif -%}
+                  </div>
+                  {% if footer %}
+                    <footer class="mt-8 break-words space-y-2">
+                      {% if block.settings.image and block.settings.image_style == 'photo' %}
+                      <p>{{ block.settings.image | image_url: width: 600 | image_tag: loading: 'lazy', sizes: '5rem', class: 'inline-block w-12 h-12 aspect-1 rounded-full object-cover object-center' }}</p>
+                      {% endif %}
+                      <p>{{ block.settings.source | strip }}</p>
+                      {% if block.settings.image and block.settings.image_style == 'logo' %}
+                      <p>{{ block.settings.image | image_url: width: 600 | image_tag: loading: 'lazy', sizes: '4rem', class: 'inline-block max-w-[8rem] h-auto' }}</p>
+                      {% endif %}
+                    </footer>
+                  {% endif %}
+                </blockquote>
+              </div>
+            </li>
+          {% endfor %}
+        </ul>
+        {%- endif -%}
+      </div>
+    </div>
+
+  </div>
+</section>
+
+{%- if section.settings.enable_carousel -%}
+{% unless request.design_mode %}
+  <script src="{{ 'modules-carousel.bundle.min.js' | asset_url }}" type="module"></script>
+{% endunless %}
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Testimonials",
+  "settings": [
+    {
+      "id": "title",
+      "type": "text",
+      "label": "Heading",
+      "default": "Testimonials"
+    },
+    {
+      "id": "subheading",
+      "type": "richtext",
+      "label": "Subheading",
+      "default": "<p>Use this text to share information about your brand with your customers.</p>"
+    },
+    {
+      "type": "checkbox",
+      "id": "wrap_text_in_quotes",
+      "label": "Wrap text in quotes"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_carousel",
+      "label": "Display as carousel",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Color"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "default": "scheme_1",
+      "label": "Color scheme"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "space_above",
+      "min": 0,
+      "max": 2,
+      "step": 0.5,
+      "unit": "x",
+      "label": "Above",
+      "default": 1
+    },
+    {
+      "type": "range",
+      "id": "space_below",
+      "min": 0,
+      "max": 2,
+      "step": 0.5,
+      "unit": "x",
+      "label": "Below",
+      "default": 1
+    }
+  ],
+  "blocks": [
+    {
+      "type": "testimonial",
+      "name": "Testimonial",
+      "settings": [
+        {
+          "id": "image",
+          "type": "image_picker",
+          "label": "Image"
+        },
+        {
+          "id": "image_style",
+          "type": "radio",
+          "label": "Image style",
+          "options": [
+            {
+              "value": "photo",
+              "label": "Photo"
+            },
+            {
+              "value": "logo",
+              "label": "Logo"
+            }
+          ],
+          "default": "photo"
+        },
+        {
+          "type": "select",
+          "id": "rating",
+          "label": "Rating",
+          "options": [
+            {
+              "value": "none",
+              "label": "No rating"
+            },
+            {
+              "value": "5_stars",
+              "label": "5 stars"
+            },
+            {
+              "value": "4_stars",
+              "label": "4 stars"
+            },
+            {
+              "value": "3_stars",
+              "label": "3 stars"
+            },
+            {
+              "value": "2_stars",
+              "label": "2 stars"
+            },
+            {
+              "value": "1_stars",
+              "label": "1 star"
+            }
+          ],
+          "default": "5_stars"
+        },
+        {
+          "id": "quote",
+          "type": "richtext",
+          "label": "Testimonial",
+          "default": "<p>A quote from a customer or staff member can help show off your products’ unique selling points.</p>"
+        },
+        {
+          "id": "source",
+          "type": "text",
+          "label": "Source",
+          "default": "Source"
+        },
+        {
+          "type": "select",
+          "id": "text_align",
+          "label": "Text alignment",
+          "options": [
+            {
+              "value": "text-left",
+              "label": "Left"
+            },
+            {
+              "value": "text-center",
+              "label": "Center"
+            },
+            {
+              "value": "text-right",
+              "label": "Right"
+            }
+          ],
+          "default": "text-left"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Testimonials",
+      "blocks": [
+        {
+          "type": "testimonial"
+        },
+        {
+          "type": "testimonial"
+        },
+        {
+          "type": "testimonial"
+        },
+        {
+          "type": "testimonial"
+        },
+        {
+          "type": "testimonial"
+        }
+      ]
+    }
+  ],
+  "disabled_on": {
+    "groups": [
+      "aside",
+      "header",
+      "footer",
+      "custom.hero"
+    ]
+  }
+}
+{% endschema %}

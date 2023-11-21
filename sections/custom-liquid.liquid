@@ -1,0 +1,143 @@
+{%- liquid
+  assign section_color = section.settings.color_scheme
+
+  assign text_align = section.settings.text_alignment
+
+  capture type_classes
+    render 'type-scale-classes'
+  endcapture
+-%}
+
+{% unless section.settings.liquid_only %}
+  <section
+    class="section-container"
+    style="--top-spacing-adjust: {{ section.settings.space_above }}; --bottom-spacing-adjust: {{ section.settings.space_below }};"
+    data-color-scheme="{{ section_color }}"
+  >
+    <div class="text-scheme-text bg-scheme-background pt-top-section-vertical-spacing pb-bottom-section-vertical-spacing">
+      <div class="wrapper">
+        {%- if section.settings.show_top_border -%}
+          <hr class="border-t-theme border-scheme-border mb-half-section-vertical-spacing">
+        {%- endif -%}
+        <div class="grid lg:grid-cols-12 gap-theme" {% if section.settings.title == blank %}style="--section-content-col-span: 12;"{% endif %}>
+          {% if section.settings.title != blank %}
+            <div class="lg:col-span-section-title min-w-0">
+              <h2 class="font-heading text-heading-standard break-words">
+                {{ section.settings.title | strip }}
+              </h2>
+            </div>
+          {% endif %}
+
+          <div class="col-span-full lg:col-end-[-1] lg:col-span-section-content flex min-w-0 {{ text_align }}">
+            <div class="w-full no-m-first">
+              {% if section.settings.custom_liquid != blank %}
+                <div class="{{ type_classes }} break-words">
+                  {{ section.settings.custom_liquid }}
+                </div>
+              {%- endif -%}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+{% else %}
+  {{ section.settings.custom_liquid }}
+{% endunless %}
+
+{% schema %}
+{
+  "name": "Custom Liquid",
+  "settings": [
+    {
+      "id": "title",
+      "type": "text",
+      "label": "Heading",
+      "default": "Heading"
+    },
+    {
+      "type": "liquid",
+      "id": "custom_liquid",
+      "label": "Custom Liquid",
+      "info": "Add app snippets, other Liquid code, or HTML to create advanced customizations.",
+      "default": "<p>Add custom Liquid code.</p>"
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Text alignment",
+      "options": [
+        {
+          "value": "text-left",
+          "label": "Left"
+        },
+        {
+          "value": "text-center",
+          "label": "Center"
+        },
+        {
+          "value": "text-right",
+          "label": "Right"
+        }
+      ],
+      "default": "text-left"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "checkbox",
+      "id": "liquid_only",
+      "label": "Output custom Liquid only",
+      "info": "Omit theme spacing, color scheme, and heading",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_top_border",
+      "label": "Show top border",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Color"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "default": "scheme_1",
+      "label": "Color scheme"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "space_above",
+      "min": 0,
+      "max": 2,
+      "step": 0.5,
+      "unit": "x",
+      "label": "Above",
+      "default": 1
+    },
+    {
+      "type": "range",
+      "id": "space_below",
+      "min": 0,
+      "max": 2,
+      "step": 0.5,
+      "unit": "x",
+      "label": "Below",
+      "default": 1
+    }
+  ],
+  "presets": [
+    {
+      "name": "Custom Liquid"
+    }
+  ]
+}
+{% endschema %}

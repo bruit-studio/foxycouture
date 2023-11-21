@@ -1,0 +1,139 @@
+<section class="section-container" data-color-scheme="primary">
+  <div class="text-scheme-text bg-scheme-background py-section-vertical-spacing">
+    <div class="wrapper">
+      
+      <div class="grid lg:grid-cols-12 gap-theme">
+  
+        <div class="lg:col-span-full">
+          <h1 class="font-heading text-heading-standard break-words">{{ 'customer.account.title' | t }}</h1>
+          <a class="theme-link inline-block mt-4" href="{{ routes.account_logout_url }}">
+            {{ 'customer.log_out' | t }}
+          </a>
+        </div>
+
+        <div class="col-span-full lg:col-span-8">
+          <h2 class="font-heading text-heading-secondary">{{ 'customer.orders.title' | t }}</h2>
+
+          {% paginate customer.orders by 20 %}
+            {%- if customer.orders.size > 0 -%}
+              <table role="table" class="customer order-history w-full mt-8">
+                <caption class="sr-only">
+                  {{ 'customer.orders.title' | t }}
+                </caption>
+                <thead role="rowgroup">
+                  <tr role="row" class="[&>th]:pb-2">
+                    <th class="text-left" id="ColumnOrder" scope="col" role="columnheader">{{ 'customer.orders.order_number' | t }}</th>
+                    <th class="text-left" id="ColumnDate" scope="col" role="columnheader">{{ 'customer.orders.date' | t }}</th>
+                    <th class="text-left" id="ColumnPayment" scope="col" role="columnheader">{{ 'customer.orders.payment_status' | t }}</th>
+                    <th class="text-left" id="ColumnFulfillment" scope="col" role="columnheader">
+                      {{ 'customer.orders.fulfillment_status' | t }}
+                    </th>
+                    <th class="text-right" id="ColumnTotal" scope="col" role="columnheader">{{ 'customer.orders.total' | t }}</th>
+                  </tr>
+                </thead>
+                <tbody role="rowgroup">
+                  {%- for order in customer.orders -%}
+                    <tr role="row" class="border-t-theme border-scheme-border [&>td]:py-2">
+                      <td
+                        id="RowOrder"
+                        role="cell"
+                        headers="ColumnOrder"
+                        data-label="{{ 'customer.orders.order_number' | t }}"
+                      >
+                        <a
+                          class="theme-link"
+                          href="{{ order.customer_url }}"
+                          aria-label="{{ 'customer.orders.order_number_link' | t: number: order.name }}"
+                        >
+                          {{ order.name }}
+                        </a>
+                      </td>
+                      <td headers="RowOrder ColumnDate" role="cell" data-label="{{ 'customer.orders.date' | t }}">
+                        {{ order.created_at | time_tag: format: 'date' }}
+                      </td>
+                      <td
+                        headers="RowOrder ColumnPayment"
+                        role="cell"
+                        data-label="{{ 'customer.orders.payment_status' | t }}"
+                      >
+                        {{ order.financial_status_label }}
+                      </td>
+                      <td
+                        headers="RowOrder ColumnFulfillment"
+                        role="cell"
+                        data-label="{{ 'customer.orders.fulfillment_status' | t }}"
+                      >
+                        {{ order.fulfillment_status_label }}
+                      </td>
+                      <td class="text-right" headers="RowOrder ColumnTotal" role="cell" data-label="{{ 'customer.orders.total' | t }}">
+                        {{ order.total_net_amount | money_with_currency }}
+                      </td>
+                    </tr>
+                  {%- endfor -%}
+                </tbody>
+              </table>
+            {%- else -%}
+              <p>{{ 'customer.orders.none' | t }}</p>
+            {%- endif -%}
+
+    
+            {%- if paginate.pages > 1 -%}
+              {%- render 'pagination', paginate: paginate -%}
+            {%- endif -%}
+          {% endpaginate %}
+
+
+        </div>
+  
+        <div class="col-span-full lg:col-span-4">
+          <h2 class="font-heading text-heading-secondary">{{ 'customer.account.details' | t }}</h2>
+
+          <div class="mt-8">
+            {{ customer.default_address | format_address }}
+
+            <a class="theme-link mt-2" href="{{ routes.account_addresses_url }}">
+              {{ 'customer.account.view_addresses' | t }} ({{ customer.addresses_count }})
+            </a>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>  
+</section>
+
+{%- style -%}
+@media screen and (max-width: 989px) {
+  .customer thead,
+  .customer th,
+  .customer tfoot td:first-of-type {
+    display: none;
+  }
+
+  .customer td {
+    display: flex;
+    text-align: right;
+  }
+
+  .customer td::before {
+    color: rgba(var(--color-foreground), 0.75);
+    content: attr(data-label);
+    padding-right: 2rem;
+    flex-grow: 1;
+    text-align: left;
+  }
+
+  .customer td:first-of-type {
+    display: flex;
+    align-items: center;
+  }
+
+  .customer tr {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    width: 100%;
+  }
+}
+{%- endstyle -%}

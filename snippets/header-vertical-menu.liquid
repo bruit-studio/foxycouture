@@ -1,0 +1,12 @@
+{%- if show_menu_heading -%}
+  <h4 class="text-scheme-text font-heading mb-2">{{ menu.title }}</h4>
+{%- endif -%}
+<nav>
+  <ul class="menu {{ link_classes }}">
+    {%- for link in menu.links -%}
+      <li class="menu-link">
+        <a class="hover:underline" href="{{ link.url }}">{{ link.title }}</a>
+      </li>
+    {%- endfor -%}
+  </ul>
+</nav>

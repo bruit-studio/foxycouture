@@ -1,0 +1,297 @@
+{%- liquid
+  assign liquid = ''
+  assign logo = ''
+  if section.settings.use_default_logo
+    if section.settings.liquid == blank and section.settings.logo == blank
+      assign logo = settings.logo
+      assign liquid = settings.logo_liquid
+    endif
+  endif
+  if section.settings.logo != blank
+    assign logo = section.settings.logo
+  endif
+  if section.settings.liquid != blank
+    assign liquid = section.settings.liquid
+  endif
+  if section.settings.enable_overlay
+    assign section_classes = section_classes | append: ' absolute top-0 left-0 right-0 pointer-events-none z-20'
+  endif
+
+  assign mobile_offset = section.settings.overlay_offset | times: 0.5
+  assign desktop_offset = section.settings.overlay_offset
+
+  if liquid != blank or logo != blank
+    case section.settings.alignment
+      when 'left'
+        assign alignment_classes = 'mr-auto'
+      when 'right'
+        assign alignment_classes = 'ml-auto'
+      when 'center'
+        assign alignment_classes = 'mx-auto'
+    endcase
+  else
+    case section.settings.alignment
+      when 'left'
+        assign alignment_classes = 'text-left'
+      when 'right'
+        assign alignment_classes = 'text-right'
+      when 'center'
+        assign alignment_classes = 'text-center'
+    endcase
+  endif
+-%}
+
+{%- style -%}
+  #{{ section.id }} {
+    --overlay-offset: {{ mobile_offset }}px;
+  }
+
+  @media (min-width: 990px) {
+    #section-{{ section.id }} {
+      --overlay-offset: {{ desktop_offset }}px;
+    }
+  }
+{%- endstyle -%}
+
+{%- capture hero_logo -%}
+<span class="{{ settings.site_title_font }} break-words">
+  {%- if liquid != blank or logo != blank -%}
+    {%- if liquid != blank -%}
+      {%- style -%}
+      #{{ section.id }}-svg-logo {
+        max-width: {{ section.settings.logo_max_width }}%;
+      }
+      #{{ section.id }}-svg-logo > svg {
+        width: 100%;
+        height: 100%;
+        fill: currentColor;
+      }
+
+      #{{ section.id }}-svg-logo path {
+        fill: currentColor;
+      }
+      {%- endstyle -%}
+      <div id="{{ section.id }}-svg-logo" class="svg-logo [&>svg]:w-full  [&>svg]:h-auto {{ alignment_classes }}" style="max-width: {{ section.settings.logo_max_width }}%">
+        {%- if section.settings.link_to_home_page -%}
+        <a href="{{ routes.root_url }}" class="block  [&>svg]:w-full  [&>svg]:h-auto">
+        {%- endif -%}
+        {{ liquid }}
+        {%- if section.settings.link_to_home_page -%}
+        </a>
+        {%- endif -%}
+      </div>
+    {%- elsif logo != blank -%}
+      {%- assign logo_alt = logo.alt | default: shop.name | escape -%}
+      <div class="{{ alignment_classes }}" style="max-width: {{ section.settings.logo_max_width }}%">
+        {%- if section.settings.link_to_home_page -%}
+        <a href="{{ routes.root_url }}" class="block">
+        {%- endif -%}
+        {%- assign logo_alt =logo.alt | default: shop.name | escape -%}
+        {{ logo | image_url: width: 3000 | image_tag:
+          class: 'site-title-logo-image w-full',
+          width: logo.width,
+          alt: logo_alt,
+          preload: true
+        }}
+        {%- if section.settings.link_to_home_page -%}
+        </a>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+  {%- else -%}
+    <div class="{% render 'type-scale-classes', mobile_text_scale: section.settings.mobile_text_scale, desktop_text_scale: section.settings.desktop_text_scale %} {{ alignment_classes }}">
+      {%- if section.settings.link_to_home_page -%}
+      {{ shop.name | link_to: routes.root_url }}
+      {%- else -%}
+      {{ shop.name }}
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+</span>
+{%- endcapture -%}
+
+<section
+  id="section-{{ section.id }}"
+  class="wrapper"
+  data-color-scheme="{{ section.settings.color_scheme }}"
+  style="--top-spacing-adjust: {{ section.settings.space_above }}; --bottom-spacing-adjust: {{ section.settings.space_below }};"
+>
+  <div
+    class="relative text-scheme-text bg-scheme-background"
+    {% if section.settings.enable_overlay %}
+      style="height: var(--overlay-offset);"
+    {% endif %}
+  >
+    <div class="{{ section_classes }} pt-top-section-vertical-spacing pb-bottom-section-vertical-spacing">
+      {{ hero_logo }}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Hero logo",
+  "limit": 1,
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "link_to_home_page",
+      "label": "Link to home page",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Plain text"
+    },
+    {
+      "type": "range",
+      "id": "mobile_text_scale",
+      "min": -2,
+      "max": 10,
+      "step": 1,
+      "label": "Mobile font size scale",
+      "default": 6
+    },
+    {
+      "type": "range",
+      "id": "desktop_text_scale",
+      "min": -2,
+      "max": 10,
+      "step": 1,
+      "label": "Desktop font size scale",
+      "default": 10
+    },
+    {
+      "type": "header",
+      "content": "Logo"
+    },
+    {
+      "type": "paragraph",
+      "content": "Edit your logo in [theme settings](/editor?context=theme&category=logo)."
+    },
+    {
+      "type": "checkbox",
+      "id": "use_default_logo",
+      "label": "Use default logo",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Custom logo"
+    },
+    {
+      "type": "paragraph",
+      "content": "This will override plain text or default logo settings."
+    },
+    {
+      "id": "logo",
+      "type": "image_picker",
+      "label": "Logo image"
+    },
+    {
+      "id": "liquid",
+      "type": "liquid",
+      "label": "SVG",
+      "info": "Add SVG code. SVG will be displayed instead of logo if provided."
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": "Alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "logo_max_width",
+      "min": 10,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": "Logo max width",
+      "default": 100
+    },
+    {
+      "type": "header",
+      "content": "Overlay"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_overlay",
+      "label": "Enable overlay",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "overlay_offset",
+      "min": 0,
+      "max": 500,
+      "step": 5,
+      "unit": "px",
+      "label": "Overlay offset",
+      "default": 100
+    },
+    {
+      "type": "header",
+      "content": "Color"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "default": "scheme_1",
+      "label": "Color scheme"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "space_above",
+      "min": 0,
+      "max": 2,
+      "step": 0.5,
+      "unit": "x",
+      "label": "Above",
+      "default": 1
+    },
+    {
+      "type": "range",
+      "id": "space_below",
+      "min": 0,
+      "max": 2,
+      "step": 0.5,
+      "unit": "x",
+      "label": "Below",
+      "default": 1
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hero logo"
+    }
+  ],
+  "enabled_on": {
+    "groups": [
+      "custom.hero",
+      "footer"
+    ]
+  }
+}
+{% endschema %}

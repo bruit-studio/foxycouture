@@ -1,0 +1,405 @@
+
+{%- liquid
+  assign drawer_position = section.settings.drawer_position
+  if drawer_position == 'leftDrawer'
+    assign teleport_slot = 'left-drawer-slot'
+  else
+    assign teleport_slot = 'right-drawer-slot'
+  endif
+  assign link_classes = ''
+  assign uppercase = settings.header_uppercase
+
+  if uppercase
+    assign link_classes = link_classes | append: ' uppercase'
+  endif
+
+  assign locale_selector = false
+  assign country_selector = false
+
+  if section.settings.show_country_selector and localization.available_countries.size > 1
+    assign country_selector = true
+  endif
+
+  if section.settings.show_locale_selector and shop.published_locales.size > 1
+    assign locale_selector = true
+  endif
+-%}
+
+{%- style -%}
+#DrawerMenu {
+  --blocks-vertical-spacing-desktop: {{ section.settings.vertical_space_between_blocks | times: 0.0625 }}rem;
+  --blocks-vertical-spacing-mobile: {% if section.settings.vertical_space_between_blocks < 24 %}{{ section.settings.vertical_space_between_blocks }}{% else %}{{ section.settings.vertical_space_between_blocks | times: 0.7 | round | at_least: 20 }}{% endif %}px;
+  --blocks-vertical-spacing: var(--blocks-vertical-spacing-mobile);
+}
+
+@media (min-width: 990px) {
+  #DrawerMenu {
+    --blocks-vertical-spacing: var(--blocks-vertical-spacing-desktop);
+  }
+}
+{%- endstyle -%}
+<script>
+  window.theme.menuDrawer = window.theme.menuDrawerPosition || {};
+  window.theme.menuDrawer.position = {{ drawer_position | json }};
+</script>
+<section data-menu-drawer-section x-data='ThemeSection_MenuDrawer({{ drawer_position | json }})' data-position='{{ drawer_position }}'>
+  <template data-should-teleport="#{{ teleport_slot }}">
+
+    <div
+      id='DrawerMenu'
+      x-show="$store.modals.{{ drawer_position }}.contents === 'menu-drawer'"
+      :data-modal-label="
+        ($store.modals.{{ drawer_position }}.contents === 'menu-drawer')
+        ?
+        '{{ section.settings.linklist.title | escape }}'
+        : false"
+      class="menu-drawer text-menu-drawer max-h-full flex flex-col h-screen {% render 'type-scale-classes', mobile_text_scale: section.settings.mobile_text_scale, desktop_text_scale: section.settings.desktop_text_scale %}"
+    >
+
+      <div class="p-2 lg:p-4 w-full shrink-0 overflow-hidden">
+        <div class="relative flex items-center justify-end">
+          <button @click.prevent="$store.modals.close('menu-drawer')" class="block top-0 min-touch-target">
+            <span class="sr-only">{{ 'general.accessibility.close_modal' | t }}</span>
+            <span class="inline-block w-4 h-4">{%- render 'icon-close' -%}</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="flex-auto flex flex-col overflow-hidden overflow-y-auto p-2 lg:p-4 pb-8">
+        <div class="space-y-spacer" style="--spacing-adjust: {{ section.settings.vertical_space_between_blocks }}">
+        {%- for block in section.blocks -%}
+          {%- case block.type -%}
+
+            {%- when 'menu' -%}
+
+            {%- render 'sidebar-menu-block'
+              menu: block.settings.menu,
+              nested_navigation_style: block.settings.nested_navigation_style,
+              id: block.id,
+              show_collection_products_count: block.settings.show_collection_products_count,
+              accordion_icon: settings.accordion_icon,
+              show_cart: block.settings.show_cart,
+              link_classes: link_classes
+            -%}
+
+            {%- when 'rich_text' -%}
+              <div class="rte {{ block.settings.text_alignment }}">
+                {{ block.settings.richtext }}
+              </div>
+            {%- when 'button' -%}
+              {%- if block.settings.label != blank -%}
+              <div>
+                <a class="btn" href="{{ block.settings.link }}">
+                  {{ block.settings.label }}
+                </a>
+              </div>
+              {%- endif -%}
+            {%- when 'social_media' -%}
+              <div>
+                {%- render 'social-media', display: block.settings.display -%}
+              </div>
+          {%- endcase -%}
+        {%- endfor -%}
+
+
+      </div>
+
+      {%- if section.settings.show_search -%}
+        <div class="mt-8">
+          <div class="text-base">
+            <form action="{{ routes.search_url }}" method="get" role="search">
+              <label for="search" class="sr-only">
+                {{- 'general.search.submit' | t -}}
+              </label>
+              <div class="relative">
+                <input
+                  type="search"
+                  name="q"
+                  class="border-scheme-text/0 border-b-theme border-b-scheme-border pl-0 pr-8 w-full focus:border rounded-[0]"
+                  value="{{ search.terms | escape }}"
+                  placeholder="{{ 'general.search.placeholder' | t }}"
+                >
+                <button
+                  type="submit"
+                  class="flex justify-center items-center absolute top-0 right-0 bottom-0 left-auto h-full"
+                  aria-label="{{ 'general.search.submit' | t }}"
+                >
+                  <div class="w-6 h-6">
+                    {%- render 'icon-search' -%}
+                  </div>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      {%- endif -%}
+
+      {%- if country_selector or locale_selector -%}
+        <div class="mt-8 space-y-4">
+        {%- if country_selector -%}
+          <div class="text-base">
+          {%- form 'localization', id: 'FooterCountryForm', class: 'localization-form' -%}
+            {%- render 'country-localization', position: 'menu-drawer' -%}
+          {%- endform -%}
+          </div>
+        {%- endif -%}
+        {%- if locale_selector -%}
+          <div x-data="{}" class="text-base">
+            {%- form 'localization', id: 'FooterLanguageFormNoScript', class: 'localization-form', x-ref: 'languageform' -%}
+              {%- render 'language-localization', form: form, position: 'menu-drawer' -%}
+            {%- endform -%}
+          </div>
+        {%- endif -%}
+        </div>
+      {%- endif -%}
+
+
+      {%- if shop.customer_accounts_enabled -%}
+      <div class="mt-8">
+        <a href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}" class="">
+          {%- liquid
+            if customer
+              echo 'customer.account_fallback' | t
+            else
+              echo 'customer.log_in' | t
+            endif
+          -%}
+        </a>
+      </div>
+      {%- endif -%}
+      </div>
+
+    </div>
+
+  </template>
+</section>
+
+<script src="{{ 'menu-drawer.js' | asset_url }}" type="module"></script>
+
+{% schema %}
+{
+  "name": "Menu drawer",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_search",
+      "label": "Show search",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Language selector",
+      "info": "To add a language, go to your [language settings.](/admin/settings/languages)"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_locale_selector",
+      "label": "Show language selector",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Country/region selector",
+      "info": "To add a country/region, go to your [payment settings.](/admin/settings/payments)"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_country_selector",
+      "label": "Show country/region selector",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "radio",
+      "id": "drawer_position",
+      "label": "Drawer position",
+      "options": [
+        {
+          "value": "rightDrawer",
+          "label": "Right"
+        },
+        {
+          "value": "leftDrawer",
+          "label": "Left"
+        }
+      ],
+      "default": "rightDrawer"
+    },
+    {
+      "type": "range",
+      "id": "vertical_space_between_blocks",
+      "min": 0,
+      "max": 2,
+      "step": 0.5,
+      "unit": "x",
+      "label": "Vertical spacing between blocks",
+      "default": 1
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "range",
+      "id": "desktop_text_scale",
+      "min": -2,
+      "max": 4,
+      "step": 1,
+      "label": "Desktop font size scale",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "mobile_text_scale",
+      "min": -2,
+      "max": 2,
+      "step": 1,
+      "label": "Mobile font size scale",
+      "default": 0
+    }
+  ],
+  "blocks": [
+    {
+      "name": "Menu",
+      "type": "menu",
+      "settings": [
+        {
+          "id": "menu",
+          "type": "link_list",
+          "label": "Main menu",
+          "default": "main-menu"
+        },
+        {
+          "type": "radio",
+          "id": "nested_navigation_style",
+          "label": "Nested navigation style",
+          "options": [
+            {
+              "value": "accordion",
+              "label": "Accordion"
+            },
+            {
+              "value": "contextual",
+              "label": "Contextual"
+            },
+            {
+              "value": "expanded",
+              "label": "Expanded"
+            }
+          ],
+          "default": "accordion"
+        },
+        {
+          "type": "radio",
+          "id": "accordion_icon",
+          "label": "Accordion icon",
+          "options": [
+            {
+              "value": "plus_minus",
+              "label": "Plus / minus"
+            },
+            {
+              "value": "caret",
+              "label": "Caret"
+            }
+          ],
+          "default": "plus_minus"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_cart",
+          "label": "Show cart link as last menu item",
+          "default": false
+        },
+        {
+          "type": "checkbox",
+          "id": "show_collection_products_count",
+          "label": "Show collection products count",
+          "default": false
+        }
+      ]
+    },
+    {
+      "name": "Rich text",
+      "type": "rich_text",
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "richtext",
+          "label": "Paragraph",
+          "default": "<p>Use this to add additional information about your store, e.g. address / contact details.</p>"
+        },
+        {
+          "type": "select",
+          "id": "text_alignment",
+          "label": "Text alignment",
+          "options": [
+            {
+              "value": "text-left",
+              "label": "Left"
+            },
+            {
+              "value": "text-center",
+              "label": "Center"
+            },
+            {
+              "value": "text-right",
+              "label": "Right"
+            }
+          ],
+          "default": "text-left"
+        }
+      ]
+    },
+    {
+      "type": "button",
+      "name": "Button",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "Shop Now"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        }
+      ]
+    },
+    {
+      "type": "social_media",
+      "name": "Social media",
+      "settings": [
+        {
+          "type": "radio",
+          "id": "display",
+          "label": "Display as",
+          "options": [
+            {
+              "value": "icons",
+              "label": "Icons"
+            },
+            {
+              "value": "text",
+              "label": "Text"
+            }
+          ],
+          "default": "icons"
+        }
+      ]
+    }
+  ],
+  "default": {
+    "blocks": [
+      {
+        "type": "menu"
+      }
+    ]
+  }
+}
+{% endschema %}

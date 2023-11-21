@@ -1,0 +1,403 @@
+{%- liquid
+
+  assign mode = mode | default: 'preview'
+  if video.media_type == 'external_video'
+    assign mode = 'preview'
+  endif
+
+  assign video_player_id = id | append: '-' | append: video.id
+
+  assign media_class = 'tile-media track-loaded html-video-object w-full'
+  assign labels_display = section.settings.labels_display | default: 'below_media'
+  assign show_caption = true
+  assign media_fill_space = true
+  assign always_show_labels_on_mobile = false
+  if section.settings.labels_show_titles_and_captions != nil
+    assign show_caption = section.settings.labels_show_titles_and_captions
+  endif
+  if section.settings.media_fill_space != nil
+    assign media_fill_space = section.settings.media_fill_space
+  endif
+  if section.settings.labels_always_show_on_mobile != nil
+    assign always_show_labels_on_mobile = section.settings.labels_always_show_on_mobile
+  endif
+
+  if media_classes != blank
+    assign media_class = media_class | append: ' ' | append: media_classes
+  endif
+
+  assign media_wrapper_aspect_ratio = media_wrapper_aspect_ratio | default: 'natural'
+  assign content_wrapper_classes = content_wrapper_classes | default: 'mt-2'
+
+  assign media_fit = 'object-cover'
+  if media_fill_space == true or media_fill_space == false
+    if media_fill_space
+      assign media_fit = 'object-cover'
+    else
+      assign media_fit = 'object-contain'
+    endif
+  endif
+
+
+  if media_wrapper_aspect_ratio != 'natural'
+    assign media_wrapper_classes = media_wrapper_classes | append: ' aspect-css-var'
+    assign media_wrapper_attrs = media_wrapper_attrs | append: ' style="--ratio: ' | append: media_wrapper_aspect_ratio | append: ';"'
+    assign media_class = media_class | append: ' absolute inset-0 w-full h-full ' | append: media_fit
+  else
+    assign media_wrapper_classes = media_wrapper_classes | append: ' aspect-css-var'
+    assign media_wrapper_attrs = media_wrapper_attrs | append: ' style="--ratio: ' | append: video.aspect_ratio | append: ';"'
+    assign media_class = media_class | append: ' absolute inset-0 w-full h-full object-cover'
+  endif
+
+  assign preview_image_media_class = media_class | append: ' transition duration-300 scale-100 group-hover:scale-103'
+
+  unless labels_display
+    assign labels_display = 'below_media'
+  endunless
+
+  assign render_labels_under_media = false
+  assign render_labels_in_footer = false
+  assign render_labels_in_overlay = false
+
+  if labels_display == 'below_media' or always_show_labels_on_mobile
+    unless context == 'slideshow'
+      assign render_labels_under_media = true
+    endunless
+  endif
+
+  if context == 'slideshow' and labels_display == 'footer'
+    assign render_labels_in_footer = true
+  endif
+
+  if labels_display == 'text_overlay_on_hover' or labels_display == 'follow_mouse_on_hover'
+    assign render_labels_in_overlay = true
+  endif 
+
+  if always_show_labels_on_mobile and labels_display != 'below_media'
+    assign content_wrapper_classes = content_wrapper_classes | append: ' lg:hidden'
+    if context == 'slideshow'
+      assign render_labels_in_footer = true
+    endif
+  endif
+
+  unless tag
+    assign tag = 'li'
+  endunless
+
+  unless sizes
+    assign sizes = '(min-width: 990px) 33vw, 50vw'
+  endunless
+
+-%}
+
+<{{ tag }}
+
+  class="relative group {% if class != blank %}{{ class }}{% endif %}"
+  {% if attributes %}
+    {{ attributes }}
+  {% endif %}
+  x-data='ThemeTile()'
+>
+  {% if link %}
+  <a
+    href="{{ link }}"
+    aria-labelledby="Section-{{ section.id }}-Video-{{ video.id }}-label"
+    class="absolute inset-0 z-10 group"
+    {% if labels_display == 'text_overlay_on_hover' or labels_display == 'follow_mouse_on_hover' %}
+    x-ref="tileLink"
+    {% if show_caption and caption != '' %}
+    x-on:mouseenter="showLabel" x-on:mouseleave="hideLabel"
+    x-on:focus="showLabel" x-on:blur="hideLabel"
+    @keyup.escape="hideLabel"
+    {% endif %}
+    {% endif %}
+  >
+  </a>
+{% endif %}
+
+  <div class="tile-media-wrapper rounded-media relative overflow-hidden {{ media_wrapper_classes }}" {{ media_wrapper_attrs }}>
+
+    {%- case mode -%}
+      {%- when 'autoplay' -%}
+        <div
+          id="{{ section.id }}-{{ video.id }}"
+          class="w-full h-full"
+          x-data='Theme_Video({{ playback | json }}, {{ mode | json }})'
+          x-intersect:enter.half="play(true)"
+          x-intersect:leave.half="pause"
+        >
+          <div
+            class="relative w-full h-full"
+          >
+            <div
+              class="html-video-wrapper"
+              x-data="HTMLVideo"
+              @play="play"
+              @pause="pause"
+            >
+              {%- if video != blank -%}
+                {{
+                  video
+                  | video_tag:
+                    autoplay: false,
+                    image_size: '2048x',
+                    loop: true,
+                    controls: false,
+                    preload: 'none',
+                    class: media_class,
+                    muted: true,
+                    id: player_id,
+                    x-ref: 'video'
+                }}
+                {%- else -%}
+                <video autoplay muted class="{{ media_class }}">
+                  <source src="{{ 'placeholder-video.mp4' | asset_url }}" type="video/mp4">
+                  Your browser does not support the video tag.
+                </video>
+          {%- endif -%}
+            </div>
+          </div>
+        </div>
+      {%- when 'preview' -%}
+        <div
+          id="{{ video_player_id }}"
+          class="w-full h-full"
+          x-data='Theme_Video({{ playback | json }})'
+          x-intersect:leave="pause"
+        >
+          <div
+            class="relative w-full h-full"
+          >
+            <template x-if="!enabled">
+              <button
+                @click="enable"
+                class="absolute inset-0 h-full w-full group/button"
+                type="button"
+                {% if labels_display == 'text_overlay_on_hover' or labels_display == 'follow_mouse_on_hover' %}
+                x-ref="tileLink"
+                aria-labelledby="Section-{{ section.id }}-Video-{{ video.id }}-label"
+                {% if show_caption and caption != '' %}
+                x-on:mouseenter="showLabel" x-on:mouseleave="hideLabel"
+                x-on:focus="showLabel" x-on:blur="hideLabel"
+                @keyup.escape="hideLabel"
+                {% endif %}
+                {% endif %}
+              >
+                <span
+                  class="z-20 absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 rounded-full w-14 h-14 lg:w-20 lg:h-20 bg-scheme-background text-scheme-background-overlay flex items-center justify-center group-hover/button:bg-scheme-accent group-hover/button:text-scheme-accent-overlay transition-opacity"
+                >
+                  <span class="w-5 h-5 inline-block">
+                    {%- render 'icon-play' -%}
+                  </span>
+                </span>
+                {%- if video != blank -%}
+                {{ video.preview_image | image_url: width: 2000 | image_tag: class: preview_image_media_class, loading: 'lazy', sizes: sizes }}
+                {%- else -%}
+                {{ 'image' | placeholder_svg_tag: 'w-full h-full bg-scheme-placeholder-background text-scheme-placeholder-foreground fill-current' }}
+                {%- endif -%}
+              </button>
+            </template>
+            <template x-if="enabled">
+              {%- case video.media_type -%}
+              {%- when 'external_video' -%}
+                {%- if video.host == 'youtube' -%}
+                  <div
+                    class="{{ wrapper_class }}"
+                    x-data="YouTubeEmbed"
+                    @play="play"
+                    @pause="pause"
+                    {% if request.design_mode %}
+                      @deinit="deinit"
+                    {% endif %}
+                  >
+                    {{
+                      video
+                      | external_video_url:
+                        enablejsapi: 1,
+                        autoplay: true,
+                        loop: loop,
+                        playlist: video.external_id
+                      | external_video_tag:
+                        id: player_id,
+                        class: media_class,
+                        loading: 'lazy',
+                        x-ref: 'video',
+                        alpineonloadattr: 'onIFrameLoad'
+                      | replace: 'alpineonloadattr', 'x-on:load'
+                    }}
+                  </div>
+                {%- else -%}
+                  <div
+                    class="{{ wrapper_class }}"
+                    x-data="VimeoEmbed"
+                    @play="play"
+                    @pause="pause"
+                    {% if request.design_mode %}
+                      @deinit="deinit"
+                    {% endif %}
+                  >
+                    {{
+                      video
+                      | external_video_url:
+                        autoplay: true,
+                        loop: loop,
+                        player_id: media.id
+                      | external_video_tag:
+                        id: player_id,
+                        class: media_class,
+                        loading: 'lazy',
+                        x-ref: 'video'
+                    }}
+                  </div>
+                {%- endif -%}
+              {%- when 'video' -%}
+                <div
+                  class="html-video-wrapper {{ wrapper_class }}"
+                  x-data="HTMLVideo"
+                  @play="play"
+                  @pause="pause"
+                >
+                  {%- if video != blank -%}
+                  {{
+                    video
+                    | video_tag:
+                      autoplay: true,
+                      image_size: '2048x',
+                      loop: loop,
+                      controls: true,
+                      preload: 'none',
+                      class: media_class,
+                      muted: false,
+                      id: player_id,
+                      x-ref: 'video'
+                  }}
+                  {%- else -%}
+                  <video autoplay muted class="{{ media_class }}">
+                    <source src="{{ 'placeholder-video.mp4' | asset_url }}" type="video/mp4">
+                    Your browser does not support the video tag.
+                  </video>
+                  {%- endif -%}
+                </div>
+              {%- endcase -%}
+            </template>
+          </div>
+        </div>
+
+        {%- if playback == 'modal' -%}
+        <div
+          x-data
+          x-init="initTeleport($root)"
+          x-cloak
+        >
+          <template data-should-teleport="#modal-slot">
+            <template x-if="$store.modals.modal.contents === '{{ video_player_id }}'">
+              <div class="text-scheme-text bg-scheme-background">
+                <button
+                  @click.prevent="$store.modals.close('{{ video_player_id }}')"
+                  type="button"
+                  class="block p-1 w-8 ml-auto absolute top-2 right-2 z-10"
+                >
+                  <span class="sr-only">
+                    {{- 'general.accessibility.close_modal' | t -}}
+                  </span>
+                  <span class="inline-block w-4 h-4">
+                    {%- render 'icon-close' -%}
+                  </span>
+                </button>
+                <div class="absolute inset-0 flex items-center justify-center section-x-padding">
+                  <div class="h-full w-full p-10">
+                    <div
+                      class="video-modal-container aspect-css-var ml-auto mr-auto relative top-1/2 -translate-y-1/2  max-w-full max-h-full pointer-events-auto"
+                      style="--ratio:{{ video.aspect_ratio }};">
+                      <div
+                        x-data="HTMLVideo"
+                        @play="play"
+                        @pause="pause"
+                        class="video-modal-wrapper"
+                      >
+                        {%- if video != blank -%}
+                        {{
+                          video
+                          | video_tag:
+                            autoplay: true,
+                            image_size: '2048x',
+                            loop: enable_video_looping,
+                            controls: true,
+                            preload: 'none',
+                            class: media_class,
+                            muted: false,
+                            id: player_id,
+                            x-ref: 'video'
+                        }}
+                        {%- else -%}
+                        <video autoplay muted class="{{ media_class }}">
+                          <source src="{{ 'placeholder-video.mp4' | asset_url }}" type="video/mp4">
+                          Your browser does not support the video tag.
+                        </video>
+                        {%- endif -%}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </template>
+          </template>
+        </div>
+        {%- endif -%}
+    {%- endcase -%}
+
+
+  </div>
+
+
+  {%- if render_labels_under_media and show_caption and caption != blank -%}
+    <div class="tile-content-wrapper {{ content_wrapper_classes }}">
+      {%- if show_caption -%}
+        <div class="break-words" aria-hidden="true">
+          {{ caption }}
+        </div>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+
+
+  {%- if render_labels_in_footer and show_caption and caption != blank -%}
+    <template
+      x-teleport="#Section-{{ section.id }}-CaptionContainer"
+    >
+      <span x-show="current_slide === {{ index }}" id="Section-{{ section.id }}-Product-{{ product.id }}-label">
+        {{ caption }}
+      </span>
+    </template>
+  {%- endif -%}
+
+  {%- if render_labels_in_overlay and show_caption and caption != blank -%}
+  <template x-ref="labelContent">
+    <span id="Section-{{ section.id }}-Video-{{ video.id }}-label">
+      {{ caption }}
+    </span>
+  </template>
+  {%- endif -%}
+
+  {% unless request.design_mode %}
+    <script src="{{ 'tile.js' | asset_url }}" type="module"></script>
+    <script src="{{ 'video.js' | asset_url }}" type="module"></script>
+    {% case video.media_type %}
+      {% when 'external_video' %}
+        {% if video.host == 'youtube' %}
+          <script
+            src="{{ 'youtube-embed.js' | asset_url }}"
+            type="module"
+          ></script>
+        {% elsif video.host == 'vimeo' %}
+          <script
+            src="{{ 'vimeo-embed.js' | asset_url }}"
+            type="module"
+          ></script>
+        {% endif %}
+      {% when 'video' %}
+        <script src="{{ 'html5-video.js' | asset_url }}" type="module"></script>
+    {% endcase %}
+  {% endunless %}
+
+</{{ tag }}>

@@ -1,0 +1,107 @@
+{%- style -%}
+  #section-{{ section.id }} .grid-wrapper {
+    {% if section.settings.disable_left_and_right_margins %}
+      --wrapper-left-and-right-margin: 0px;
+    {% endif %}
+    {% if section.settings.remove_grid_gaps %}
+      --media-grid-col-gap: 0px;
+      --media-grid-row-gap: 0px;
+      --media-grid-gap: 0px;
+    {% endif %}
+  }
+{%- endstyle -%}
+
+<ul class="grid grid-cols-section-mobile lg:grid-cols-section-desktop grid-wrapper gap-media-grid {{ section.settings.standard_layout_align_items | default: 'items-start' }}">
+  {%- liquid
+    # Calculate sizes
+
+    if settings.enable_sidebar
+      assign sidebar_width = 100.00 | divided_by: 12 | times: settings.sidebar_width_on_desktop | round: 2
+      assign desktop_sizes_base = 100 | minus: sidebar_width
+    else
+      assign desktop_sizes_base = 100
+    endif
+
+    assign desktop_sizes_css_base = desktop_sizes_base | append: 'vw'
+
+    if settings.enable_max_grid_width
+      assign desktop_sizes_css_base = 'min(' | append: settings.max_grid_width | append: 'px, ' | append: desktop_sizes_base | append: 'vw)'
+    endif
+
+    assign desktop_sizes = 'calc(' | append: desktop_sizes_css_base | append: ' / ' | append: section.settings.desktop_columns | append: ')'
+
+    assign mobile_sizes_in_vw = 100 | divided_by: section.settings.mobile_columns
+    assign mobile_sizes = mobile_sizes_in_vw | round: 2 | append: 'vw'
+
+    assign sizes = '(min-width: 990px) ' | append: desktop_sizes | append: ', ' | append: mobile_sizes
+
+    case content_source
+      when 'collection'
+        for product in products limit: section.settings.products_to_show
+          render 'tile-product', product: product, media_wrapper_aspect_ratio: section.settings.media_aspect_ratio, sizes: sizes
+        else
+          assign number_of_products_to_show = section.settings.products_to_show | default: 6
+          for i in (1..number_of_products_to_show)
+            render 'tile-placeholder', placeholder_index: forloop.index, type: 'product', media_wrapper_aspect_ratio: section.settings.media_aspect_ratio
+          endfor
+        endfor
+      when 'blocks'
+        for block in section.blocks
+          case block.type
+            when 'image'
+              assign media = block.settings.image
+              if media != blank
+                render 'tile-image', image: block.settings.image, caption: block.settings.caption, link: block.settings.link, media_wrapper_aspect_ratio: section.settings.media_aspect_ratio, sizes: sizes
+                continue
+              endif
+            when 'video'
+              assign media = block.settings.video
+              if media != blank
+                render 'tile-video', video: block.settings.video, mode: block.settings.mode, id: block.id, playback: block.settings.playback, caption: block.settings.caption, mode: block.settings.mode, link: block.settings.link, media_wrapper_aspect_ratio: section.settings.media_aspect_ratio, sizes: sizes
+                continue
+              endif
+            when 'collection'
+              assign media = block.settings.collection
+              if media != blank
+                render 'tile-collection', collection: block.settings.collection, media_wrapper_aspect_ratio: section.settings.media_aspect_ratio, sizes: sizes
+                continue
+              endif
+            when 'product'
+              assign media = block.settings.product
+              if media != blank
+                render 'tile-product', product: block.settings.product, media_wrapper_aspect_ratio: section.settings.media_aspect_ratio, sizes: sizes
+                continue
+              endif
+          endcase
+          render 'tile-placeholder', type: block.type, caption: block.settings.caption, media_wrapper_aspect_ratio: section.settings.media_aspect_ratio
+        endfor
+      when 'collection_list'
+        for collection in collections
+          render 'tile-collection', collection: collection, media_wrapper_aspect_ratio: section.settings.media_aspect_ratio, sizes: sizes
+        else
+          for i in (1..3)
+            render 'tile-placeholder', placeholder_index: forloop.index, type: 'collection', media_wrapper_aspect_ratio: section.settings.media_aspect_ratio
+          endfor
+        endfor
+      when 'product_media'
+        for media in product.media
+          unless media.id == product.featured_media.id and section.settings.hide_featured_media
+            case media.media_type
+              when 'video', 'external_video'
+                render 'tile-video', video: media, mode: section.settings.video_mode, id: block.id, playback: section.settings.video_playback, media_wrapper_aspect_ratio: section.settings.media_aspect_ratio, sizes: sizes
+              when 'image'
+                render 'tile-image', image: media, media_wrapper_aspect_ratio: section.settings.media_aspect_ratio, sizes: sizes
+            endcase
+          endunless
+        endfor
+      when 'articles'
+        for article in articles
+          render 'tile-article', article: article, media_wrapper_aspect_ratio: section.settings.media_aspect_ratio, show_title: section.settings.show_title, show_author: section.settings.show_author, show_date: section.settings.show_date, show_excerpt: section.settings.show_excerpt, title_font: section.settings.title_font, sizes: sizes
+        else
+          for i in (1..3)
+            render 'tile-placeholder', placeholder_index: forloop.index, type: 'image', media_wrapper_aspect_ratio: section.settings.media_aspect_ratio
+          endfor
+        endfor
+    endcase
+  -%}
+</ul>

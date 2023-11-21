@@ -1,0 +1,33 @@
+{
+  "sections": {
+    "collections-list": {
+      "type": "main-list-collections",
+      "settings": {
+        "collection_list": [
+
+        ],
+        "grid_type": "standard",
+        "mobile_columns": "1",
+        "desktop_columns": 3,
+        "standard_layout_align_items": "items-start",
+        "modular_layout_variation": 1,
+        "modular_grid_item_aspect_ratio": 1,
+        "irregular_layout_variation": 1,
+        "irregular_alignment_of_items": "items-center justify-center",
+        "media_aspect_ratio": "0.6667",
+        "media_fill_space": false,
+        "labels_show_titles_and_captions": true,
+        "labels_display": "follow_mouse_on_hover",
+        "labels_always_show_on_mobile": false,
+        "color_scheme": "primary",
+        "space_above": 1,
+        "space_below": 1,
+        "disable_left_and_right_margins": true,
+        "remove_grid_gaps": true
+      }
+    }
+  },
+  "order": [
+    "collections-list"
+  ]
+}

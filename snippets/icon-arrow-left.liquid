@@ -1,0 +1,12 @@
+{%- case settings.arrow_style -%}
+{%- when 'standard' -%}
+<svg class="theme-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+  <path stroke="currentColor" stroke-miterlimit="10" stroke-width="1.5" d="M22 12H2"/>
+  <path stroke="currentColor" stroke-linejoin="round" stroke-width="1.5" d="M10.235 3.765 2 12l8.235 8.235"/>
+</svg>
+{%- when 'wide' -%}
+<svg class="theme-icon" viewBox="0 0 48 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M44 11.6667H4" stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M10.6667 18.3333L4 11.6667L10.6667 5" stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+{%- endcase -%}

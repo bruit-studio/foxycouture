@@ -1,0 +1,184 @@
+{%- liquid
+  assign item_separator = '||__carousel-item__||'
+  assign block_attributes = ''
+  capture carousel_items
+    case content_source
+      when 'collection'
+        for product in products limit: section.settings.products_to_show
+          render 'tile-product', tag: 'div', product: product, media_wrapper_aspect_ratio: product.featured_media.aspect_ratio, index: forloop.index, sizes: sizes
+          echo item_separator
+        else
+          assign number_of_products_to_show = section.settings.products_to_show | default: 6
+          for i in (1..number_of_products_to_show)
+            capture aspect_ratio
+              cycle 0.8, 1.2, 0.8, 1.8, 0.7, 2.2, 1.0, 2.0, 2.5, 0.7
+            endcapture
+            assign aspect_ratios = aspect_ratios | append: aspect_ratio | append: ':'
+            render 'tile-placeholder', tag: 'div', placeholder_index: forloop.index, type: 'product', media_wrapper_aspect_ratio: aspect_ratio
+            echo item_separator
+          endfor
+        endfor
+      when 'blocks'
+        for block in section.blocks
+          assign block_attributes = block_attributes | append: block.shopify_attributes | append: '||__block-attribute-separator__||'
+          case block.type
+            when 'image'
+              assign media = block.settings.image
+              if media != blank
+                render 'tile-image', tag: 'div', image: block.settings.image, caption: block.settings.caption, link: block.settings.link, media_wrapper_aspect_ratio: media.aspect_ratio, index: forloop.index, sizes: sizes 
+                echo item_separator
+                continue
+              endif
+            when 'video'
+              assign media = block.settings.video
+              if media != blank
+                render 'tile-video', tag: 'div', video: block.settings.video, mode: block.settings.mode, id: block.id, playback: block.settings.playback, caption: block.settings.caption, mode: block.settings.mode, link: block.settings.link, media_wrapper_aspect_ratio: media.aspect_ratio, sizes: sizes, index: forloop.index
+                echo item_separator
+                continue
+              endif
+          endcase
+          if block.type == 'image'
+          capture aspect_ratio
+            cycle 0.8, 1.2, 0.8, 1.8, 0.7, 2.2, 1.0, 2.0, 2.5, 0.7
+          endcapture
+          else
+            assign aspect_ratio = 1.33
+          endif
+          assign aspect_ratios = aspect_ratios | append: aspect_ratio | append: ':'
+          render 'tile-placeholder', tag: 'div', placeholder_index: forloop.index, type: block.type, media_wrapper_aspect_ratio: aspect_ratio
+          echo item_separator
+        endfor
+      when 'collection_list'
+        for collection in collections
+          render 'tile-collection', tag: 'div', collection: collection, media_wrapper_aspect_ratio: collection.featured_media.aspect_ratio, index: forloop.index, sizes: sizes
+          echo item_separator
+        else
+          for i in (1..6)
+            capture aspect_ratio
+              cycle 0.8, 1.2, 0.8, 1.8, 0.7, 2.2, 1.0, 2.0, 2.5, 0.7
+            endcapture
+            assign aspect_ratios = aspect_ratios | append: aspect_ratio | append: ':'
+            render 'tile-placeholder', tag: 'div', placeholder_index: forloop.index, type: 'collection', media_wrapper_aspect_ratio: aspect_ratio
+            echo item_separator
+          endfor
+        endfor
+      when 'product_media'
+        for media in product.media
+          unless media.id == product.featured_media.id and section.settings.hide_featured_media
+          case media.media_type
+            when 'video' or 'external_video'
+              render 'tile-video', tag: 'div', video: media, mode: section.settings.video_mode, id: section.id, playback: playback: section.settings.video_playback, media_wrapper_aspect_ratio: media.aspect_ratio, sizes: sizes
+            when 'image'
+              render 'tile-image', tag: 'div', image: media, media_wrapper_aspect_ratio: media.aspect_ratio, sizes: sizes
+          endcase
+          echo item_separator
+          endunless
+        endfor
+    endcase
+  endcapture
+
+
+  assign carousel_items_array = carousel_items | split: item_separator
+  assign block_attributes = block_attributes | split: '||__block-attribute-separator__||'
+-%}
+
+{%- style -%}
+
+  #section-{{ section.id }} .carousel-item {
+    --total-margin: calc(var(--wrapper-left-and-right-margin) * 2);
+    width: calc({{ section.settings.item_width_mobile }}% - var(--total-margin));
+  }
+  @media (min-width: 990px) {
+    #section-{{ section.id }} .carousel-item {
+      width: {{ section.settings.item_width_desktop }}%;
+    }
+  }
+{%- endstyle -%}
+
+<div
+  x-data='ThemeModule_Carousel({{ section.id | json }})'
+  x-init="mounted()"
+  class="carousel-container w-full max-w-screen lg:max-w-full overflow-hidden"
+>
+  <ul id="CarouselTrack-{{ section.id }}" x-ref="carousel-track" class="carousel-track flex overflow-x-scroll scroll-smooth gap-media-grid {{ section.settings.align_items }} snap-x snap-mandatory snap-always">
+    {%- for item in carousel_items_array -%}
+      <li class="relative carousel-item shrink-0 {{ section.settings.snap_alignment }} scroll-ml-wrapper-left-and-right-margin first:ml-wrapper-left-and-right-margin last:mr-wrapper-left-and-right-margin overflow-hidden" {{ block_attributes[forloop.index0] }}>
+        {{ item }}
+      </li>
+    {%- endfor -%}
+  </ul>
+
+  {%- capture slides_index -%}
+    <span x-text="`${current_slide}/${total_slides}`"></span>
+  {%- endcapture -%}
+
+  {%- capture caption_container -%}
+    <div id="Section-{{ section.id }}-CaptionContainer">
+    </div>
+  {%- endcapture -%}
+
+  {%- capture slideshow_arrows -%}
+    {%- if view_more_in_footer -%}
+      <div class="flex flex-wrap gap-4 justify-end">
+      {%- render 'carousel-buttons' -%}
+      {{ view_all_button }}
+      </div>
+    {%- else -%}
+      {%- render 'carousel-buttons' -%}
+    {%- endif -%}
+  {%- endcapture -%}
+
+  {%- liquid
+    assign layout_key = 'b'
+    assign show_labels_on_mobile = section.settings.labels_always_show_on_mobile
+    assign show_slides_index = section.settings.show_index_and_total_slides
+    assign labels_display = section.settings.labels_display
+    assign show_captions_on_desktop = false
+    if labels_display == 'footer'
+      assign show_captions_on_desktop = true
+    endif
+    if labels_display == 'footer' or show_labels_on_mobile
+      assign layout_key = layout_key | append: 'c'
+    endif
+    if show_slides_index
+      assign layout_key = layout_key | append: 'i'
+    endif
+  -%}
+
+  <div class=" grid grid-cols-12 grid-flow-dense gap-2  wrapper mt-8">
+    {%- case layout_key -%}
+      {%- when 'b' -%}
+        <div class="col-span-full text-right">
+          {{ slideshow_arrows }}
+        </div>
+      {%- when 'bi' -%}
+        <div class="col-span-6 text-left">
+          {{ slides_index }}
+        </div>
+        <div class="col-span-6 text-right">
+          {{ slideshow_arrows }}
+        </div>
+      {%- when 'bc' -%}
+        <div class="col-span-6 text-left {% unless show_captions_on_desktop %}lg:hidden{% endunless %}">
+          {{ caption_container }}
+        </div>
+        <div class="col-span-6 lg:col-end-13  text-right">
+          {{ slideshow_arrows }}
+        </div>
+      {%- when 'bci' -%}
+        <div class="row-start-2 col-span-6 lg:col-span-1 lg:row-start-auto text-left">
+          {{ slides_index }}
+        </div>
+        <div class="row-start-1 col-span-full lg:row-start-auto text-left lg:col-span-7 {% unless show_captions_on_desktop %}lg:hidden{% endunless %}">
+          {{ caption_container }}
+        </div>
+        <div class="row-start-2 col-span-6 lg:col-span-4 lg:col-end-13 lg:row-start-auto text-right">
+          {{ slideshow_arrows }}
+        </div>
+    {%- endcase -%}
+  </div>
+</div>
+
+{% unless request.design_mode %}
+  <script src="{{ 'modules-carousel.bundle.min.js' | asset_url }}" type="module"></script>
+{% endunless %}

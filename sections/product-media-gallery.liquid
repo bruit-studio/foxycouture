@@ -1,0 +1,422 @@
+{%- liquid
+  assign section_color = section.settings.color_scheme
+  case section.settings.space_above
+    when 'default'
+      assign spacing_above = 'pt-section-vertical-spacing'
+    when 'section_grid_gutter'
+      assign spacing_above = 'pt-grid-gutter'
+    when 'none'
+      assign spacing_above = ''
+  endcase
+
+  case section.settings.space_below
+    when 'default'
+      assign spacing_below = 'pb-section-vertical-spacing'
+    when 'section_grid_gutter'
+      assign spacing_below = 'pb-grid-gutter'
+    when 'none'
+      assign spacing_below = ''
+  endcase
+
+-%}
+
+{%- style -%}
+  #section-{{ section.id }} .grid-wrapper {
+    --number-of-columns: {{ section.settings.desktop_columns }};
+    --number-of-gutters: calc(var(--number-of-columns) - 1);
+    --total-gutter-size: calc(var(--media-grid-col-gap) * var(--number-of-gutters));
+    {% if section.settings.disable_left_and_right_margins %}
+      --wrapper-left-and-right-margin: 0px;
+    {% endif %}
+    {% if section.settings.remove_grid_gaps %}
+      --media-grid-col-gap: 0px;
+      --media-grid-row-gap: 0px;
+      --media-grid-gap: 0px;
+    {% endif %}
+  }
+{%- endstyle -%}
+
+<section
+  id="section-{{ section.id }}"
+  
+  class="section-container"
+  data-color-scheme="{{ section_color }}"
+  style="--section-grid-cols-mobile: {{ section.settings.mobile_columns }}; --section-grid-cols-desktop: {{ section.settings.desktop_columns }};"
+  {% if section.settings.enable_image_zoom %}
+    x-data='productMediaGallery({{ section.id | json }})'
+  {% else %}
+    x-data="{ labelContent: '', focusVisible: false }"
+  {% endif %}
+
+>
+  <div class="text-scheme-text bg-scheme-background {{ spacing_above }} {{ spacing_below }} ">
+    
+    {%- liquid
+      if section.settings.title != blank
+        render 'section-title-horizontal', title: section.settings.title
+      endif
+
+      case section.settings.grid_type
+        when 'standard'
+          render 'grid-standard', content_source: 'product_media'
+        when 'masonry'
+          render 'grid-masonry', content_source: 'product_media'
+        when 'justified'
+          render 'grid-justified', content_source: 'product_media'
+        when 'modular'
+          render 'grid-modular', content_source: 'product_media'
+        when 'irregular'
+          render 'grid-irregular', content_source: 'product_media'
+      endcase
+    -%}
+  </div>
+
+  {%- liquid
+    if section.settings.labels_display == 'text_overlay_on_hover' or section.settings.labels_display == 'follow_mouse_on_hover'
+      render 'overlay-labels' with  section.settings.labels_display as labels_display
+    endif
+  -%}
+</section>
+
+{%- liquid
+  if section.settings.enable_image_zoom
+    assign modal_id = 'image-zoom-' | append: section.id
+    assign zoom_section_url = product.url | append: '?section_id=main-product-zoom'
+    render 'product-media-zoom-modal', modal_id: modal_id, zoom_section_url: zoom_section_url
+  endif
+%}
+
+{% schema %}
+{
+  "name": "Product media gallery",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "This section will not display product models."
+    },
+    {
+      "type": "checkbox",
+      "id": "hide_featured_media",
+      "label": "Hide featured media",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "grid_type",
+      "label": "Grid type",
+      "options": [
+        {
+          "value": "standard",
+          "label": "Standard"
+        },
+        {
+          "value": "masonry",
+          "label": "Masonry"
+        },
+        {
+          "value": "justified",
+          "label": "Justified"
+        },
+        {
+          "value": "modular",
+          "label": "Modular"
+        },
+        {
+          "value": "irregular",
+          "label": "Irregular"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "mobile_columns",
+      "label": "Mobile columns",
+      "options": [
+        {
+          "value": "1",
+          "label": "1 column"
+        },
+        {
+          "value": "2",
+          "label": "2 columns"
+        }
+      ],
+      "default": "1"
+    },
+    {
+      "type": "range",
+      "id": "desktop_columns",
+      "min": 1,
+      "max": 6,
+      "step": 1,
+      "label": "Number of columns on desktop",
+      "default": 5,
+      "info": "This setting does not apply if grid type is set to 'Modular' or 'Irregular'."
+    },
+    {
+      "type": "range",
+      "id": "grid_gutter",
+      "min": 0,
+      "max": 128,
+      "step": 4,
+      "unit": "px",
+      "label": "Grid gutter",
+      "default": 48
+    },
+    {
+      "type": "checkbox",
+      "id": "disable_left_and_right_margins",
+      "label": "Disable left and right margins",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Modular"
+    },
+    {
+      "type": "range",
+      "id": "modular_layout_variation",
+      "min": 1,
+      "max": 12,
+      "step": 1,
+      "label": "Layout variation",
+      "default": 1
+    },
+    {
+      "type": "range",
+      "id": "modular_grid_item_aspect_ratio",
+      "min": 0.5,
+      "max": 1.8,
+      "step": 0.1,
+      "unit": ":1",
+      "label": "Grid base aspect ratio",
+      "default": 1,
+      "info": "Wide to tall"
+    },
+    {
+      "type": "header",
+      "content": "Irregular"
+    },
+    {
+      "type": "range",
+      "id": "irregular_layout_variation",
+      "min": 1,
+      "max": 15,
+      "step": 1,
+      "label": "Layout variation",
+      "default": 1
+    },
+    {
+      "type": "select",
+      "id": "irregular_alignment_of_items",
+      "label": "Alignment of items",
+      "options": [
+        {
+          "value": "items-top justify-start",
+          "label": "Top left"
+        },
+        {
+          "value": "items-top justify-center",
+          "label": "Top center"
+        },
+        {
+          "value": "items-top justify-end",
+          "label": "Top right"
+        },
+        {
+          "value": "items-top justify-between",
+          "label": "Top justified"
+        },
+        {
+          "value": "items-center justify-start",
+          "label": "Center left"
+        },
+        {
+          "value": "items-center justify-center",
+          "label": "Center"
+        },
+        {
+          "value": "items-center justify-end",
+          "label": "Center right"
+        },
+        {
+          "value": "items-center justify-between",
+          "label": "Center justified"
+        },
+        {
+          "value": "items-end justify-start",
+          "label": "Bottom left"
+        },
+        {
+          "value": "items-end justify-center",
+          "label": "Bottom center"
+        },
+        {
+          "value": "items-end justify-end",
+          "label": "Bottom right"
+        },
+        {
+          "value": "items-end justify-between",
+          "label": "Bottom justified"
+        }
+      ],
+      "default": "items-top justify-between"
+    },
+    {
+      "type": "header",
+      "content": "Media"
+    },
+    {
+      "type": "paragraph",
+      "content": "These settings only apply if grid type is set to 'Standard' or 'Irregular'."
+    },
+    {
+      "type": "select",
+      "id": "media_aspect_ratio",
+      "label": "Aspect ratio",
+      "options": [
+        {
+          "value": "natural",
+          "label": "Natural"
+        },
+        {
+          "value": "1",
+          "label": "Square (1:1)"
+        },
+        {
+          "value": "1.333",
+          "label": "Landscape (4:3)"
+        },
+        {
+          "value": "0.6667",
+          "label": "Portrait (2:3)"
+        },
+        {
+          "value": "1.778",
+          "label": "Widescreen (16:9)"
+        }
+      ],
+      "default": "natural"
+    },
+    {
+      "type": "checkbox",
+      "id": "media_fill_space",
+      "label": "Maximize size",
+      "default": false,
+      "info": "No effect when aspect ratio is set to 'Natural'."
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_image_zoom",
+      "label": "Enable image zoom"
+    },
+    {
+      "type": "radio",
+      "id": "video_mode",
+      "label": "Video mode",
+      "options": [
+        {
+          "value": "preview",
+          "label": "Preview"
+        },
+        {
+          "value": "autoplay",
+          "label": "Autoplay"
+        }
+      ],
+      "default": "preview",
+      "info": "Autoplay does not support YouTube or Vimeo and sound will be muted."
+    },
+    {
+      "type": "radio",
+      "id": "video_playback",
+      "label": "Video playback",
+      "options": [
+        {
+          "value": "inline",
+          "label": "Inline"
+        },
+        {
+          "value": "modal",
+          "label": "Modal"
+        }
+      ],
+      "default": "inline",
+      "info": "Does not apply if mode is set to autoplay."
+    },
+    {
+      "type": "header",
+      "content": "Color"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "default": "scheme_1",
+      "label": "Color scheme"
+    },
+    {
+      "type": "header",
+      "content": "Spacing",
+      "info": "Adjust vertical spacing to visually connect this section to adjacent sections"
+    },
+    {
+      "type": "select",
+      "id": "space_above",
+      "label": "Space above",
+      "options": [
+        {
+          "value": "default",
+          "label": "Default"
+        },
+        {
+          "value": "section_grid_gutter",
+          "label": "Section grid gutter"
+        },
+        {
+          "value": "none",
+          "label": "None"
+        }
+      ],
+      "default": "default"
+    },
+    {
+      "type": "select",
+      "id": "space_below",
+      "label": "Space below",
+      "options": [
+        {
+          "value": "default",
+          "label": "Default"
+        },
+        {
+          "value": "section_grid_gutter",
+          "label": "Section grid gutter"
+        },
+        {
+          "value": "none",
+          "label": "None"
+        }
+      ],
+      "default": "default"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product media gallery",
+      "settings": {
+        "grid_type": "modular",
+        "mobile_columns": "2"
+      }
+    }
+  ],
+  "enabled_on": {
+    "templates": [
+      "product"
+    ]
+  }
+}
+{% endschema %}

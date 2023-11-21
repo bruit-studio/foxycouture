@@ -1,0 +1,5 @@
+<div class="mt-spacer" style="--spacing-adjust: {{ block.settings.space_above }};" {{ block.shopify_attributes }}>
+  <div class="flex items-center {{ block.settings.text_color }}">
+    {% render 'social-share', share_title: product.title, share_permalink: product.url, share_image: product.featured_image %}
+  </div>
+</div>

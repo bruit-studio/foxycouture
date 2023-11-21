@@ -1,0 +1,202 @@
+{%- liquid
+  assign predictive_search_enabled = settings.predictive_search_enabled
+  assign search_resources = ''
+
+  if settings.search_products
+    assign search_resources = ' product'
+  endif
+
+  if settings.search_collections
+    assign search_resources = search_resources | append: ' collection'
+  endif
+
+  if settings.search_articles
+    assign search_resources = search_resources | append: ' article'
+  endif
+
+  if settings.search_pages
+    assign search_resources = search_resources | append: ' page'
+  endif
+
+  if settings.search_suggestions
+    assign search_resources = search_resources | append: ' query'
+  endif
+
+  assign search_resources = search_resources | strip | split: ' ' | join: ','
+-%}
+
+<div
+  x-data="{ searchOpen: false }"
+  x-init="initTeleport($root); $store.modals.register('search', 'rightDrawer');"
+  class="hidden lg:block"
+>
+  <a
+    data-search-toggle
+    @click.prevent="$store.modals.open('search')"
+    @keydown.space.prevent="$store.modals.open('search')"
+    href="{{ routes.search_url }}"
+    :role="`button`"
+    class="block relative before:absolute before:-inset-2 before:content-['']"
+  >
+    {%- if section.settings.use_icons -%}
+      <span class="sr-only">{{ 'general.search.submit' | t }}</span>
+      <div class="w-6 h-6">{%- render 'icon-search' -%}</div>
+    {%- else -%}
+      {{ 'general.search.submit' | t }}
+    {%- endif -%}
+  </a>
+
+  <template data-should-teleport="#right-drawer-slot">
+    <div x-show="$store.modals.rightDrawer.contents === 'search'">
+
+
+      <div
+        class="max-h-full flex flex-col h-screen"
+        :data-modal-label="$store.modals.rightDrawer.contents === 'search' ? '{{ 'general.search.title' | t | escape }}' : false"
+      >
+        <h2 class="sr-only" tabindex="-1">
+          {{ 'general.search.title' | t }}
+        </h2>
+
+        <div
+          class="w-full"
+          {% if predictive_search_enabled %}
+            x-data="PredictiveSearch('{{ search_resources }}')"
+            @keyup="onKeyup"
+            @keydown="onKeydown"
+            @search-is-open.document="onOpen"
+          {% endif %}
+          x-ref="searchComponent"
+        >
+          <form
+            action="{{ routes.search_url }}"
+            class="predictive-search-form flex flex-col h-screen"
+            method="get"
+            role="search"
+          >
+            <input type="hidden" name="options[prefix]" value="last">
+            {%- if predictive_search_enabled == false
+              and settings.search_products
+              or settings.search_articles
+              or settings.search_pages
+            -%}
+              <input
+                type="hidden"
+                name="type"
+                value="{% if settings.search_products %}product{% endif %}{% if settings.search_articles %},article{% endif %}{% if settings.search_pages %},page{% endif %}"
+              >
+            {%- endif -%}
+            <div class="p-2.5 lg:p-5">
+              <div class="relative border-scheme-text/0 border-b-theme border-b-scheme-border pb-1 flex items-center">
+                <button
+                  @click.prevent="$store.modals.close('search')"
+                  class="flex justify-center items-center absolute top-0 right-0 bottom-0 left-auto min-touch-target"
+                >
+                  <span class="sr-only">
+                    {{- 'general.accessibility.close_modal' | t -}}
+                  </span>
+                  <span class="inline-block w-5 h-5">
+                    {%- render 'icon-close' -%}
+                  </span>
+                </button>
+                <input
+                  type="search"
+                  name="q"
+                  class="py-0  px-9 w-full border-none rounded-[0] outline-offset-[1rem]"
+                  value="{{ search.terms | escape }}"
+                  placeholder="{{ 'general.search.placeholder' | t }}"
+                  {% if predictive_search_enabled %}
+                    :aria-expanded="resultsOpen"
+                    :aria-activedescendant="activeElementId"
+                    aria-owns="predictive-search-results-list"
+                    aria-controls="predictive-search-results-list"
+                    aria-autocomplete="list"
+                    autocorrect="off"
+                    autocomplete="off"
+                    autocapitalize="off"
+                    spellcheck="false"
+                    x-ref="input"
+                    x-model.debounce.300="rawQuery"
+                    @focus="onFocus"
+                  {% endif %}
+                  autofocus
+                >
+                <button
+                  type="submit"
+                  class="flex justify-center items-center absolute top-1/2 -translate-y-1/2 right-auto bottom-0 left-0 min-touch-target"
+                  aria-label="{{ 'general.search.submit' | t }}"
+                >
+                  <div class="w-6 h-6">
+                    {%- render 'icon-search' -%}
+                  </div>
+                </button>
+              </div>
+            </div>
+
+            {%- if predictive_search_enabled -%}
+              <div
+                x-ref="resultsSlot"
+                class="relative grow scroll-py-2.5"
+                :class="
+                  {
+                    'overflow-y-auto': ! loading,
+                    'overflow-y-hidden': loading,
+                  }
+                "
+              >
+                <div
+                  x-ref="results"
+                  x-html-if-set="resultsHTML"
+                  tabindex="-1"
+                  hidden
+                ></div>
+
+                <span
+                  class="predictive-search-status sr-only"
+                  role="status"
+                  aria-hidden="true"
+                ></span>
+                <template x-if="loading">
+                  <div class="sticky inset-0 w-full h-full flex z-10 bg-scheme-background/90">
+                    <div
+                      class="h-52 w-full flex items-center justify-center"
+                    >
+                      <div role="status">
+                        <svg
+                          aria-hidden="true"
+                          class="w-8 h-8 mr-2 text-scheme-text/10 animate-spin  fill-scheme-text"
+                          viewBox="0 0 100 101"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/>
+                          <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill"/>
+                        </svg>
+                        <span class="sr-only">
+                          {{- 'general.accessibility.loading' | t -}}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </template>
+              </div>
+              <template x-if="showViewAll">
+                <div
+                  x-ref="viewAll"
+                  class="text-center py-3 px-1.5 lg:px-3 mt-auto bg-scheme-background/50 pb-safe-bottom"
+                  role="option"
+                  :aria-selected="isSelected"
+                  id="predictive-search-option-search-keywords"
+                >
+                  <button class="btn">
+                    {{ 'general.search.view_all' | t }}
+                  </button>
+                </div>
+              </template>
+            {%- endif -%}
+          </form>
+        </div>
+      </div>
+    </div>
+  </template>
+</div>

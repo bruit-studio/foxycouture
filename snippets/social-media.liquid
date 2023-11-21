@@ -1,0 +1,82 @@
+{% liquid
+  assign display = display | default: 'icons'
+  assign social_accounts = 'Facebook, Twitter, Pinterest, Instagram, Snapchat, TikTok, Tumblr, YouTube, Vimeo, LinkedIn' | split: ', '
+
+  assign social_account_items_string = ''
+
+  assign social_item_separator = '||__social-item-end__||'
+
+  for social in social_accounts
+    assign social_handle = social | handleize
+    assign social_link = 'social_' | append: social_handle | append: '_link'
+
+    if settings[social_link] != blank
+      capture social_account_item
+        echo '<a class="min-touch-target inline-block" href="' | append: settings[social_link] | append: '" aria-label="' | append: social | append: '">'
+        if display == 'icons'
+        case social_handle
+          when 'facebook'
+            render 'icon-facebook'
+          when 'twitter'
+            render 'icon-twitter'
+          when 'pinterest'
+            render 'icon-pinterest'
+          when 'instagram'
+            render 'icon-instagram'
+          when 'snapchat'
+            render 'icon-snapchat'
+          when 'tiktok'
+            render 'icon-tiktok'
+          when 'tumblr'
+            render 'icon-tumblr'
+          when 'youtube'
+            render 'icon-youtube'
+          when 'vimeo'
+            render 'icon-vimeo'
+          when 'linkedin'
+            render 'icon-linkedin'
+        endcase
+        else
+          echo social
+        endif
+        echo '</a>'
+        echo social_item_separator
+      endcapture
+
+      assign social_account_items_string = social_account_items_string | append: social_account_item
+    endif
+  endfor
+
+  if social_account_items_string != blank
+    assign social_account_items = social_account_items_string | split: social_item_separator
+  endif
+
+  assign text_alignment_class = text_alignment | default: 'justify-start'
+  if text_alignment != 'blank'
+    case text_alignment
+      when 'text-left'
+        assign text_alignment_class = 'justify-start'
+      when 'text-center'
+        assign text_alignment_class = 'justify-center'
+      when 'text-right'
+        assign text_alignment_class = 'justify-end'
+    endcase
+  endif
+
+  if display == 'icons'
+    assign list_class = 'flex flex-wrap justify-start -m-2 ' | append: text_alignment_class
+    assign item_class = 'w-[1.125rem] h-[1.125rem] m-2'
+  endif
+
+  if display == 'text' and text_layout == 'horizontal'
+    assign list_class = 'flex flex-wrap -mx-1 ' | append: text_alignment_class
+    assign item_class = 'px-1'
+  endif
+%}
+<ul class="{{ list_class }}">
+  {% for item in social_account_items %}
+    <li class="{{ item_class }}">
+      {{ item }}
+    </li>
+  {% endfor %}
+</ul>

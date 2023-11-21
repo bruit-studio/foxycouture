@@ -1,0 +1,417 @@
+{%- liquid
+  assign section_color = section.settings.color_scheme
+-%}
+
+<section class="section-container" data-color-scheme="{{ section_color }}" style="--top-spacing-adjust: {{ section.settings.space_above }}; --bottom-spacing-adjust: {{ section.settings.space_below }};">
+  <div class="text-scheme-text bg-scheme-background pt-top-section-vertical-spacing pb-bottom-section-vertical-spacing">
+    <div class="wrapper">
+      {%- if section.settings.show_top_border -%}
+      <hr class="border-t-theme border-scheme-border mb-half-section-vertical-spacing">
+      {%- endif -%}
+  
+      <div class="grid lg:grid-cols-12 gap-theme" {% if section.settings.title == blank %}style="--section-content-col-span: 12;"{% endif %}>
+  
+        {% if section.settings.title != blank %}
+        <div class="lg:col-span-section-title min-w-0">
+          <h2 class="font-heading text-heading-standard break-words">
+            {{ section.settings.title | strip }}
+          </h2>
+        </div>
+        {% endif %}
+  
+        <div class="col-span-full lg:col-end-[-1] lg:col-span-section-content flex min-w-0" style="--section-grid-cols-desktop: {{ section.settings.desktop_columns }};">
+          <div class="grid lg:grid-cols-section-desktop w-full gap-theme min-w-0">
+            {%- for block in section.blocks -%}
+              <div class="min-w-0 break-words">
+  
+                
+                <div class="flex justify-start items-center min-w-0 break-words">
+                  {%- if block.settings.icon != 'none' -%}
+                  <div class="w-5 h-5 mr-2">
+                    <span class="block w-5 h-5">{%- render 'content-icon', icon: block.settings.icon -%}</span>
+                  </div>
+                  {%- endif -%}
+                  {% if block.settings.title != blank %}
+                  <h2 class="font-heading text-heading-secondary break-words">
+                    {{ block.settings.title | strip }}
+                  </h2>
+                  {% endif %}
+                </div>
+                
+  
+                <div class="mt-4 {% if block.settings.icon != 'none' -%}pl-7{% endif %}">
+                  {% if block.settings.text != blank %}
+                    <div class="rte">
+                      {{ block.settings.text }}
+                    </div>
+                  {%- endif -%}
+      
+                  {% if block.settings.cta_link %}
+                    <div class="mt-8">
+                      <a class="btn" href="{{ block.settings.cta_link }}">
+                        {{ block.settings.cta_label }}
+                      </a>
+                    </div>
+                  {% endif %}
+                </div>
+              </div>
+            {%- endfor -%}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>  
+</section>
+
+{% schema %}
+{
+  "name": "Text blocks",
+  "settings": [
+    {
+      "id": "title",
+      "type": "text",
+      "label": "Heading",
+      "default": "Text blocks"
+    },
+    {
+      "type": "range",
+      "id": "desktop_columns",
+      "min": 1,
+      "max": 3,
+      "step": 1,
+      "label": "Desktop columns",
+      "default": 2
+    },
+    {
+      "type": "checkbox",
+      "id": "show_top_border",
+      "label": "Show top border",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Color"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "default": "scheme_1",
+      "label": "Color scheme"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "space_above",
+      "min": 0,
+      "max": 2,
+      "step": 0.5,
+      "unit": "x",
+      "label": "Above",
+      "default": 1
+    },
+    {
+      "type": "range",
+      "id": "space_below",
+      "min": 0,
+      "max": 2,
+      "step": 0.5,
+      "unit": "x",
+      "label": "Below",
+      "default": 1
+    }
+  ],
+  "blocks": [
+    {
+      "type": "block",
+      "name": "Block",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            {
+              "value": "none",
+              "label": "None"
+            },
+            {
+              "value": "bag",
+              "label": "Bag"
+            },
+            {
+              "value": "basket",
+              "label": "Basket"
+            },
+            {
+              "value": "box",
+              "label": "Box"
+            },
+            {
+              "value": "chat",
+              "label": "Chat"
+            },
+            {
+              "value": "checkmark",
+              "label": "Checkmark"
+            },
+            {
+              "value": "clock",
+              "label": "Clock"
+            },
+            {
+              "value": "coathanger",
+              "label": "Coathanger"
+            },
+            {
+              "value": "cog",
+              "label": "Cog"
+            },
+            {
+              "value": "dryer",
+              "label": "Dryer"
+            },
+            {
+              "value": "emoji-grin",
+              "label": "Emoji Grin"
+            },
+            {
+              "value": "eye",
+              "label": "Eye"
+            },
+            {
+              "value": "flag",
+              "label": "Flag"
+            },
+            {
+              "value": "gift",
+              "label": "Gift"
+            },
+            {
+              "value": "globe",
+              "label": "Globe"
+            },
+            {
+              "value": "heart",
+              "label": "Heart"
+            },
+            {
+              "value": "house",
+              "label": "House"
+            },
+            {
+              "value": "iron",
+              "label": "Iron"
+            },
+            {
+              "value": "leaf",
+              "label": "Leaf"
+            },
+            {
+              "value": "light-bulb",
+              "label": "Light Bulb"
+            },
+            {
+              "value": "lightning-bolt",
+              "label": "Lightning Bolt"
+            },
+            {
+              "value": "like",
+              "label": "Like"
+            },
+            {
+              "value": "lock",
+              "label": "Lock"
+            },
+            {
+              "value": "map-pin",
+              "label": "Map Pin"
+            },
+            {
+              "value": "medal",
+              "label": "Medal"
+            },
+            {
+              "value": "notepad",
+              "label": "Notepad"
+            },
+            {
+              "value": "paint-palette",
+              "label": "Paint Palette"
+            },
+            {
+              "value": "pants",
+              "label": "Pants"
+            },
+            {
+              "value": "person",
+              "label": "Person"
+            },
+            {
+              "value": "phone",
+              "label": "Phone"
+            },
+            {
+              "value": "plane",
+              "label": "Plane"
+            },
+            {
+              "value": "question-circle",
+              "label": "Question Circle"
+            },
+            {
+              "value": "recycle",
+              "label": "Recycle"
+            },
+            {
+              "value": "refresh-arrow",
+              "label": "Refresh Arrow"
+            },
+            {
+              "value": "ruler",
+              "label": "Ruler"
+            },
+            {
+              "value": "safety-pin",
+              "label": "Safety Pin"
+            },
+            {
+              "value": "shield",
+              "label": "Shield"
+            },
+            {
+              "value": "ship",
+              "label": "Ship"
+            },
+            {
+              "value": "shop",
+              "label": "Shop"
+            },
+            {
+              "value": "sneaker",
+              "label": "Sneaker"
+            },
+            {
+              "value": "star",
+              "label": "Star"
+            },
+            {
+              "value": "t-shirt",
+              "label": "T-Shirt"
+            },
+            {
+              "value": "tag",
+              "label": "Tag"
+            },
+            {
+              "value": "trophy",
+              "label": "Trophy"
+            },
+            {
+              "value": "truck-with-clock",
+              "label": "Truck with Clock"
+            },
+            {
+              "value": "truck",
+              "label": "Truck"
+            },
+            {
+              "value": "wallet",
+              "label": "Wallet"
+            },
+            {
+              "value": "washing-machine",
+              "label": "Washing Machine"
+            }
+          ],
+          "default": "none"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Heading",
+          "default": "Heading"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p>Share blog posts, products, or promotions with your customers. Use this text to describe products, share details on availability and style, or as a space to display recent reviews or FAQs.</p>"
+        },
+        {
+          "type": "header",
+          "content": "Call to action"
+        },
+        {
+          "type": "url",
+          "id": "cta_link",
+          "label": "Link"
+        },
+        {
+          "type": "text",
+          "id": "cta_label",
+          "label": "Label"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Text blocks",
+      "blocks": [
+        {
+          "type": "block"
+        },
+        {
+          "type": "block"
+        },
+        {
+          "type": "block"
+        },
+        {
+          "type": "block"
+        }
+      ]
+    },
+    {
+      "name": "Text blocks with icons",
+      "blocks": [
+        {
+          "type": "block",
+          "settings": {
+            "icon": "globe"
+          }
+        },
+        {
+          "type": "block",
+          "settings": {
+            "icon": "heart"
+          }
+        },
+        {
+          "type": "block",
+          "settings": {
+            "icon": "leaf"
+          }
+        },
+        {
+          "type": "block",
+          "settings": {
+            "icon": "truck"
+          }
+        }
+      ]
+    }
+  ],
+  "disabled_on": {
+    "groups": [
+      "aside",
+      "header",
+      "footer",
+      "custom.hero"
+    ]
+  }
+}
+{% endschema %}

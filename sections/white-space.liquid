@@ -1,0 +1,49 @@
+<section id="section-{{ section.id }}"></section>
+
+{%- style -%}
+
+  #section-{{ section.id }} {
+    height: {{ section.settings.desktop_height | times: 0.0625 }}rem;
+  } 
+
+  @media screen and (min-width: 990px) {
+    #section-{{ section.id }} {
+      height: {{ section.settings.desktop_height | times: 0.0625 }}rem;
+    } 
+  }
+{%- endstyle -%}
+
+{% schema %}
+{
+  "name": "White space",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Add blank space between sections."
+    },
+    {
+      "type": "range",
+      "id": "desktop_height",
+      "min": 24,
+      "max": 420,
+      "step": 12,
+      "unit": "px",
+      "label": "Desktop height",
+      "default": 240
+    }
+  ],
+  "presets": [
+    {
+      "name": "White space"
+    }
+  ],
+  "enabled_on": {
+    "groups": [
+      "header",
+      "aside",
+      "custom.hero",
+      "footer"
+    ]
+  }
+}
+{% endschema %}

@@ -1,0 +1,20 @@
+{%- liquid
+  assign tag_badges = settings.tag_badges | newline_to_br | split: '<br />'
+
+-%}
+<div class="absolute top-1 left-1 pointer-events-none flex flex-wrap gap-1 [text-transform:var(--button-text-transform)]">
+  {%- for tag in tag_badges -%}
+    {%- assign tag_stripped = tag | strip -%}
+    {%- if product_tags contains tag_stripped -%}
+      <span class="rounded-button bg-scheme-accent text-scheme-accent-contrast px-2">{{ tag }}</span>
+    {%- endif -%}
+  {%- endfor -%}
+  {%- if settings.products_show_on_sale_and_sold_out_badges -%}
+    {%- if on_sale -%}
+      <span class="rounded-button bg-scheme-accent text-scheme-accent-contrast px-2">{{ 'products.product.on_sale' | t }}</span>
+    {%- endif -%}
+    {%- if sold_out -%}
+      <span class="rounded-button bg-scheme-text text-scheme-background px-2">{{ 'products.product.sold_out' | t }}</span>
+    {%- endif -%}
+  {%- endif -%}
+</div>

@@ -1,0 +1,160 @@
+{%- liquid
+  assign section_color = section.settings.color_scheme
+  assign text_align = section.settings.text_alignment
+
+  capture type_classes
+    render 'type-scale-classes', mobile_text_scale: section.settings.mobile_text_scale, desktop_text_scale: section.settings.desktop_text_scale
+  endcapture
+-%}
+
+<section class="section-container" data-color-scheme="{{ section_color }}" style="--top-spacing-adjust: {{ section.settings.space_above }}; --bottom-spacing-adjust: {{ section.settings.space_below }};">
+  <div class="text-scheme-text bg-scheme-background pt-top-section-vertical-spacing pb-bottom-section-vertical-spacing">
+    <div class="wrapper">
+      {%- if section.settings.show_top_border -%}
+      <hr class="border-t-theme border-scheme-border mb-half-section-vertical-spacing">
+      {%- endif -%}
+  
+      <div class="grid lg:grid-cols-12 gap-theme">
+  
+        {% if section.settings.title != blank %}
+        <div class="lg:col-span-section-title min-w-0">
+          <h2 class="font-heading text-heading-standard break-words">
+            {{ section.settings.title | strip }}
+          </h2>
+        </div>
+        {% endif %}
+  
+        <div class="col-span-full lg:col-end-[-1] lg:col-span-section-content flex min-w-0 {{ text_align }}">
+          <div class="w-full no-m-first">
+  
+            {% if section.settings.richtext != blank %}
+              <div class="rte  {% render 'type-scale-classes', mobile_text_scale: section.settings.mobile_text_scale, desktop_text_scale: section.settings.desktop_text_scale %} break-words">
+                {{ section.settings.richtext }}
+              </div>
+            {%- endif -%}
+  
+            {%- if section.settings.cta_link and section.settings.cta_label != blank -%}
+              <div class="mt-8">
+                <a class="btn" href="{{ section.settings.cta_link }}">
+                  {{ section.settings.cta_label }}
+                </a>
+              </div>
+            {% endif %}
+  
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>  
+</section>
+
+{% schema %}
+{
+  "name": "Rich text",
+  "settings": [
+    {
+      "id": "title",
+      "type": "text",
+      "label": "Heading",
+      "default": "Heading"
+    },
+    {
+      "id": "richtext",
+      "type": "richtext",
+      "label": "Text",
+      "default": "<p>Use this text to share information about your brand with your customers. Describe a product, share announcements, or welcome customers to your store.</p>"
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Text alignment",
+      "options": [
+        {
+          "value": "text-left",
+          "label": "Left"
+        },
+        {
+          "value": "text-center",
+          "label": "Center"
+        },
+        {
+          "value": "text-right",
+          "label": "Right"
+        }
+      ],
+      "default": "text-left"
+    },
+    {
+      "type": "header",
+      "content": "Call to action"
+    },
+    {
+      "type": "url",
+      "id": "cta_link",
+      "label": "Link"
+    },
+    {
+      "type": "text",
+      "id": "cta_label",
+      "label": "Label"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_top_border",
+      "label": "Show top border",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Color"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "default": "scheme_1",
+      "label": "Color scheme"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "space_above",
+      "min": 0,
+      "max": 2,
+      "step": 0.5,
+      "unit": "x",
+      "label": "Above",
+      "default": 1
+    },
+    {
+      "type": "range",
+      "id": "space_below",
+      "min": 0,
+      "max": 2,
+      "step": 0.5,
+      "unit": "x",
+      "label": "Below",
+      "default": 1
+    }
+  ],
+  "presets": [
+    {
+      "name": "Rich text"
+    }
+  ],
+  "disabled_on": {
+    "groups": [
+      "aside",
+      "header",
+      "footer",
+      "custom.hero"
+    ]
+  }
+}
+{% endschema %}

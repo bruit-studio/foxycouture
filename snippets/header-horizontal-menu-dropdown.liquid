@@ -1,0 +1,135 @@
+{%- liquid
+  assign position_child_links_right = false
+  if last_block and block.settings.desktop_text_alignment == 'lg:justify-end'
+    assign position_child_links_right = true 
+  endif
+-%}
+<nav>
+  <ul class="menu {% unless block.settings.separate_with_comma %}-mx-2{% endunless %} {{ link_classes }}  flex flex-wrap {{ block.settings.desktop_text_alignment }}">
+    {%- for link in block.settings.menu.links -%}
+      <li class="menu-link {% unless block.settings.separate_with_comma %}px-2{% endunless %}">
+        {%- if link.links.size > 0 -%}
+          <div
+            class="relative"
+            x-cloak
+            x-data="
+            {
+              expanded: false
+            }
+          "
+          >
+          <button
+            type="button"
+            class="text-left hover:underline"
+            @click="expanded = ! expanded"
+            :aria-expanded="expanded"
+          >
+            <div class="flex items-center">
+              <span class="hover:underline {% if link.child_active %}underline{% endif %}">{{ link.title }}</span>
+              <div class="ml-1 js-enabled flex items-center">
+                <span
+                  class="w-4 h-4 inline-block transition-transform ease-gentle duration-[280ms]"
+                  x-cloak
+                >
+                 {%- if settings.accordion_icon == 'plus_minus' -%}
+                 <span x-show="expanded">{% render 'icon-minus' %}</span>
+                 <span x-show="!expanded">{% render 'icon-plus' %}</span>
+                 {%- else -%}
+                 <span class="block rotate-180" x-show="expanded">{% render 'icon-chevron-down' %}</span>
+                 <span x-show="!expanded">{% render 'icon-chevron-down' %}</span>
+                 {%- endif -%}
+                </span>
+              </div>
+            </div>
+          </button>
+          {% comment %}
+            Second level
+          {% endcomment %}
+          <ul
+            class="child-links menu dropdown-child border border-theme border-scheme-text bg-scheme-background z-50 absolute min-w-full w-48 mt-2 -mx-1 {% if position_child_links_right %}right-0{% endif %}"
+            x-show="expanded"
+            @click.away.prevent="expanded = false"
+          >
+            {%- for child_link in link.links -%}
+
+              <li class="menu-link">
+                
+                {%- if child_link.links.size > 0 -%}
+                  {% comment %}
+                    Third level
+                  {% endcomment %}
+                  <div
+                    x-cloak
+                    x-data="
+                    {
+                      grandchild_expanded: {% if child_link.child_active %}true{% else %}false{% endif %}
+                    }
+                  "
+                  >
+                    <button
+                      class="flex items-center justify-between w-full p-1"
+                      @click="grandchild_expanded = ! grandchild_expanded"
+                      :aria-expanded="grandchild_expanded"
+                    >
+                      <div class="grow min-w-[40%] break-words text-left">
+                        <span  class="hover:underline {% if child_link.child_active %}underline{% endif %}">{{ child_link.title }}</span>
+                      </div>
+                      <div class="shrink-0 ml-auto js-enabled flex items-center">
+                        <span
+                          class="w-4 h-4 inline-block transition-transform ease-gentle duration-[280ms]"
+                          x-cloak
+                        >
+                          {%- if settings.accordion_icon == 'plus_minus' -%}
+                          <span x-show="grandchild_expanded">{% render 'icon-minus' %}</span>
+                          <span x-show="!grandchild_expanded">{% render 'icon-plus' %}</span>
+                          {%- else -%}
+                          <span class="block rotate-180" x-show="grandchild_expanded">{% render 'icon-chevron-down' %}</span>
+                          <span x-show="!grandchild_expanded">{% render 'icon-chevron-down' %}</span>
+                          {%- endif -%}
+                        </span>
+                      </div>
+                    </button>
+                    <ul class="grandchild-links pl-5 menu dropdown-grandchild" x-show="grandchild_expanded">
+                      {%- for grandchild_link in child_link.links -%}
+                        <li class="menu-link ">
+                          <a class="hover:underline break-words {% if grandchild_link.current %}underline{% endif %}" href="{{ grandchild_link.url }}">
+                            {{ grandchild_link.title }}
+                          </a>
+                        </li>
+                      {%- endfor -%}
+                    </ul>
+                  </div>
+                {%- else -%}
+                <a href="{{ child_link.url }}" class="block p-1 break-words hover:underline {% if child_link.active %}underline{% endif %}">
+                  {{ child_link.title }}
+                </a>
+                {%- endif -%}
+              </li>
+            {%- endfor -%}
+          </ul>
+        </div>
+        {%- else -%}
+        <a href="{{ link.url }}" class="hover:underline {% if link.active %}underline{% endif %}">{{ link.title }}</a>
+        {%- endif -%}
+        {%- if block.settings.separate_with_comma -%}
+          {%- liquid
+            assign show_comma_on_last_item_in_loop = false
+            if block.settings.show_cart and section.settings.use_icons == false
+              assign show_comma_on_last_item_in_loop = true
+            endif
+          -%}
+          {%- unless forloop.last and show_comma_on_last_item_in_loop == false -%}
+          &#44;&nbsp;
+          {%- endunless -%}
+        {%- endif -%}
+      </li>
+    {%- endfor -%}
+    {%- if block.settings.show_cart -%}
+      <li class="menu-link {% unless block.settings.separate_with_comma %}px-2{% endunless %} {% if show_comma_on_last_item_in_loop == false %}ml-2{% endif %}">
+        <button class=""  @click.prevent="$store.modals.open('cart')">
+          {{ cart_button_content }}
+        </button>
+      </li>
+    {%- endif -%}
+  </ul>
+</nav>

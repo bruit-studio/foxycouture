@@ -1,0 +1,41 @@
+<aside
+  x-data
+>
+  <template x-teleport="body">
+    <div
+      x-show="$store.modals.quickViewDrawer.open"
+      @keydown.escape.prevent.stop="$store.modals.close('quickViewDrawer')"
+      @click="$store.modals.close('quickViewDrawer')"
+      class="fixed left-0 top-0 right-0 bottom-0 lg:inset-0 z-110 max-lg:flex max-lg:items-end"
+      data-color-scheme="{{ settings.quick_view_color_scheme }}"
+      id="modals-quickViewDrawer"
+      @quick-view-drawer-is-open.window="setTimeout(() => { $focus.first() }, 120)"
+    >
+      <div
+        x-show="$store.modals.quickViewDrawer.open"
+        class='fixed inset-0 {{ settings.modals_overlay_background_color }} {% if settings.modals_overlay_saturate %}backdrop-saturate-0{% endif %}'
+        style="--tw-bg-opacity: {{ settings.modals_overlay_opacity | divided_by: 100.0 }};"
+        x-transition.opacity.duration.500ms
+      >
+        <!-- Overlay -->
+      </div>
+      <div
+        @click.stop
+        x-show="$store.modals.quickViewDrawer.open"
+        x-transition:enter="transition ease-energetic duration-[350ms]"
+        x-transition:enter-start="max-lg:translate-y-full lg:translate-x-full"
+        x-transition:enter-end="max-lg:translate-y-0 lg:translate-x-0"
+        x-transition:leave="transition ease-energetic duration-[350ms]"
+        x-transition:leave-start="max-lg:translate-y-0 lg:translate-x-0"
+        x-transition:leave-end="max-lg:translate-y-full lg:translate-x-full"
+        x-trap.noscroll.inert="$store.modals.quickViewDrawer.open"
+        class="relative w-full h-[90vh] lg:max-w-[var(--quick-view-max-width)] lg:h-full bg-scheme-background text-scheme-text ml-auto overflow-hidden"
+        id="quick-view-drawer-slot"
+        role="dialog"
+        aria-modal="true"
+        :aria-label="getModalLabel('quickViewDrawer', $el)"
+        tabindex="-1"
+      ></div>
+    </div>
+  </template>
+</aside>

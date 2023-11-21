@@ -1,0 +1,190 @@
+{%- liquid
+  assign section_color = section.settings.color_scheme
+  assign text_align = section.settings.text_alignment
+
+  if collection.image and section.settings.show_collection_image
+    assign has_image = true
+  endif
+
+  # Calculate sizes
+
+  if settings.enable_sidebar
+    assign sidebar_width = 100.00 | divided_by: 12 | times: settings.sidebar_width_on_desktop | round: 2
+    assign desktop_sizes_base = 100 | minus: sidebar_width
+  else
+    assign desktop_sizes_base = 100
+  endif
+
+  assign desktop_sizes_css_base = desktop_sizes_base | append: 'vw'
+
+  if settings.enable_max_site_width and section.settings.enable_full_bleed == false
+    assign desktop_sizes_css_base = 'min(' | append: settings.max_site_width | append: 'px, ' | append: desktop_sizes_base | append: 'vw)'
+  endif
+
+  assign mobile_sizes = '100vw'
+
+  if has_image and section.settings.enable_full_bleed
+    assign desktop_sizes = desktop_sizes_css_base
+  else
+    assign desktop_sizes = 'calc(' | append: desktop_sizes_css_base | append: ' * 0.8)'
+  endif
+
+  assign sizes = '(min-width: 990px) ' | append: desktop_sizes | append: ', ' | append: mobile_sizes
+
+  if section.settings.show_collection_description and collection.description != blank
+    assign has_description = true
+  endif
+-%}
+
+<section
+  class="section-container"
+  data-color-scheme="{{ section_color }}"
+  style="--top-spacing-adjust: {{ section.settings.space_above }}; --bottom-spacing-adjust: {{ section.settings.space_below }};"
+>
+  <div class="text-scheme-text bg-scheme-background pt-top-section-vertical-spacing pb-bottom-section-vertical-spacing">
+    <div class="space-y-half-section-vertical-spacing">
+      {% if has_image %}
+        <div
+          {% unless section.settings.enable_full_bleed %}
+            class="wrapper"
+          {% endunless %}
+        >
+          {%- liquid
+            assign media_class = 'track-loaded'
+            if section.settings.collection_image_aspect_ratio != 'natural'
+              assign media_wrapper_classes = media_wrapper_classes | append: ' aspect-css-var'
+              assign media_wrapper_attrs = 'style="--ratio: ' | append: section.settings.collection_image_aspect_ratio | append: ';"'
+              assign media_class = media_class | append: ' absolute inset-0 w-full h-full object-cover'
+            endif
+          -%}
+          <div class="relative {{ media_wrapper_classes }}" {{ media_wrapper_attrs }}>
+          {{ collection.image | image_url: width: 3000 | image_tag: loading: 'lazy', sizes: sizes, class: media_class }}
+          </div>
+        </div>
+      {% endif %}
+
+      <div class="wrapper">
+        {%- if section.settings.show_top_border -%}
+          <hr class="border-t-theme border-scheme-border mb-half-section-vertical-spacing">
+        {%- endif -%}
+
+        <div class="grid lg:grid-cols-12 gap-theme">
+          {% if section.settings.show_collection_title %}
+            <div class="lg:col-span-section-title min-w-0">
+              <h2 class="font-heading text-heading-feature break-words">
+                {{ collection.title }}
+              </h2>
+            </div>
+          {% endif %}
+
+          {%- if has_description -%}
+            <div class="col-span-full lg:col-end-[-1] lg:col-span-section-content flex min-w-0 {{ text_align }}">
+              <div class="w-full">
+                <div class="space-y-2  text-base">
+                  {{ collection.description }}
+                </div>
+              </div>
+            </div>
+          {%- endif -%}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Collection banner",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_collection_title",
+      "label": "Show collection title",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_collection_description",
+      "label": "Show collection description",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Collection image"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_collection_image",
+      "label": "Show collection image"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_full_bleed",
+      "label": "Enable full bleed",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "collection_image_aspect_ratio",
+      "label": "Crop",
+      "options": [
+        {
+          "value": "natural",
+          "label": "Natural"
+        },
+        {
+          "value": "1.333",
+          "label": "Landscape (4:3)"
+        },
+        {
+          "value": "1.778",
+          "label": "Widescreen (16:9)"
+        },
+        {
+          "value": "2.35",
+          "label": "Cinematic (2.35:1)"
+        },
+        {
+          "value": "3.5",
+          "label": "Ultrawide (3.5:1)"
+        }
+      ],
+      "default": "natural"
+    },
+    {
+      "type": "header",
+      "content": "Color"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "default": "scheme_1",
+      "label": "Color scheme"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "space_above",
+      "min": 0,
+      "max": 2,
+      "step": 0.5,
+      "unit": "x",
+      "label": "Above",
+      "default": 1
+    },
+    {
+      "type": "range",
+      "id": "space_below",
+      "min": 0,
+      "max": 2,
+      "step": 0.5,
+      "unit": "x",
+      "label": "Below",
+      "default": 1
+    }
+  ]
+}
+{% endschema %}

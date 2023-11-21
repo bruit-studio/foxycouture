@@ -1,0 +1,124 @@
+{%- liquid
+  assign media_class = 'tile-media track-loaded transition duration-300 scale-100 group-hover:scale-103'
+  assign labels_display = section.settings.labels_display | default: 'below_media'
+  assign media_fill_space = true
+  if section.settings.labels_show_titles_and_captions != nil
+    assign show_title = section.settings.labels_show_titles_and_captions
+  endif
+  if section.settings.media_fill_space != nil
+    assign media_fill_space = section.settings.media_fill_space
+  endif
+
+  if article
+    assign article_title = article.title
+    assign article_author = article.author
+    assign article_date = article.published_at
+    if article.excerpt.size > 0
+      assign article_excerpt = article.excerpt | strip_html
+    else
+      assign article_excerpt = article.content | strip_html | truncatewords: 10
+    endif
+  else
+    assign article_title = 'sections.onboarding.blog_title' | t
+    assign article_author = 'sections.onboarding.blog_author' | t
+    assign article_date = 'now'
+    assign article_excerpt = 'sections.onboarding.blog_excerpt' | t
+  endif
+
+  if media_classes != blank
+    assign media_class = media_class | append: ' ' | append: media_classes
+  endif
+  assign media_wrapper_aspect_ratio = media_wrapper_aspect_ratio | default: 'natural'
+  assign content_wrapper_classes = content_wrapper_classes | default: 'mt-2'
+
+  assign media_fit = 'object-cover'
+  if media_fill_space == true or media_fill_space == false
+    if media_fill_space
+      assign media_fit = 'object-cover'
+    else
+      assign media_fit = 'object-contain'
+    endif
+  endif
+
+
+  if media_wrapper_aspect_ratio != 'natural'
+    assign media_wrapper_classes = media_wrapper_classes | append: ' aspect-css-var'
+    assign media_wrapper_attrs = media_wrapper_attrs | append: ' style="--ratio: ' | append: media_wrapper_aspect_ratio | append: ';"'
+    assign media_class = media_class | append: ' absolute inset-0 w-full h-full ' | append: media_fit
+  endif
+
+  unless labels_display
+    assign labels_display = 'below_media'
+  endunless
+
+  unless tag
+    assign tag = 'li'
+  endunless
+
+  unless sizes
+    assign sizes = '(min-width: 990px) 33vw, 50vw'
+  endunless
+-%}
+
+<{{ tag }}
+  class="relative group {% if class != blank %}{{ class }}{% endif %}"
+  {% if attributes %}
+    {{ attributes }}
+  {% endif %}
+  x-data='ThemeTile()'
+>
+  <a
+    class="tile-link absolute inset-0 z-10 group"
+    href="{{ article.url }}"
+    aria-labelledby="Section-{{ section.id }}-Article-{{ article.id }}-label"
+    {%- if labels_display == 'text_overlay_on_hover' or labels_display == 'follow_mouse_on_hover' -%}
+    x-ref="tileLink"
+    x-on:mouseenter="showLabel" x-on:mouseleave="hideLabel"
+    x-on:focus="showLabel" x-on:blur="hideLabel"
+    @keyup.escape="hideLabel"
+    {%- endif -%}
+  >
+    <span class="sr-only">{{ article.title }}</span>
+
+  </a>
+
+  {%- if article.image -%}
+  <div class="tile-media-wrapper rounded-media overflow-hidden relative {{ media_wrapper_classes }}" {{ media_wrapper_attrs }}>
+    {{ article.image | image_url: width: 2000 | image_tag: class: media_class, loading: 'lazy', sizes: sizes }}
+  </div>
+  {%- endif -%}
+
+  <div class="tile-content-wrapper {{ content_wrapper_classes }} space-y-2" id="Section-{{ section.id }}-Article-{{ article.id }}-label">
+
+    {% if show_title %}
+    <div class="{{ title_font }} break-words" aria-hidden="true">
+      {{ article_title }}
+    </div>
+    {% endif %}
+
+    {% if show_author or show_date %}
+      <p class="text-scheme-secondary">
+        {%- if show_author -%}
+          {{- 'blogs.article.by_author' | t: author: article_author -}}
+          <br/>
+        {%- endif -%}
+        {%- if show_date -%}
+          {{ article_date | time_tag: format: 'month_day_year' }}
+        {%- endif -%}
+      </p>
+    {% endif %}
+
+    {% if show_excerpt %}
+      <div>
+        {{ article_excerpt }}
+      </div>
+    {% endif %}
+
+  </div>
+
+
+  {% unless request.design_mode %}
+    <script src="{{ 'tile.js' | asset_url }}" type="module"></script>
+  {% endunless %}
+
+</{{ tag }}>

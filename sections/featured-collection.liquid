@@ -1,0 +1,457 @@
+{%- liquid
+  if section.settings.collection.all_products_count > section.settings.products_to_show
+    assign more_in_collection = true
+  endif
+-%}
+
+{%- if section.settings.show_view_all -%}
+{%- capture view_all_button -%}
+<a
+  href="{{ section.settings.collection.url }}"
+  class="btn"
+  aria-label="{{ 'collections.general.view_all_label' | t: collection_name: section.settings.collection.title }}"
+>
+  {{ 'collections.general.view_all' | t }}
+</a>
+{%- endcapture -%}
+{%- endif -%}
+
+<section
+  id="section-{{ section.id }}"
+  x-data="{ labelContent: '', focusVisible: false  }"
+  class="section-container"
+  data-color-scheme="{{ section.settings.color_scheme }}"
+  style="--section-grid-cols-mobile: {{ section.settings.mobile_columns }}; --section-grid-cols-desktop: {{ section.settings.desktop_columns }}; --top-spacing-adjust: {{ section.settings.space_above }}; --bottom-spacing-adjust: {{ section.settings.space_below }};"
+>
+  <div class="text-scheme-text bg-scheme-background pt-top-section-vertical-spacing pb-bottom-section-vertical-spacing">
+    {%- liquid
+      if section.settings.title != blank
+        render 'section-title-horizontal', title: section.settings.title, view_all_button: view_all_button
+      endif
+
+      case section.settings.grid_type
+        when 'standard'
+          render 'grid-standard', products: section.settings.collection.products, content_source: 'collection'
+        when 'masonry'
+          render 'grid-masonry', products: section.settings.collection.products, content_source: 'collection'
+        when 'justified'
+          render 'grid-justified', products: section.settings.collection.products, content_source: 'collection', max_items: section.settings.products_to_show
+        when 'modular'
+          render 'grid-modular', products: section.settings.collection.products, content_source: 'collection'
+        when 'irregular'
+          render 'grid-irregular', products: section.settings.collection.products, content_source: 'collection'
+      endcase
+    -%}
+
+    {%- if section.settings.show_view_all and more_in_collection and section.settings.title == blank %}
+    <div class="wrapper mt-half-section-vertical-spacing flex justify-end">
+      {{ view_all_button }}
+    </div>
+    {%- endif -%}
+
+  </div>
+
+  {%- liquid
+    if section.settings.labels_display == 'text_overlay_on_hover' or section.settings.labels_display == 'follow_mouse_on_hover'
+      render 'overlay-labels' with section.settings.labels_display as labels_display
+    endif
+  -%}
+</section>
+
+{%- unless section.settings.quick_view == 'disabled' -%}
+  {%- render 'product-quick-view-scripts' -%}
+{%- endunless -%}
+
+{% schema %}
+{
+  "name": "Featured collection",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Featured collection"
+    },
+    {
+      "id": "collection",
+      "type": "collection",
+      "label": "Collection"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "min": 2,
+      "max": 25,
+      "step": 1,
+      "default": 12,
+      "label": "Maximum products to show"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_view_all",
+      "label": "Enable \"View all\" if collection has more products than shown"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "grid_type",
+      "label": "Grid type",
+      "options": [
+        {
+          "value": "standard",
+          "label": "Standard"
+        },
+        {
+          "value": "masonry",
+          "label": "Masonry"
+        },
+        {
+          "value": "justified",
+          "label": "Justified"
+        },
+        {
+          "value": "modular",
+          "label": "Modular"
+        },
+        {
+          "value": "irregular",
+          "label": "Irregular"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "mobile_columns",
+      "label": "Mobile columns",
+      "options": [
+        {
+          "value": "1",
+          "label": "1 column"
+        },
+        {
+          "value": "2",
+          "label": "2 columns"
+        }
+      ],
+      "default": "1"
+    },
+    {
+      "type": "range",
+      "id": "desktop_columns",
+      "min": 1,
+      "max": 6,
+      "step": 1,
+      "label": "Number of columns on desktop",
+      "default": 5,
+      "info": "This setting does not apply if grid type is set to 'Modular' or 'Irregular'."
+    },
+    {
+      "type": "header",
+      "content": "Standard"
+    },
+    {
+      "type": "select",
+      "id": "standard_layout_align_items",
+      "label": "Alignment of items",
+      "options": [
+        {
+          "value": "items-start",
+          "label": "Top"
+        },
+        {
+          "value": "items-baseline",
+          "label": "Baseline"
+        },
+        {
+          "value": "items-center",
+          "label": "Center"
+        },
+        {
+          "value": "items-end",
+          "label": "Bottom"
+        }
+      ],
+      "default": "items-start"
+    },
+    {
+      "type": "header",
+      "content": "Modular"
+    },
+    {
+      "type": "range",
+      "id": "modular_layout_variation",
+      "min": 1,
+      "max": 12,
+      "step": 1,
+      "label": "Layout variation",
+      "default": 1
+    },
+    {
+      "type": "range",
+      "id": "modular_grid_item_aspect_ratio",
+      "min": 0.5,
+      "max": 1.8,
+      "step": 0.1,
+      "unit": ":1",
+      "label": "Grid base aspect ratio",
+      "default": 1,
+      "info": "Wide to tall"
+    },
+    {
+      "type": "header",
+      "content": "Irregular"
+    },
+    {
+      "type": "range",
+      "id": "irregular_layout_variation",
+      "min": 1,
+      "max": 15,
+      "step": 1,
+      "label": "Layout variation",
+      "default": 1
+    },
+    {
+      "type": "select",
+      "id": "irregular_alignment_of_items",
+      "label": "Alignment of items",
+      "options": [
+        {
+          "value": "items-top justify-start",
+          "label": "Top left"
+        },
+        {
+          "value": "items-top justify-center",
+          "label": "Top center"
+        },
+        {
+          "value": "items-top justify-end",
+          "label": "Top right"
+        },
+        {
+          "value": "items-top justify-between",
+          "label": "Top justified"
+        },
+        {
+          "value": "items-center justify-start",
+          "label": "Center left"
+        },
+        {
+          "value": "items-center justify-center",
+          "label": "Center"
+        },
+        {
+          "value": "items-center justify-end",
+          "label": "Center right"
+        },
+        {
+          "value": "items-center justify-between",
+          "label": "Center justified"
+        },
+        {
+          "value": "items-end justify-start",
+          "label": "Bottom left"
+        },
+        {
+          "value": "items-end justify-center",
+          "label": "Bottom center"
+        },
+        {
+          "value": "items-end justify-end",
+          "label": "Bottom right"
+        },
+        {
+          "value": "items-end justify-between",
+          "label": "Bottom justified"
+        }
+      ],
+      "default": "items-center justify-center"
+    },
+    {
+      "type": "header",
+      "content": "Media"
+    },
+    {
+      "type": "paragraph",
+      "content": "These settings only apply if grid type is set to 'Standard' or 'Irregular'."
+    },
+    {
+      "type": "select",
+      "id": "media_aspect_ratio",
+      "label": "Aspect ratio",
+      "options": [
+        {
+          "value": "natural",
+          "label": "Natural"
+        },
+        {
+          "value": "1",
+          "label": "Square (1:1)"
+        },
+        {
+          "value": "1.333",
+          "label": "Landscape (4:3)"
+        },
+        {
+          "value": "0.6667",
+          "label": "Portrait (2:3)"
+        },
+        {
+          "value": "1.778",
+          "label": "Widescreen (16:9)"
+        }
+      ],
+      "default": "natural"
+    },
+    {
+      "type": "checkbox",
+      "id": "media_fill_space",
+      "label": "Maximize size",
+      "default": false,
+      "info": "No effect when aspect ratio is set to 'Natural'."
+    },
+    {
+      "type": "header",
+      "content": "Labels"
+    },
+    {
+      "type": "checkbox",
+      "id": "labels_show_titles_and_captions",
+      "label": "Show titles",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "labels_show_product_prices",
+      "label": "Show prices",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "labels_display",
+      "label": "Display",
+      "options": [
+        {
+          "value": "below_media",
+          "label": "Below media"
+        },
+        {
+          "value": "text_overlay_on_hover",
+          "label": "Text overlay on hover"
+        },
+        {
+          "value": "follow_mouse_on_hover",
+          "label": "Follow mouse on hover"
+        }
+      ],
+      "default": "below_media",
+      "info": "Customise overlay labels in [theme settings](/editor?context=theme&category=overlay+labels)."
+    },
+    {
+      "type": "checkbox",
+      "id": "labels_show_product_vendor",
+      "label": "Show vendor",
+      "default": false,
+      "info": "Only enabled if Display is set to 'Below media'"
+    },
+    {
+      "type": "checkbox",
+      "id": "labels_always_show_on_mobile",
+      "label": "Always show labels on mobile",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Product tiles"
+    },
+    {
+      "type": "select",
+      "id": "quick_view",
+      "label": "Quick view",
+      "options": [
+        {
+          "value": "disabled",
+          "label": "Disabled"
+        },
+        {
+          "value": "enabled_on_desktop",
+          "label": "Enabled on desktop"
+        },
+        {
+          "value": "enabled_on_desktop_and_mobile",
+          "label": "Enabled on desktop and mobile"
+        }
+      ],
+      "default": "disabled"
+    },
+    {
+      "type": "header",
+      "content": "Color"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "default": "scheme_1",
+      "label": "Color scheme"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "space_above",
+      "min": 0,
+      "max": 2,
+      "step": 0.5,
+      "unit": "x",
+      "label": "Above",
+      "default": 1
+    },
+    {
+      "type": "range",
+      "id": "space_below",
+      "min": 0,
+      "max": 2,
+      "step": 0.5,
+      "unit": "x",
+      "label": "Below",
+      "default": 1
+    },
+    {
+      "type": "checkbox",
+      "id": "disable_left_and_right_margins",
+      "label": "Disable left and right margins",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "remove_grid_gaps",
+      "label": "Remove grid gaps",
+      "default": false
+    }
+  ],
+  "presets": [
+    {
+      "name": "Featured collection",
+      "settings": {
+        "products_to_show": 6,
+        "grid_type": "standard",
+        "mobile_columns": "2",
+        "desktop_columns": 3,
+        "labels_show_product_prices": true
+      }
+    }
+  ],
+  "disabled_on": {
+    "groups": [
+      "aside",
+      "header",
+      "footer",
+      "custom.hero"
+    ]
+  }
+}
+{% endschema %}

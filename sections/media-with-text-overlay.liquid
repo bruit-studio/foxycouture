@@ -1,0 +1,555 @@
+{%- liquid
+  assign section_color = section.settings.color_scheme
+  assign content_width_on_desktop = section.settings.content_width_on_desktop | plus: 0
+-%}
+
+{% style %}
+  #{{ section.id }} {
+    --total-gutter-size: calc(var(--theme-col-gap-desktop) * 11);
+    --column-size: calc((100% - var(--total-gutter-size)) / 12);
+    --content-size: calc(var(--column-size) * {{ content_width_on_desktop }} + var(--theme-col-gap-desktop) * {{ content_width_on_desktop | minus: 1 }});
+  }
+
+  #{{ section.id }} .media-overlay-container {
+    
+    {%- if section.settings.aspect_ratio_mobile == 'full-screen' -%}
+      height: 100vh;
+    {%- else %}
+    aspect-ratio: {{ section.settings.aspect_ratio_mobile }};
+    {%- endif %}
+  }
+
+  {%- if section.settings.aspect_ratio_desktop != 'same' -%}
+  @media (min-width: 990px) {
+    #{{ section.id }} .media-overlay-container {
+      {%- if section.settings.aspect_ratio_desktop == 'full-screen' -%}
+      height: 100vh;
+      {%- else %}
+      height: auto;
+      aspect-ratio: {{ section.settings.aspect_ratio_desktop }};
+      {%- endif %}
+    }
+
+    #{{ section.id }} .overlay-content {
+      width: var(--content-size);
+    }
+  }
+  {%- endif -%}
+{% endstyle %}
+
+<section id="{{ section.id }}" class="section-container text-scheme-text bg-scheme-background {% unless section.settings.enable_full_bleed %}py-section-vertical-spacing{% endunless %}" data-color-scheme="{{ section_color }}">
+{%- unless section.settings.enable_full_bleed -%}
+<div class="wrapper">
+{%- endunless -%}
+<div class="media-overlay-container relative w-full">
+  {%- if section.settings.cta_link != blank and section.settings.cta_label == blank -%}
+    <a href="{{ section.settings.cta_link }}" class="absolute inset-0 z-10"></a>
+  {%- endif -%}
+  {%- for block in section.blocks -%}
+    {%- case block.type -%}
+      {%- when 'image' -%}
+        {%- unless block.settings.image_mobile == blank and block.settings.image == blank -%}
+        {%- liquid
+          assign image_class = 'track-loaded absolute inset-0 object-cover w-full h-full'
+          if block.settings.image_mobile != blank
+            assign image_class = image_class | append: ' hidden lg:block'
+            assign mobile_class = 'track-loaded absolute inset-0 object-cover w-full h-full lg:hidden'
+          endif
+        -%}
+        {%- if block.settings.image_mobile -%}
+          {{ block.settings.image_mobile | image_url: width: 1000 | image_tag: class: mobile_class, loading: 'lazy' }}
+        {%- endif -%}
+        {{ block.settings.image | image_url: width: 2000 | image_tag: class: image_class, loading: 'lazy' }}
+        {%- else -%}
+        {{ 'lifestyle-1' | placeholder_svg_tag: 'absolute inset-0 object-cover w-full h-full tile-placeholder-svg bg-scheme-placeholder-background text-scheme-placeholder-foreground fill-current' }}
+        {%- endunless -%}
+      {%- when 'video' -%}
+        {%- if block.settings.video != blank -%}
+        {{
+          block.settings.video
+          | video_tag:
+            autoplay: true,
+            image_size: '2048x',
+            loop: true,
+            controls: false,
+            preload: 'none',
+            class: ' absolute inset-0 w-full h-full object-cover',
+            muted: true,
+            id: section.id
+        }}
+        {%- else -%}
+        <video autoplay muted class="w-full h-full absolute inset-0 object-cover">
+          <source src="{{ 'placeholder-video.mp4' | asset_url }}" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+        {%- endif -%}
+      {%- when 'color_overlay' -%}
+        {%- if block.settings.enable_custom_color -%}
+          {% style %}
+          #ColorOverlay-{{ block.id }} {
+            background-color: {{ block.settings.custom_overlay_color }};
+          }
+          {% endstyle %}
+        {%- endif -%}
+        <div id="ColorOverlay-{{ block.id }}" class="absolute inset-0 w-full h-full {{ block.settings.overlay_color }}"  data-color-scheme="{{ block.settings.color_scheme }}" style="opacity: {{ block.settings.opacity }}%; mix-blend-mode: {{ block.settings.blend_mode }};">
+        </div>
+    {%- endcase -%}
+  {%- endfor -%}
+  <div class="overflow-hidden content inset-0 absolute w-full h-full {{ section.settings.text_align }}">
+    <div class="p-wrapper-left-and-right-margin h-full w-full">
+      <div class="h-full w-full flex min-w-0 break-words {{ section.settings.content_position }}">
+        <div class="overlay-content no-m-first min-w-0">
+          {% if section.settings.title != blank %}
+            <div>
+              <h2 class="font-heading {{ section.settings.heading_size }} break-words">
+                {{ section.settings.title | strip }}
+              </h2>
+            </div>
+            {% endif %}
+
+            {% if section.settings.richtext != blank %}
+              <div class="rte break-words mt-4">
+                {{ section.settings.richtext }}
+              </div>
+            {%- endif -%}
+            
+            {% if section.settings.cta_link != blank and section.settings.cta_label != blank %}
+              <div class="mt-8">
+                <a class="btn {{ section.settings.button_style }}" href="{{ section.settings.cta_link }}">
+                  {{ section.settings.cta_label }}
+                </a>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+    </div>
+  </div>
+</div>
+{%- unless section.settings.enable_full_bleed -%}
+</div>
+{%- endunless -%}
+</section>
+
+{% schema %}
+{
+  "name": "Media with text overlay",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_full_bleed",
+      "label": "Enable full bleed",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "aspect_ratio_mobile",
+      "label": "Aspect ratio - mobile",
+      "options": [
+        {
+          "value": "0.66",
+          "label": "Portrait (2:3)"
+        },
+        {
+          "value": "1",
+          "label": "Square (1:1)"
+        },
+        {
+          "value": "1.33",
+          "label": "Landscape (4:3)"
+        },
+        {
+          "value": "full-screen",
+          "label": "Full screen"
+        }
+      ],
+      "default": "full-screen"
+    },
+    {
+      "type": "select",
+      "id": "aspect_ratio_desktop",
+      "label": "Aspect ratio – desktop:",
+      "options": [
+        {
+          "value": "same",
+          "label": "Same as mobile"
+        },
+        {
+          "value": "1.33",
+          "label": "Classic (4:3)"
+        },
+        {
+          "value": "1.78",
+          "label": "Widescreen (16:9)"
+        },
+        {
+          "value": "2.35",
+          "label": "Cinematic (2.35:1)"
+        },
+        {
+          "value": "full-screen",
+          "label": "Full screen"
+        }
+      ],
+      "default": "same"
+    },
+    {
+      "type": "select",
+      "id": "content_position",
+      "label": "Content position",
+      "options": [
+        {
+          "value": "justify-start items-start",
+          "label": "Top left"
+        },
+        {
+          "value": "justify-center items-start",
+          "label": "Top center"
+        },
+        {
+          "value": "justify-end items-start",
+          "label": "Top right"
+        },
+        {
+          "value": "justify-start items-center",
+          "label": "Left"
+        },
+        {
+          "value": "justify-center items-center",
+          "label": "Center"
+        },
+        {
+          "value": "justify-end items-center",
+          "label": "Right"
+        },
+        {
+          "value": "justify-start items-end",
+          "label": "Bottom left"
+        },
+        {
+          "value": "justify-center items-end",
+          "label": "Bottom center"
+        },
+        {
+          "value": "justify-end items-end",
+          "label": "Bottom right"
+        }
+      ],
+      "default": "justify-center items-center"
+    },
+    {
+      "type": "select",
+      "id": "text_align",
+      "label": "Text alignment",
+      "options": [
+        {
+          "value": "text-left",
+          "label": "Left"
+        },
+        {
+          "value": "text-center",
+          "label": "Center"
+        },
+        {
+          "value": "text-right",
+          "label": "Right"
+        }
+      ],
+      "default": "text-center"
+    },
+    {
+      "type": "select",
+      "id": "content_width_on_desktop",
+      "label": "Content width on desktop",
+      "options": [
+        {
+          "value": "4",
+          "label": "One third"
+        },
+        {
+          "value": "6",
+          "label": "One half"
+        },
+        {
+          "value": "8",
+          "label": "Two thirds"
+        },
+        {
+          "value": "12",
+          "label": "Full width"
+        }
+      ],
+      "default": "4"
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Media with text overlay"
+    },
+    {
+      "type": "radio",
+      "id": "heading_size",
+      "label": "Heading font size",
+      "options": [
+        {
+          "value": "text-heading-feature",
+          "label": "Feature"
+        },
+        {
+          "value": "text-heading-standard",
+          "label": "Standard"
+        },
+        {
+          "value": "text-heading-secondary",
+          "label": "Secondary"
+        }
+      ],
+      "default": "text-heading-feature"
+    },
+    {
+      "type": "richtext",
+      "id": "richtext",
+      "label": "Text",
+      "default": "<p>Use this text to share information about your brand with your customers.</p>"
+    },
+    {
+      "type": "header",
+      "content": "Call to action"
+    },
+    {
+      "type": "url",
+      "id": "cta_link",
+      "label": "Link"
+    },
+    {
+      "type": "text",
+      "id": "cta_label",
+      "label": "Label"
+    },
+    {
+      "type": "radio",
+      "id": "button_style",
+      "label": "Button style",
+      "options": [
+        {
+          "value": "",
+          "label": "Outline"
+        },
+        {
+          "value": "btn--solid",
+          "label": "Solid"
+        }
+      ],
+      "default": ""
+    },
+    {
+      "type": "header",
+      "content": "Color"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "default": "scheme_1",
+      "label": "Color scheme"
+    }
+  ],
+  "blocks": [
+    {
+      "name": "Image",
+      "type": "image",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_mobile",
+          "label": "Mobile image"
+        }
+      ]
+    },
+    {
+      "name": "Video",
+      "type": "video",
+      "settings": [
+        {
+          "type": "video",
+          "id": "video",
+          "label": "Video"
+        }
+      ]
+    },
+    {
+      "name": "Color overlay",
+      "type": "color_overlay",
+      "settings": [
+        {
+          "type": "header",
+          "content": "Color"
+        },
+        {
+          "type": "header",
+          "content": "Color"
+        },
+        {
+          "type": "color_scheme",
+          "id": "color_scheme",
+          "default": "scheme_1",
+          "label": "Color scheme"
+        },
+        {
+          "type": "select",
+          "id": "overlay_color",
+          "label": "Overlay color",
+          "options": [
+            {
+              "value": "bg-scheme-background",
+              "label": "Scheme background"
+            },
+            {
+              "value": "bg-scheme-text",
+              "label": "Scheme text"
+            },
+            {
+              "value": "bg-scheme-accent",
+              "label": "Scheme accent"
+            }
+          ]
+        },
+        {
+          "type": "header",
+          "content": "Custom color"
+        },
+        {
+          "type": "checkbox",
+          "id": "enable_custom_color",
+          "label": "Enable custom color",
+          "default": false
+        },
+        {
+          "type": "color",
+          "id": "custom_overlay_color",
+          "label": "Custom color",
+          "default": "#FFFFFF"
+        },
+        {
+          "type": "header",
+          "content": "Effects"
+        },
+        {
+          "id": "opacity",
+          "type": "range",
+          "label": "Opacity",
+          "min": 1,
+          "max": 100,
+          "step": 1,
+          "default": 80
+        },
+        {
+          "type": "select",
+          "id": "blend_mode",
+          "label": "Blend mode",
+          "default": "normal",
+          "options": [
+            {
+              "value": "normal",
+              "label": "Normal"
+            },
+            {
+              "value": "multiply",
+              "label": "Multiply"
+            },
+            {
+              "value": "screen",
+              "label": "Screen"
+            },
+            {
+              "value": "overlay",
+              "label": "Overlay"
+            },
+            {
+              "value": "darken",
+              "label": "Darken"
+            },
+            {
+              "value": "lighten",
+              "label": "Lighten"
+            },
+            {
+              "value": "color-dodge",
+              "label": "Color dodge"
+            },
+            {
+              "value": "color-burn",
+              "label": "Color burn"
+            },
+            {
+              "value": "hard-light",
+              "label": "Hard light"
+            },
+            {
+              "value": "soft-light",
+              "label": "Soft light"
+            },
+            {
+              "value": "difference",
+              "label": "Difference"
+            },
+            {
+              "value": "exclusion",
+              "label": "Exclusion"
+            },
+            {
+              "value": "hue",
+              "label": "Hue"
+            },
+            {
+              "value": "saturation",
+              "label": "Saturation"
+            },
+            {
+              "value": "color",
+              "label": "Color"
+            },
+            {
+              "value": "luminosity",
+              "label": "Luminosity"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Media with text overlay",
+      "blocks": [
+        {
+          "type": "image"
+        },
+        {
+          "type": "color_overlay"
+        }
+      ]
+    }
+  ],
+  "disabled_on": {
+    "groups": [
+      "aside",
+      "header",
+      "footer",
+      "custom.hero"
+    ]
+  }
+}
+{% endschema %}

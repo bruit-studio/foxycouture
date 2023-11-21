@@ -1,0 +1,78 @@
+{%- comment -%}
+Variables:
+tag
+logo_max_width
+liquid
+text_classes
+link
+link_classes
+{%- endcomment -%}
+{%- liquid
+  assign logo = settings.logo
+  assign liquid = settings.logo_liquid
+  unless tag
+    if request.page_type == 'index'
+      assign tag = 'h1'
+    else
+      assign tag = 'span'
+    endif
+  endunless
+
+  unless max_width_unit
+    assign max_width_unit = 'px'
+  endunless
+
+  assign max_width_with_units = logo_max_width | append: max_width_unit
+  assign logo_alt = logo.alt | default: shop.name | escape
+
+  assign has_logo_alternate = false
+  assign logo_alternate = settings.logo_alternate
+  if logo_alternate != blank
+    assign has_logo_alternate = true
+  endif
+-%}
+<{{ tag }} class="font-heading break-words block">
+  {%- if link -%}
+  <a href="{{ link }}" class="{{ link_classes }}">
+  {%- endif -%}
+    {%- if liquid != blank -%}
+      {%- style -%}
+      #{{ logo_id }}-svg-logo > svg { 
+        width: 100%;
+        height: 100%;
+      }
+
+      #{{ logo_id }}-svg-logo > svg path {
+        fill: currentColor;
+      }
+      {%- endstyle -%}
+      <div id="{{ logo_id }}-svg-logo" class="svg-logo" style="max-width: {{ max_width_with_units }}">
+        {{ liquid }}
+      </div>
+    {%- elsif logo != blank -%}
+      <div class="{% if has_logo_alternate %}logo-has-alternate{% endif %}" style="max-width: {{ max_width_with_units }}">
+        {%- assign logo_alt = logo.alt | default: shop.name | escape -%}
+        {{ logo | image_url: width: 1000 | image_tag:
+          class: 'site-title-logo-image logo-default',
+          width: logo.width,
+          alt: logo_alt,
+          preload: true,
+          sizes: max_width_with_units
+        }}
+        {%- if logo_alternate != blank -%}
+        {{ logo_alternate | image_url: width: 1000 | image_tag:
+          class: 'site-title-logo-image logo-alternate',
+          width: logo_alternate.width,
+          alt: logo_alt,
+          preload: true,
+          sizes: max_width_with_units
+        }}
+        {%- endif -%}
+      </div>
+    {%- else -%}
+      <span class="{{ settings.site_title_font }}">{{ shop.name }}</span>
+    {%- endif -%}
+  {%- if link -%}
+  </a>
+  {%- endif -%}
+</{{ tag }}>

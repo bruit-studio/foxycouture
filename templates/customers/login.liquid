@@ -1,0 +1,179 @@
+{%- style -%}
+#customer-login #recover {
+  display: none;
+}
+
+#customer-login #login {
+  display: block;
+}
+
+#customer-login #recover:target {
+  display: block;
+}
+
+#customer-login #recover:target ~ #login {
+  display: none;
+}
+{%- endstyle -%}
+<section id="customer-login" class="section-container" data-color-scheme="primary">
+  <div class="text-scheme-text bg-scheme-background py-section-vertical-spacing">
+    <div class="wrapper">
+      
+      <div class="grid gap-theme max-w-[16rem] mx-auto">
+  
+
+        <div>
+
+          <div id="recover">
+            <h1 class="font-heading text-heading-secondary break-words text-center"> {{ 'customer.recover_password.title' | t }}</h1>
+            <div class='mt-8'>
+              <p class="text-center">
+                {{ 'customer.recover_password.subtext' | t }}
+              </p>
+              
+              
+              {%- form 'recover_customer_password' -%}
+                <div class="space-y-4 mt-8">
+                  {% assign recover_success = form.posted_successfully? %}
+                  <div class="field">
+                    <label class="block" for="RecoverEmail">
+                      {{ 'customer.login_page.email' | t }}
+                    </label>
+                    <input
+                      class="block w-full border-scheme-text mt-2"
+                      type="email"
+                      value=""
+                      name="email"
+                      id="RecoverEmail"
+                      autocorrect="off"
+                      autocapitalize="off"
+                      autocomplete="email"
+                      {% if form.errors %}
+                        aria-invalid="true"
+                        aria-describedby="RecoverEmail-email-error"
+                        autofocus
+                      {% endif %}
+                      placeholder="{{ 'customer.login_page.email' | t }}"
+                    >
+                    
+                  </div>
+                  {%- if form.errors -%}
+                    <small id="RecoverEmail-email-error" class="form__message">
+                      <span class="inline-block w-4 h-4 shrink-0">{%- render 'icon-error' -%}</span>
+                      {{ form.errors.messages.form }}
+                    </small>
+                  {%- endif -%}
+                </div>
+
+                <div class="mt-4 text-center">
+                  <button class="btn btn--solid block w-full">
+                    {{ 'customer.login_page.submit' | t }}
+                  </button>
+            
+                  <a class="inline-block mt-4 theme-link" href="#login">
+                    {{ 'customer.login_page.cancel' | t }}
+                  </a>
+                </div>
+              {%- endform -%}
+            </div>
+          </div>
+        
+          <div id="login">
+
+            <h1 class="font-heading text-heading-secondary break-words text-center">{{ 'customer.login_page.title' | t }}</h1>
+            {{ form.errors | default_errors }}
+            {%- if recover_success == true -%}
+              <h3 class="form__message" tabindex="-1" autofocus>
+                <span class="inline-block w-4 h-4 shrink-0">{%- render 'icon-check' -%}</span>
+                <span>{{ 'customer.recover_password.success' | t }}</span>
+              </h3>
+            {%- endif -%}
+            {%- form 'customer_login', novalidate: 'novalidate' -%}
+              {%- if form.errors -%}
+                <h2 class="form__message text-scheme-accent mt-8" tabindex="-1" autofocus>
+                  <span class="sr-only">{{ 'general.accessibility.error' | t }} </span>
+                  <div class="">
+                    <span class="inline-block w-4 h-4 shrink-0">{%- render 'icon-error' -%}</span>
+                    {{ 'templates.contact.form.error_heading' | t }}
+                  </div>
+                </h2>
+                <span class="text-scheme-accent">{{ form.errors | default_errors }}</span>
+              {%- endif -%}
+              
+              <div class="space-y-4 mt-8">
+              <div class="field">
+                <label class="block" for="CustomerEmail">
+                  {{ 'customer.login_page.email' | t }}
+                </label>
+                <input
+                  class="block w-full border-scheme-text mt-2"
+                  type="email"
+                  name="customer[email]"
+                  id="CustomerEmail"
+                  autocomplete="email"
+                  autocorrect="off"
+                  autocapitalize="off"
+                  {% if form.errors contains 'form' %}
+                    aria-invalid="true"
+                  {% endif %}
+                  placeholder="{{ 'customer.login_page.email' | t }}"
+                >
+              </div>
+        
+              {%- if form.password_needed -%}
+                <div class="field">
+                  <label class="block for="CustomerPassword">
+                    {{ 'customer.login_page.password' | t }}
+                  </label>
+                  <input
+                    class="block w-full border-scheme-text mt-2"
+                    type="password"
+                    value=""
+                    name="customer[password]"
+                    id="CustomerPassword"
+                    autocomplete="current-password"
+                    {% if form.errors contains 'form' %}
+                      aria-invalid="true"
+                    {% endif %}
+                    placeholder="{{ 'customer.login_page.password' | t }}"
+                  >
+                </div>
+        
+                <a href="#recover" class="text-sm theme-link cursor-pointer">
+                  {{ 'customer.login_page.forgot_password' | t }}
+                </a>
+              {%- endif -%}
+              </div>
+              
+              <div class="mt-8 text-center">
+                <button class="btn btn--solid block w-full">
+                  {{ 'customer.login_page.sign_in' | t }}
+                </button>
+          
+                <a class="inline-block mt-4 theme-link" href="{{ routes.account_register_url }}">
+                  {{ 'customer.login_page.create_account' | t }}
+                </a>
+              </div>
+
+
+            {%- endform -%}
+          </div>
+        
+          {%- if shop.checkout.guest_login -%}
+            <div>
+              <hr>
+              <h2>{{ 'customer.login_page.guest_title' | t }}</h2>
+        
+              {%- form 'guest_login' -%}
+                <button>
+                  {{ 'customer.login_page.guest_continue' | t }}
+                </button>
+              {%- endform -%}
+            </div>
+          {%- endif -%}
+        </div>
+      </div>
+
+    </div>
+  </div>  
+</section>

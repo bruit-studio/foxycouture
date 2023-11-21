@@ -1,0 +1,286 @@
+{%- liquid
+  assign item_separator = '||__slide__||'
+  assign aspect_ratios = ''
+  assign block_attributes = ''
+  capture slides
+    case content_source
+      when 'collection'
+        for product in products limit: section.settings.products_to_show
+          assign aspect_ratios = aspect_ratios | append: product.featured_media.aspect_ratio | append: ':'
+          assign captions = captions | append: product.title | append: ':'
+          render 'tile-product', tag: 'div', product: product, tag: 'div', class: 'h-full w-full', media_wrapper_classes: 'h-full w-full relative', media_classes: 'slideshow-gallery-image h-full w-full object-cover', media_wrapper_aspect_ratio: product.featured_media.aspect_ratio, context: 'slideshow', index: forloop.index, sizes: sizes
+          echo item_separator
+        else
+          assign number_of_products_to_show = section.settings.products_to_show | default: 6
+          for i in (1..number_of_products_to_show)
+            capture aspect_ratio
+              cycle 0.8, 1.2, 0.8
+            endcapture
+            assign aspect_ratios = aspect_ratios | append: aspect_ratio | append: ':'
+            render 'tile-placeholder', tag: 'div', placeholder_index: forloop.index, type: 'product', class: 'h-full w-full', media_wrapper_classes: 'w-full h-full', placeholder_svg_classes: 'w-full h-full', media_wrapper_aspect_ratio: aspect_ratio, context: 'slideshow', index: forloop.index
+            echo item_separator
+          endfor
+        endfor
+      when 'blocks'
+        for block in section.blocks
+          assign block_attributes = block_attributes | append: block.shopify_attributes | append: '||__block-attribute-separator__||'
+          case block.type
+            when 'image'
+              assign media = block.settings.image
+              if media != blank
+                assign aspect_ratios = aspect_ratios | append: media.aspect_ratio | append: ':'
+                render 'tile-image', tag: 'div', image: block.settings.image, caption: block.settings.caption, link: block.settings.link, class: 'h-full w-full', image_class: 'slideshow-gallery-image h-full w-full object-cover', context: 'slideshow', index: forloop.index, sizes: sizes
+                echo item_separator
+                continue
+              endif
+            when 'video'
+              assign media = block.settings.video
+              if media != blank
+                assign aspect_ratios = aspect_ratios | append: media.aspect_ratio | append: ':'
+                render 'tile-video', tag: 'div', video: block.settings.video, id: block.id, playback: block.settings.playback, caption: block.settings.caption, mode: block.settings.mode, link: block.settings.link, class: 'h-full w-full', media_wrapper_classes: 'w-full h-full', media_classes: 'slideshow-gallery-image h-full w-full object-cover', context: 'slideshow', index: forloop.index, sizes: sizes
+                echo item_separator
+                continue
+              endif
+          endcase
+          if block.type == 'image'
+            capture aspect_ratio
+              cycle 0.8, 1.2, 0.8, 1.8, 0.7, 2.2, 1.0, 2.0, 2.5, 0.7
+            endcapture
+          else
+            assign aspect_ratio = 1.33
+          endif
+          render 'tile-placeholder', tag: 'div', placeholder_index: forloop.index, type: block.type, class: 'h-full w-full', media_wrapper_classes: 'w-full h-full', placeholder_svg_classes: 'w-full h-full', media_wrapper_aspect_ratio: aspect_ratio, context: 'slideshow', index: forloop.index, sizes: sizes
+          echo item_separator
+          assign aspect_ratios = aspect_ratios | append: aspect_ratio | append: ':'
+        endfor
+      when 'collection_list'
+        for collection in collections
+          if collection.featured_image != blank
+            assign aspect_ratio = collection.featured_image.aspect_ratio
+          else
+            assign aspect_ratio = 1.0
+          endif 
+          assign aspect_ratios = aspect_ratios | append: aspect_ratio | append: ':'
+          render 'tile-collection', tag: 'div', collection: collection, class: 'h-full w-full', image_class: 'h-full w-full object-cover', context: 'slideshow', index: forloop.index, sizes: sizes
+          echo item_separator
+        else
+          for i in (1..3)
+            capture aspect_ratio
+              cycle 0.8, 1.2, 0.8
+            endcapture
+            render 'tile-placeholder', tag: 'div', placeholder_index: forloop.index, type: 'collection', class: 'h-full w-full', media_wrapper_classes: 'w-full h-full', placeholder_svg_classes: 'w-full h-full', media_wrapper_aspect_ratio: aspect_ratio, context: 'slideshow', index: forloop.index
+            echo item_separator
+            assign aspect_ratios = aspect_ratios | append: aspect_ratio | append: ':'
+          endfor
+        endfor
+      when 'product_media'
+        for media in product.media
+          unless media.id == product.featured_media.id and section.settings.hide_featured_media
+          assign aspect_ratios = aspect_ratios | append: media.aspect_ratio | append: ':'
+          case media.media_type
+            when 'video' or 'external_video'
+              render 'tile-video', tag: 'div', video: media, mode: section.settings.video_mode, id: block.id, playback: section.settings.video_playback, class: 'h-full w-full', media_wrapper_classes: 'w-full h-full', media_classes: 'slideshow-gallery-image h-full w-full object-cover', context: 'slideshow', index: forloop.index, sizes: sizes
+            when 'image'
+              render 'tile-image', tag: 'div', image: media, class: 'h-full w-full', image_class: 'slideshow-gallery-image h-full w-full object-cover', context: 'slideshow', index: forloop.index
+          endcase
+          echo item_separator
+          endunless
+        endfor
+    endcase
+  endcapture
+
+  assign aspect_ratios = aspect_ratios | split: ':'
+  assign slides_array = slides | split: item_separator
+
+  assign block_attributes = block_attributes | split: '||__block-attribute-separator__||'
+
+-%}
+
+{%- style -%}
+  .gallery-item {
+    aspect-ratio: var(--ratio);
+  }
+
+  @media (min-width: 990px) {
+    #section-{{ section.id }} .gallery-item {
+      max-width: calc({{ section.settings.max_width_of_slides }}vw - var(--sidebar-width));
+    }
+  }
+{%- endstyle -%}
+
+{%- capture item_wrapper -%}
+  <li
+    role="group"
+    aria-roledescription="slide"
+    :aria-label="`Slide [INDEX] of ${total_slides}`"
+    class="relative carousel-item shrink-0 w-screen lg:w-screen-minus-sidebar h-full snap-start overflow-hidden z-20"
+    :aria-hidden="current_slide !== [INDEX] ? true : false"
+    [SHOPIFY_BLOCK_ATTRIBUTES]
+    >
+      <div class="absolute inset-0 h-full w-full p-8 item-wrapper">
+        <div
+          class="gallery-item ml-auto mr-auto relative top-1/2 -translate-y-1/2  max-w-full max-h-full pointer-events-auto"
+          style="--ratio:[RATIO];">
+          [SLIDE]
+        </div>
+      </div>
+  </li>
+{%- endcapture -%}
+
+<div
+  x-data='ThemeModule_Carousel({{ section.id | json }}, {{ section.settings.auto_rotate | json }}, {{ section.settings.change_slides_speed | default: 0 | json }})'
+  x-init="mounted()"
+  class="gallery-slideshow slide-wrapper w-full flex flex-col relative {{ section.settings.section_height }}"
+  role="region"
+  aria-roledescription="carousel"
+  @mouseenter="is_mouse_over = true"
+  @mouseleave="is_mouse_over = false"
+>
+  <div class="carousel-container grow relative overflow-hidden">
+    
+    <button tabindex="-1"  aria-controls="CarouselTrack-{{ section.id }}" :aria-label="current_slide === 1 ? '{{ 'general.accessibility.slideshow.go_to_last_slide' | t }}' : '{{ 'general.accessibility.slideshow.previous_slide' | t }}'" role="button" @click="prevSlide" class="absolute top-0 w-1/2 h-full top-0 w-1/2 h-full z-0 flex items-center  p-5 focus:outline-none slideshow-cursor-button-prev  left-0 justify-start cursor-left-arrow z-10  lg:max-w-[10vw] hidden lg:block"></button>
+
+    <ul id="CarouselTrack-{{ section.id }}" x-ref="carousel-track" class="carousel-track flex overflow-x-scroll scroll-smooth snap-x snap-mandatory snap-always w-full h-full relative z-0" :aria-live="is_auto_playing  ? 'off' : 'polite' " aria-atomic="true">
+      {%- liquid
+        for slide in slides_array
+          echo item_wrapper | replace: '[INDEX]', forloop.index | replace: '[RATIO]', aspect_ratios[forloop.index0] | replace: '[SLIDE]', slide | replace: '[SHOPIFY_BLOCK_ATTRIBUTES]', block_attributes[forloop.index0]
+        endfor
+      -%}
+    </ul>
+
+    <button tabindex="-1" aria-controls="CarouselTrack-{{ section.id }}" :aria-label="current_slide === total_slides ? '{{ 'general.accessibility.slideshow.go_to_first_slide' | t }}' : '{{ 'general.accessibility.slideshow.next_slide' | t }}'" role="button" @click="nextSlide" class="absolute top-0 w-1/2 h-full top-0 w-1/2 h-full z-0 flex items-center  p-5 focus:outline-none slideshow-cursor-button-next right-0 justify-end cursor-right-arrow  z-10 lg:max-w-[10vw] hidden lg:block"></button>
+
+  </div>
+
+  {%- capture slides_index -%}
+    <span x-text="`${current_slide}/${total_slides}`"></span>
+  {%- endcapture -%}
+
+  {%- capture caption_container -%}
+    <div id="Section-{{ section.id }}-CaptionContainer">
+    </div>
+  {%- endcapture -%}
+
+  {%- capture slideshow_controls -%}
+  <div class="flex flex-wrap gap-4 justify-end">
+    {%- if section.settings.auto_rotate -%}
+      <button
+        @click="manualToggleAutoPlay"
+        aria-controls="CarouselTrack-{{ section.id }}"
+        role="button"
+        class="flex items-center justify-center min-touch-target"
+        :aria-label="!manually_paused  ? '{{ 'sections.slideshow.pause_slideshow' | t }}' : '{{ 'sections.slideshow.rotate_slideshow' | t }}' "
+      >
+        <span x-show="!manually_paused" class="inline-block w-6 h-6">{%- render 'icon-button-pause' %}</span>
+        <span x-show="manually_paused" class="inline-block w-6 h-6">{%- render 'icon-button-play' %}</span>
+      </button>
+    {%- endif -%}
+    {%- render 'carousel-buttons' -%}
+    {%- if view_more_in_footer -%}
+      {{ view_all_button }}
+    {%- endif -%}
+  </div>
+  {%- endcapture -%}
+
+  {%- liquid
+    assign layout_key = 'b'
+    assign show_labels_on_mobile = section.settings.labels_always_show_on_mobile
+    assign show_slides_index = section.settings.show_index_and_total_slides
+    assign labels_display = section.settings.labels_display
+    assign show_captions_on_desktop = false
+    if labels_display == 'footer'
+      assign show_captions_on_desktop = true
+    endif
+    if labels_display == 'footer' or show_labels_on_mobile
+      assign layout_key = layout_key | append: 'c'
+    endif
+    if show_slides_index
+      assign layout_key = layout_key | append: 'i'
+    endif
+  -%} 
+  
+  <div class='shrink-0'>
+    <div class="grid grid-cols-12 items-center lg:grid grid-flow-dense gap-2  wrapper py-5 ">
+      {%- case layout_key -%}
+        {%- when 'b' -%}
+          <div class="col-span-full text-right">
+            {{ slideshow_controls }}
+          </div>
+        {%- when 'bi' -%}
+          <div class="col-span-6 text-left">
+            {{ slides_index }}
+          </div>
+          <div class="col-span-6 text-right">
+            {{ slideshow_controls }}
+          </div>
+        {%- when 'bc' -%}
+          <div class="col-span-6 text-left {% unless show_captions_on_desktop %}lg:hidden{% endunless %}">
+            {{ caption_container }}
+          </div>
+          <div class="col-span-6 lg:col-end-13  text-right">
+            {{ slideshow_controls }}
+          </div>
+        {%- when 'bci' -%}
+          <div class="row-start-2 col-span-6 lg:col-span-1 lg:row-start-auto text-left">
+            {{ slides_index }}
+          </div>
+          <div class="row-start-1 col-span-full lg:row-start-auto text-left lg:col-span-7 {% unless show_captions_on_desktop %}lg:hidden{% endunless %}">
+            {{ caption_container }}
+          </div>
+          <div class="row-start-2 col-span-6 lg:col-span-4 lg:col-end-13 lg:row-start-auto text-right">
+            {{ slideshow_controls }}
+          </div>
+      {%- endcase -%}
+    </div>
+  </div>
+</div>
+
+{%- style -%}
+@supports not (aspect-ratio: 1 / 1) {
+  .slideshow-cursor-button {
+    z-index: 20;
+    top: 50%;
+    width: auto;
+    height: auto;
+    transform: translateY(-50%);
+    cursor: pointer;
+  }
+
+  .slideshow-cursor-button .icon {
+    display: block;
+  }
+
+  .gallery-item {
+    position: absolute;
+    inset: 0;
+    transform: translateY(0);
+  }
+
+  .gallery-slideshow .tile-media,
+  .gallery-slideshow .html-video-object {
+    object-fit: contain;
+  }
+
+  .html-video-object.gallery-item,
+  .html-video-wrapper {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .gallery-slideshow .tile-placeholder-svg {
+    position: absolute;
+    inset: 0;
+    width: 80vmin;
+    height: 80vmin;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+{%- endstyle -%}
+
+{% unless request.design_mode %}
+  <script src="{{ 'modules-carousel.bundle.min.js' | asset_url }}" type="module"></script>
+{% endunless %}
+

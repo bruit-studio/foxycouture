@@ -1,0 +1,417 @@
+{%- liquid
+  assign articles = section.settings.blog.articles | slice: 0, section.settings.articles_to_show
+
+  if section.settings.blog.articles_count > section.settings.articles_to_show and section.settings.show_view_all
+    assign more_in_blog = true
+  endif
+-%}
+{%- if section.settings.show_view_all -%}
+{%- capture view_all_button -%}
+<a
+  href="{{ section.settings.blog.url }}"
+  class="btn"
+>
+  {{ 'blogs.general.more_of_blog' | t: blog: section.settings.blog.title }}
+</a>
+{%- endcapture -%}
+{%- endif -%}
+
+<section
+  id="section-{{ section.id }}"
+  x-data="{ labelContent: '', focusVisible: false }"
+  class="section-container"
+  data-color-scheme="{{ section.settings.color_scheme }}"
+  style="--section-grid-cols-mobile: {{ section.settings.mobile_columns }}; --section-grid-cols-desktop: {{ section.settings.desktop_columns }}; --top-spacing-adjust: {{ section.settings.space_above }}; --bottom-spacing-adjust: {{ section.settings.space_below }};"
+>
+  <div class="text-scheme-text bg-scheme-background pt-top-section-vertical-spacing pb-bottom-section-vertical-spacing">
+
+    {%- liquid
+      if section.settings.title != blank
+        render 'section-title-horizontal', title: section.settings.title, view_all_button: view_all_button
+      endif
+
+      case section.settings.grid_type
+        when 'standard'
+          render 'grid-standard', articles: articles, content_source: 'articles'
+        when 'masonry'
+          render 'grid-masonry', articles: articles, content_source: 'articles'
+        when 'justified'
+          render 'grid-justified', articles: articles, content_source: 'articles', max_items: section.settings.articles_to_show
+        when 'modular'
+          render 'grid-modular', articles: articles, content_source: 'articles'
+        when 'irregular'
+          render 'grid-irregular', articles: articles, content_source: 'articles'
+      endcase
+    -%}
+
+    {%- if more_in_blog and section.settings.title == blank %}
+    <div class="wrapper mt-half-section-vertical-spacing flex justify-end">
+      {{ view_all_button }}
+    </div>
+    {%- endif -%}
+
+  </div>
+
+</section>
+
+{% schema %}
+{
+  "name": "Blog posts gallery",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading"
+    },
+    {
+      "type": "blog",
+      "id": "blog",
+      "label": "Blog"
+    },
+    {
+      "type": "range",
+      "id": "articles_to_show",
+      "min": 2,
+      "max": 25,
+      "step": 1,
+      "default": 12,
+      "label": "Maximum articles to show"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_view_all",
+      "label": "Enable \"View all\" if blog has more posts than shown"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "grid_type",
+      "label": "Grid type",
+      "options": [
+        {
+          "value": "standard",
+          "label": "Standard"
+        },
+        {
+          "value": "masonry",
+          "label": "Masonry"
+        },
+        {
+          "value": "justified",
+          "label": "Justified"
+        },
+        {
+          "value": "modular",
+          "label": "Modular"
+        },
+        {
+          "value": "irregular",
+          "label": "Irregular"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "mobile_columns",
+      "label": "Mobile columns",
+      "options": [
+        {
+          "value": "1",
+          "label": "1 column"
+        },
+        {
+          "value": "2",
+          "label": "2 columns"
+        }
+      ],
+      "default": "1"
+    },
+    {
+      "type": "range",
+      "id": "desktop_columns",
+      "min": 1,
+      "max": 6,
+      "step": 1,
+      "label": "Number of columns on desktop",
+      "default": 5,
+      "info": "This setting does not apply if grid type is set to 'Modular' or 'Irregular'."
+    },
+    {
+      "type": "header",
+      "content": "Standard"
+    },
+    {
+      "type": "select",
+      "id": "standard_layout_align_items",
+      "label": "Alignment of items",
+      "options": [
+        {
+          "value": "items-start",
+          "label": "Top"
+        },
+        {
+          "value": "items-baseline",
+          "label": "Baseline"
+        },
+        {
+          "value": "items-center",
+          "label": "Center"
+        },
+        {
+          "value": "items-end",
+          "label": "Bottom"
+        }
+      ],
+      "default": "items-start"
+    },
+    {
+      "type": "header",
+      "content": "Modular"
+    },
+    {
+      "type": "range",
+      "id": "modular_layout_variation",
+      "min": 1,
+      "max": 12,
+      "step": 1,
+      "label": "Layout variation",
+      "default": 1
+    },
+    {
+      "type": "range",
+      "id": "modular_grid_item_aspect_ratio",
+      "min": 0.5,
+      "max": 1.8,
+      "step": 0.1,
+      "unit": ":1",
+      "label": "Grid base aspect ratio",
+      "default": 1,
+      "info": "Wide to tall"
+    },
+    {
+      "type": "header",
+      "content": "Irregular"
+    },
+    {
+      "type": "range",
+      "id": "irregular_layout_variation",
+      "min": 1,
+      "max": 15,
+      "step": 1,
+      "label": "Layout variation",
+      "default": 1
+    },
+    {
+      "type": "select",
+      "id": "irregular_alignment_of_items",
+      "label": "Alignment of items",
+      "options": [
+        {
+          "value": "items-top justify-start",
+          "label": "Top left"
+        },
+        {
+          "value": "items-top justify-center",
+          "label": "Top center"
+        },
+        {
+          "value": "items-top justify-end",
+          "label": "Top right"
+        },
+        {
+          "value": "items-top justify-between",
+          "label": "Top justified"
+        },
+        {
+          "value": "items-center justify-start",
+          "label": "Center left"
+        },
+        {
+          "value": "items-center justify-center",
+          "label": "Center"
+        },
+        {
+          "value": "items-center justify-end",
+          "label": "Center right"
+        },
+        {
+          "value": "items-center justify-between",
+          "label": "Center justified"
+        },
+        {
+          "value": "items-end justify-start",
+          "label": "Bottom left"
+        },
+        {
+          "value": "items-end justify-center",
+          "label": "Bottom center"
+        },
+        {
+          "value": "items-end justify-end",
+          "label": "Bottom right"
+        },
+        {
+          "value": "items-end justify-between",
+          "label": "Bottom justified"
+        }
+      ],
+      "default": "items-center justify-center"
+    },
+    {
+      "type": "header",
+      "content": "Media"
+    },
+    {
+      "type": "paragraph",
+      "content": "These settings only apply if grid type is set to 'Standard' or 'Irregular'."
+    },
+    {
+      "type": "select",
+      "id": "media_aspect_ratio",
+      "label": "Aspect ratio",
+      "options": [
+        {
+          "value": "natural",
+          "label": "Natural"
+        },
+        {
+          "value": "1",
+          "label": "Square (1:1)"
+        },
+        {
+          "value": "1.333",
+          "label": "Landscape (4:3)"
+        },
+        {
+          "value": "0.6667",
+          "label": "Portrait (2:3)"
+        },
+        {
+          "value": "1.778",
+          "label": "Widescreen (16:9)"
+        }
+      ],
+      "default": "natural"
+    },
+    {
+      "type": "checkbox",
+      "id": "media_fill_space",
+      "label": "Maximize size",
+      "default": false,
+      "info": "No effect when aspect ratio is set to 'Natural'."
+    },
+    {
+      "type": "header",
+      "content": "Labels"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_title",
+      "label": "Show title",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_author",
+      "label": "Show author",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_date",
+      "label": "Show date",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_excerpt",
+      "label": "Show excerpt",
+      "default": false
+    },
+    {
+      "type": "radio",
+      "id": "title_font",
+      "label": "Title font",
+      "options": [
+        {
+          "value": "font-main",
+          "label": "Body"
+        },
+        {
+          "value": "font-heading text-heading-secondary",
+          "label": "Heading"
+        }
+      ],
+      "default": "font-main"
+    },
+    {
+      "type": "header",
+      "content": "Color"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "default": "scheme_1",
+      "label": "Color scheme"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "space_above",
+      "min": 0,
+      "max": 2,
+      "step": 0.5,
+      "unit": "x",
+      "label": "Above",
+      "default": 1
+    },
+    {
+      "type": "range",
+      "id": "space_below",
+      "min": 0,
+      "max": 2,
+      "step": 0.5,
+      "unit": "x",
+      "label": "Below",
+      "default": 1
+    },
+    {
+      "type": "checkbox",
+      "id": "disable_left_and_right_margins",
+      "label": "Disable left and right margins",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "remove_grid_gaps",
+      "label": "Remove grid gaps",
+      "default": false
+    }
+  ],
+  "presets": [
+    {
+      "name": "Blog posts gallery",
+      "settings": {
+        "articles_to_show": 6,
+        "grid_type": "modular",
+        "mobile_columns": "2",
+        "desktop_columns": 3
+      }
+    }
+  ],
+  "disabled_on": {
+    "groups": [
+      "aside",
+      "header",
+      "footer",
+      "custom.hero"
+    ]
+  }
+}
+{% endschema %}

@@ -1,0 +1,105 @@
+<nav>
+  <ul class="menu {% unless block.settings.separate_with_comma %}-mx-2{% endunless %} {{ link_classes }}  flex flex-wrap {{ block.settings.desktop_text_alignment }}">
+    {%- for link in block.settings.menu.links -%}
+      <li class="menu-link {% unless block.settings.separate_with_comma %}px-2{% endunless %}">
+        {%- if link.links.size > 0 -%}
+          <div
+            x-cloak
+            x-data="
+            {
+              expanded: false
+            }
+          "
+          >
+          <button
+            type="button"
+            class="text-left hover:underline"
+            @click="expanded = ! expanded"
+            :aria-expanded="expanded"
+          >
+            <div class="flex items-center">
+              <span class="{% if link.child_active %}underline{% endif %}">{{ link.title }}</span>
+              <div class="ml-1 js-enabled flex items-center">
+                <span
+                  class="w-4 h-4 inline-block transition-transform ease-gentle duration-[280ms]"
+                  x-cloak
+                >
+                 {%- if settings.accordion_icon == 'plus_minus' -%}
+                 <span x-show="expanded">{% render 'icon-minus' %}</span>
+                 <span x-show="!expanded">{% render 'icon-plus' %}</span>
+                 {%- else -%}
+                 <span class="block rotate-180" x-show="expanded">{% render 'icon-chevron-down' %}</span>
+                 <span x-show="!expanded">{% render 'icon-chevron-down' %}</span>
+                 {%- endif -%}
+                </span>
+              </div>
+            </div>
+          </button>
+
+          <div
+            class="absolute -left-desktop-left-and-right-margin  -right-desktop-left-and-right-margin  top-full z-50  text-scheme-text bg-scheme-background"  
+            x-show="expanded"
+            @click.away.prevent="expanded = false">
+            <div class="py-half-section-vertical-spacing">
+              <div class="wrapper">
+                <ul class="grid grid-cols-2 lg:grid-cols-12 w-full gap-theme z-0 grid-flow-dense items-top">
+                  {%- for childlink in link.links -%}
+                    <li class="col-span-2">
+                      <a
+                        href="{{ childlink.url }}"
+                        class="break-words hover:underline {% if childlink.current %} underline{% endif %}"
+                        {% if childlink.current %}
+                          aria-current="page"
+                        {% endif %}
+                      >
+                        {{ childlink.title | escape }}
+                      </a>
+                      {%- if childlink.links != blank -%}
+                        <ul class="mt-4" role="list">
+                          {%- for grandchildlink in childlink.links -%}
+                            <li>
+                              <a
+                                href="{{ grandchildlink.url }}"
+                                class="break-words hover:underline  {% if grandchildlink.current %}underline{% endif %}"
+                                {% if grandchildlink.current %}
+                                  aria-current="page"
+                                {% endif %}
+                              >
+                                {{ grandchildlink.title | escape }}
+                              </a>
+                            </li>
+                          {%- endfor -%}
+                        </ul>
+                      {%- endif -%}
+                    </li>
+                  {%- endfor -%}
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+        {%- else -%}
+        <a href="{{ link.url }}" {% if link.active %}class="underline"{% endif %}>{{ link.title }}</a>
+        {%- endif -%}
+        {%- if block.settings.separate_with_comma -%}
+          {%- liquid
+            assign show_comma_on_last_item_in_loop = false
+            if block.settings.show_cart and section.settings.use_icons == false
+              assign show_comma_on_last_item_in_loop = true
+            endif
+          -%}
+          {%- unless forloop.last and show_comma_on_last_item_in_loop == false -%}
+          &#44;&nbsp;
+          {%- endunless -%}
+        {%- endif -%}
+      </li>
+    {%- endfor -%}
+    {%- if block.settings.show_cart -%}
+      <li class="menu-link {% unless block.settings.separate_with_comma %}px-2{% endunless %} {% if show_comma_on_last_item_in_loop == false %}ml-2{% endif %}">
+        <button class=""  @click.prevent="$store.modals.open('cart')">
+          {{ cart_button_content }}
+        </button>
+      </li>
+    {%- endif -%}
+  </ul>
+</nav>

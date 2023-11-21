@@ -1,0 +1,88 @@
+<div>
+  <h2 class="sr-only" id="lang-heading">
+    {{ 'general.language.dropdown_label' | t }}
+  </h2>
+  {%- if localization.available_languages.size == 2 -%}
+  <div class=" flex justify-start">
+    {%- for language in localization.available_languages -%}
+    <input
+      class="sr-only custom-input"
+      id="{{ language.iso_code }}"
+      type="radio"
+      name="locale_code"
+      lang="{{ language.iso_code }}"
+      value="{{ language.iso_code }}"
+      @click="$refs.languageform.submit()"
+      {%- if language.iso_code == localization.language.iso_code %}
+        checked
+      {% endif %}
+    >
+    <label class="cursor-pointer {% if language.iso_code == localization.language.iso_code %}underline{% else %}hover:underline{% endif %}" for="{{ language.iso_code }}">{{ language.iso_code | capitalize }}</label>
+    {%- if forloop.first -%}
+      <span class="inline-block px-1">/</span>
+    {%- endif -%}
+  {%- endfor -%}
+  </div>
+  {%- else -%}
+  <div
+    class="relative"
+    x-data="{ expanded: false }"
+    @keydown.escape.prevent.stop="expanded = false"
+    @click.outside="expanded = false"
+  >
+    <button
+      type="button"
+      class="flex justify-between items-center"
+      :aria-expanded="expanded"
+      aria-controls="lang-list"
+      aria-describedby="lang-heading"
+      @click.prevent="expanded = ! expanded"
+    >
+      {%- if position == 'footer' -%}
+      <span class="w-4 h-4 inline-block mr-1">
+        {%- render 'icon-globe' -%}
+      </span>
+      {%- endif -%}
+      <span>{{ form.current_locale.endonym_name }}</span>
+      <div class="shrink-0 w-4 h-4 ml-2" x-show="! expanded">
+        {%- render 'icon-chevron-down' -%}
+      </div>
+      <div class="shrink-0 w-4 h-4 ml-2" x-show="expanded" x-cloak>
+        {%- render 'icon-chevron-up' -%}
+      </div>
+    </button>
+    <ul
+      id="lang-list"
+      class="absolute border border-theme border-scheme-text  left-0 right-auto md:left-auto md:right-0 max-h-[60vh] overflow-y-auto p-3 snap-y snap-mandatory z-30 bg-scheme-background{% if position == 'menu-drawer' %} top-0{% endif %}{% if position == 'footer' %} bottom-[calc(100%_+_0.5rem)]{% endif %}"
+      x-show="expanded"
+      :aria-hidden="! expanded"
+      x-cloak
+    >
+      {% for locale in form.available_locales %}
+        <li class="w-40 first:-mt-2 last:-mb-2 snap-start">
+          <a
+            class="block py-2"
+            href="#"
+            lang="{{ locale.iso_code }}"
+            {% if locale.iso_code == form.current_locale.iso_code %}
+              aria-current="true"
+            {% endif %}
+            @click.prevent="$refs.input.value = '{{ locale.iso_code }}'; $root.closest('form').submit();"
+          >
+            <span class="{% if country.iso_code == localization.country.iso_code %} underline {% endif %} underline-offset-basic">
+              {{- locale.endonym_name -}}
+            </span>
+          </a>
+        </li>
+      {%- endfor -%}
+    </ul>
+    <input
+      x-ref="input"
+      type="hidden"
+      name="locale_code"
+      id="LocaleSelector"
+      value="{{ form.current_locale.iso_code }}"
+    />
+  </div>
+  {%- endif -%}
+</div>

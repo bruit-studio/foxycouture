@@ -1,0 +1,281 @@
+{%- liquid
+  assign labels_display = section.settings.labels_display | default: 'below_media'
+  assign show_title = true
+  assign media_fill_space = true
+  assign show_price = true
+  assign show_vendor = false
+  assign enable_quick_view_on_desktop = false
+  assign enable_quick_view_on_mobile = false
+  assign always_show_labels_on_mobile = false
+
+  if section.settings.labels_show_titles_and_captions != nil
+    assign show_title = section.settings.labels_show_titles_and_captions
+  endif
+  if section.settings.media_fill_space != nil
+    assign media_fill_space = section.settings.media_fill_space
+  endif
+  if section.settings.labels_show_product_prices != nil
+    assign show_price = section.settings.labels_show_product_prices
+  endif
+  if section.settings.labels_show_product_vendor != nil
+    assign show_vendor = section.settings.labels_show_product_vendor
+  endif
+  if section.settings.labels_always_show_on_mobile != nil
+    assign always_show_labels_on_mobile = section.settings.labels_always_show_on_mobile
+  endif
+
+  assign media_wrapper_aspect_ratio = media_wrapper_aspect_ratio | default: 'natural'
+  assign media_class = 'tile-media track-loaded transition-[transform,opacity] duration-300 scale-100 group-hover:scale-103'
+
+  if media_classes != blank
+    assign media_class = media_class | append: ' ' | append: media_classes
+  endif
+
+  assign media_wrapper_aspect_ratio = media_wrapper_aspect_ratio | default: 'natural'
+  assign content_wrapper_classes = content_wrapper_classes | default: 'mt-2'
+
+  assign media_fit = 'object-cover'
+  if media_fill_space == true or media_fill_space == false
+    if media_fill_space
+      assign media_fit = 'object-cover'
+    else
+      assign media_fit = 'object-contain'
+    endif
+  endif
+
+  if section.settings.grid_type == 'modular'
+    assign media_fit = 'object-cover'
+  endif
+
+  if media_wrapper_aspect_ratio != 'natural'
+    assign media_wrapper_classes = media_wrapper_classes | append: ' aspect-css-var'
+    assign media_wrapper_attrs = media_wrapper_attrs | append: ' style="--ratio: ' | append: media_wrapper_aspect_ratio | append: ';"'
+    assign media_class = media_class | append: ' absolute inset-0 w-full h-full ' | append: media_fit
+  endif
+
+  assign hover_class = 'block w-full h-full bg-scheme-background object-center ' | append: media_fit
+
+  assign show_second_image_on_hover = settings.products_show_second_image_on_hover
+  assign show_vendor = show_vendor | default: false
+  assign enable_quick_view = enable_quick_view | default: false
+
+
+  unless labels_display
+    assign labels_display = 'below_media'
+  endunless
+
+  assign render_labels_under_media = false
+  assign render_labels_in_footer = false
+  assign render_labels_in_overlay = false
+
+  if labels_display == 'below_media' or always_show_labels_on_mobile
+    unless context == 'slideshow'
+      assign render_labels_under_media = true
+    endunless
+  endif
+
+  if context == 'slideshow' and labels_display == 'footer'
+    assign render_labels_in_footer = true
+  endif
+
+  if labels_display == 'text_overlay_on_hover' or labels_display == 'follow_mouse_on_hover'
+    assign render_labels_in_overlay = true
+  endif 
+
+  if always_show_labels_on_mobile and labels_display != 'below_media'
+    assign content_wrapper_classes = content_wrapper_classes | append: ' lg:hidden'
+    if context == 'slideshow'
+      assign render_labels_in_footer = true
+    endif
+  endif
+
+  unless tag
+    assign tag = 'li'
+  endunless
+
+  unless sizes
+    assign sizes = '(min-width: 990px) 33vw, 50vw'
+  endunless
+
+  comment
+    On sale
+  endcomment
+
+  assign on_sale = false
+
+  if product.compare_at_price > product.price
+    assign on_sale = true
+  endif
+
+  comment
+    Sold out
+  endcomment
+
+  assign sold_out = true
+
+  if product.available
+    assign sold_out = false
+  endif
+
+  comment
+    Unit prices
+  endcomment
+
+  assign current_variant = product.selected_or_first_available_variant
+
+  comment
+    Set lowest-priced variant as current
+  endcomment
+
+  if product.price_varies and product.variants.size > 1
+    for variant in product.variants
+      if variant.price == product.price_min
+        assign current_variant = variant
+        break
+      endif
+    endfor
+  endif
+
+  if section.settings.quick_view contains 'desktop'
+    assign enable_quick_view_on_desktop = true
+  endif
+  if section.settings.quick_view contains 'mobile'
+    assign enable_quick_view_on_mobile = true
+  endif
+
+-%}
+
+{%- capture label_content -%}
+{% if show_vendor and product.vendor != blank %}
+  <div class="text-scheme-secondary">
+    {{ product.vendor }}
+  </div>
+{% endif %}
+
+{%- if show_title -%}
+  <div class="break-words" aria-hidden="true">
+    {{ product.title }}
+  </div>
+{%- endif -%}
+
+{%- if show_price -%}
+  <div>
+    {% render 'product-price',
+      product: product,
+      on_sale: on_sale,
+      sold_out: sold_out,
+      current_variant: current_variant,
+    %}
+  </div>
+{%- endif -%}
+{%- endcapture -%}
+
+{%- capture overlay_label_content -%}
+  {%- if show_title -%}
+    {{ product.title }}
+  {%- endif -%}
+  {%- if show_price -%}
+    {%- if show_title -%}<br/>{%- endif -%}
+    {% render 'product-price',
+      product: product,
+      on_sale: on_sale,
+      sold_out: sold_out,
+      current_variant: current_variant,
+    %}
+  {%- endif -%}
+{%- endcapture -%}
+
+<{{ tag }}
+  class="relative group {% if class != blank %}{{ class }}{% endif %}"
+  {% if attributes %}
+    {{ attributes }}
+  {% endif %}
+  x-data='ThemeTile({{ product.url | json }}, {{ product.title | escape | json }})'
+>
+  {%- comment -%}
+    Mobile link
+  {%- endcomment -%}
+  <a
+    class="tile-link absolute inset-0 z-10 group block lg:hidden"
+    href="{{ product.url }}"
+    aria-labelledby="Section-{{ section.id }}-Product-{{ product.id }}-label"
+    {%- if enable_quick_view_on_mobile -%}
+    @click.prevent="openQuickView"
+    {%- endif -%}
+  ></a>
+
+  {%- comment -%}
+    Desktop link
+  {%- endcomment -%}
+  <a
+    class="tile-link absolute inset-0 z-10 group hidden lg:block"
+    href="{{ product.url | within: collection }}"
+    aria-labelledby="Section-{{ section.id }}-Product-{{ product.id }}-label"
+    {%- unless labels_display == 'below_media' -%}
+    x-ref="tileLink"
+    x-on:mouseenter="showLabel" x-on:mouseleave="hideLabel"
+    x-on:focus="showLabel" x-on:blur="hideLabel"
+    @keyup.escape="hideLabel"
+    {%- endunless -%}
+    {%- if enable_quick_view_on_desktop -%}
+    @click.prevent="openQuickView"
+    {%- endif -%}
+  >
+  </a>
+
+  {%- comment -%}
+    Media
+  {%- endcomment -%}
+  <div class="group tile-media-wrapper rounded-media rounded-media relative overflow-hidden {{ media_wrapper_classes }}" {{ media_wrapper_attrs }}>
+
+    {% if product.featured_media %}
+      {{ product.featured_media | image_url: width: 2000 | image_tag: class: media_class, loading: 'lazy', sizes: sizes }}
+    {% endif %}
+    {% if show_second_image_on_hover and product.media.size > 1 %}
+      <div class="absolute inset-0 w-full h-full transition duration-300 opacity-0 group-hover:opacity-100 scale-100 group-hover:scale-103">
+        {{ product.media[1] | image_url: width: 2000 | image_tag: class: hover_class, loading: 'lazy', sizes: sizes }}
+      </div>
+    {% endif %}
+
+    {%- if settings.products_show_on_sale_and_sold_out_badges or settings.tag_badges != blank -%}
+      {%- render 'product-tile-badges',
+        on_sale: on_sale,
+        sold_out: sold_out,
+        product_tags: product.tags
+      -%}
+    {%- endif -%}
+  </div>
+ 
+  {%- if render_labels_under_media -%}
+    {%- if show_title or show_price -%}
+    <div class="tile-content-wrapper {{ content_wrapper_classes }}" id="Section-{{ section.id }}-Product-{{ product.id }}-label">
+      {{ label_content }}
+    </div>
+    {%- endif -%}
+  {%- endif -%}
+
+  {%- if render_labels_in_footer -%}
+    <template
+      x-teleport="#Section-{{ section.id }}-CaptionContainer"
+    >
+      <span x-show="current_slide === {{ index }}" id="Section-{{ section.id }}-Product-{{ product.id }}-label">
+        {{ label_content }}
+      </span>
+    </template>
+  {%- endif -%}
+  
+  {%- if render_labels_in_overlay -%}
+  <template
+    x-ref="labelContent"
+  >
+    <span {% unless render_labels_under_media or render_labels_in_footer %}id="Section-{{ section.id }}-Product-{{ product.id }}-label"{% endunless %}>
+      {{ overlay_label_content }}
+    </span>
+  </template>
+  {%- endif -%}
+
+  {% unless request.design_mode %}
+    <script src="{{ 'tile.js' | asset_url }}" type="module"></script>
+  {% endunless %}
+
+</{{ tag }}>

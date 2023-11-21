@@ -1,0 +1,239 @@
+{%- layout none -%}
+<!doctype html>
+  <html class='no-js' lang='{{ request.locale.iso_code }}'>
+    <head>
+      <script src="{{ 'vendor/qrcode.js' | shopify_asset_url }}" defer></script>
+      <meta charset='utf-8'>
+      <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+      <meta name='viewport' content='width=device-width,initial-scale=1'>
+      <meta name='theme-color' content=''>
+      <link rel='canonical' href='{{ canonical_url }}'>
+      <link rel='preconnect' href='https://cdn.shopify.com' crossorigin>
+  
+      {%- if settings.favicon != blank -%}
+        <link
+          rel='icon'
+          type='image/png'
+          href='{{ settings.favicon | image_url: width: 32, height: 32 }}'
+        >
+      {%- endif -%}
+  
+      {%- unless settings.type_header_font.system?
+        and settings.type_body_font.system?
+      -%}
+        <link rel='preconnect' href='https://fonts.shopifycdn.com' crossorigin>
+      {%- endunless -%}
+  
+      <title>
+        {{ page_title }}
+        {%- if current_tags %}
+          &ndash; tagged "{{ current_tags | join: ', ' }}"
+        {%- endif -%}
+        {%- if current_page != 1 %} &ndash; Page {{ current_page }}{% endif -%}
+        {%- unless page_title contains shop.name %}
+          &ndash; {{ shop.name -}}
+        {%- endunless -%}
+      </title>
+  
+      <meta name="description" content="{{ 'gift_cards.issued.subtext' | t }}">
+  
+      {{ content_for_header }}
+  
+      {%- liquid
+        render 'meta-tags'
+        render 'js-bridge'
+      -%}
+  
+      <script src='{{ 'utils.js' | asset_url }}' defer></script>
+      <script src='{{ 'polyfills-inert.bundle.min.js' | asset_url }}' type='module'></script>
+      <script src='{{ 'global.bundle.min.js' | asset_url }}' type='module'></script>
+      <script src="{{ 'quantity-stepper.js' | asset_url }}" type="module"></script>
+  
+      {% if request.design_mode %}
+        <script
+          src='{{ 'modules-masonry.bundle.min.js' | asset_url }}'
+          type='module'
+        ></script>
+        <script
+          src='{{ 'modules-slideshow-gallery.bundle.min.js' | asset_url }}'
+          type='module'
+        ></script>
+        <script src="{{ 'tile.js' | asset_url }}" type="module"></script>
+        <script src="{{ 'follow-mouse.js' | asset_url }}" type="module"></script>
+        <script src="{{ 'theme-editor-support.js' | asset_url }}" type="module"></script>
+        <script src="{{ 'sections-promo-popup.bundle.min.js' | asset_url }}" type="module"></script>
+        <script src="{{ 'vendor-product.bundle.min.js' | asset_url }}" type="module"></script>
+        <script src="{{ 'product.js' | asset_url }}" type="module"></script>
+        <script src="{{ 'video.js' | asset_url }}" type="module"></script>
+        <script src="{{ 'vendor-store-availability.bundle.min.js' | asset_url }}" type="module"></script>
+        <script src="{{ 'store-availability.js' | asset_url }}" type="module"></script>
+        <script src="{{ 'product-model.js' | asset_url }}" type="module"></script>
+        <script src="{{ 'modules-slideshow.bundle.min.js' | asset_url }}" type="module"></script>
+        <script src="{{ 'modules-carousel.bundle.min.js' | asset_url }}" type="module"></script>
+        <script src="{{ 'zoom.js' | asset_url }}" type="module"></script>
+        <script src="{{ 'video.js' | asset_url }}" type="module"></script>
+        <script src="{{ 'html5-video.js' | asset_url }}" type="module"></script>
+        <script src="{{ 'rte.js' | asset_url }}" type="module"></script>
+      {% endif %}
+  
+      {%- render 'css-bridge' -%}
+  
+      {{ 'base.bundle.css' | asset_url | stylesheet_tag }}
+    </head>
+  
+    <body>
+      <a class="skip-link" href="#MainContent">{{ "general.accessibility.skip_to_content" | t }}</a>
+      <main role="main" id="MainContent" class="">
+
+        
+        {%- liquid
+          if settings.currency_code_enable
+            assign formatted_initial_value = gift_card.initial_value | money_with_currency
+          else
+            assign formatted_initial_value = gift_card.initial_value | money
+          endif
+        
+          assign formatted_initial_value_stripped = formatted_initial_value | strip_html
+        -%}
+        
+        
+        <section
+          class="py-section-vertical-spacing text-scheme-text bg-scheme-background"
+          data-color-scheme="primary"
+        >
+          <div class="wrapper">
+            <header class="text-center">
+              <div class="font-heading text-heading-feature">
+                <h1>
+                  {% if settings.currency_code_enabled %}
+                    {{ gift_card.balance | money_with_currency }}
+                  {% else %}
+                    {{ gift_card.balance | money }}
+                  {% endif %}
+                </h1>
+                {%- if gift_card.enabled == false or gift_card.expired -%}
+                  <p class="badge badge--expired">{{ 'gift_cards.issued.expired' | t }}</p>
+                {%- endif -%}
+              </div>
+            </header>
+            <div class="text-center mt-8 max-w-[400px] mx-auto">
+              {%- if settings.logo != blank -%}
+                {%- assign logo_alt = settings.logo.alt | default: shop.name | escape -%}
+                {{ settings.logo | image_url: width: 570 | image_tag: class: 'mx-auto', alt: logo_alt }}
+              {%- else %}
+              <img src="{{ 'gift-card/card.svg' | shopify_asset_url }}" alt="" class="mx-auto" height="{{ 570 | divided_by: 1.5 }}" width="570" loading="lazy">
+              {%- endif %}
+            </div>
+            <div class="mt-8 text-center">
+              <h2 class="font-heading text-heading-standard mt-8">{{ shop.name }}</h2>
+              <div class="mt-8">
+                {% unless gift_card.enabled %}
+                  <p>{{ 'gift_cards.issued.disabled' | t }}</p>
+                {% endunless %}
+                {% assign gift_card_expiry_date = gift_card.expires_on | date: format: "basic" %}
+                {% if gift_card.expired and gift_card.enabled %}
+                  <p>{{ 'gift_cards.issued.expired' | t: expiry: gift_card_expiry_date }}</p>
+                {% endif %}
+                {% if gift_card.expired != true and gift_card.expires_on and gift_card.enabled %}
+                  <p>{{ 'gift_cards.issued.active' | t: expiry: gift_card_expiry_date }}</p>
+                {% endif %}
+                {% if gift_card.balance != gift_card.initial_value %}
+                  {% liquid
+                    if settings.currency_code_enable
+                      assign formatted_balance = gift_card.balance | money_with_currency
+                    else
+                      assign formatted_balance = gift_card.balance | money
+                    endif
+                  %}
+                  <p>{{ 'gift_cards.issued.remaining_html' | t: balance: formatted_balance }}</p>
+                {% endif %}
+              </div>
+
+              <p class="text-center max-w-[14rem] mx-auto text-base mt-10">
+                {{ 'gift_cards.issued.redeem_html' | t: value: formatted_initial_value_stripped }}
+              </p>
+
+              <div class="block mt-4 bg-white text-base lg:text-2xl uppercase text-center p-1 max-w-[400px] mx-auto" x-data>
+                <input
+                  type="text"
+                  style="box-shadow: none;"
+                  class="font-mono block w-full p-2 border-dashed border-2 text-center {% if gift_card.expired or gift_card.enabled != true %} disabled {% endif %}"
+                  id="GiftCardDigits"
+                  value="{{ gift_card.code | format_code }}"
+                  aria-label="{{ 'gift_cards.issued.gift_card_code' | t }}"
+                  readonly
+                  @focus="$el.select()"
+                />
+              </div>
+      
+              <div class="flex justify-center py-8">
+                <div
+                  id="QrCode"
+                  class="bg-scheme-background"
+                  data-identifier="{{ gift_card.qr_identifier }}"
+                ></div>
+              </div>
+      
+              <ul class="text-center relative z-10 max-w-[400px] mx-auto">
+                <li class="mt-4">
+                  <a
+                    href="{{ shop.url }}"
+                    class="btn btn--solid block w-full"
+                    target="_blank"
+                    rel="noopener"
+                    aria-describedby="a11y-new-window-message"
+                  >
+                    {{ 'gift_cards.issued.shop_link' | t }}
+                  </a>
+                </li>
+                <li class="mt-4">
+                  <button type="button" class="btn block w-full" onclick="window.print();">
+                    {{ 'gift_cards.issued.print' | t }}
+                  </button>
+                </li>
+                {% if gift_card.pass_url %}
+                  <li class="mt-8">
+                    <a href="{{ gift_card.pass_url }}">
+                      <img src="{{ 'gift-card/add-to-apple-wallet.svg' | shopify_asset_url }}" width="120" height="40" alt="{{ 'gift_cards.issued.add_to_apple_wallet' | t }}" loading="lazy">
+                    </a>
+                  </li>
+                {% endif %}
+              </ul>
+
+            </div>
+          </div>
+        </section>
+        
+      </main>
+      <script>
+        document.documentElement.className = document.documentElement.className.replace('no-js', 'js');
+  
+        window.addEventListener('DOMContentLoaded', function() {
+          var qrCode = document.getElementById('QrCode');
+  
+          new QRCode(qrCode, {
+            text: qrCode.dataset.identifier,
+            width: 120,
+            height: 120,
+            imageAltText: theme.strings.qrImageAlt
+          });
+        });
+  
+        window.theme = {
+          strings: {
+            qrImageAlt: {{ 'gift_cards.issued.qr_image_alt' | t | json }}
+          },
+          moneyFormat: {{ shop.money_format | json }},
+          cartItemCount: {{ cart.item_count | json }}
+        };
+      </script>
+      <div id="screenreader-announce" class="sr-only" aria-live="polite" role="status"></div>
+
+      <ul hidden>
+        <li id="a11y-refresh-page-message">{{ 'general.accessibility.refresh_page' | t }}</li>
+        <li id="a11y-selection-message">{{ 'general.accessibility.selection_help' | t }}</li>
+      </ul>
+
+      <script src="{{ 'alpine.bundle.min.js' | asset_url }}" type="module"></script>
+    </body>
+  </html>

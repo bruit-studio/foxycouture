@@ -1,0 +1,157 @@
+{%- style -%}
+  #section-{{ section.id }} .grid-wrapper {
+    --number-of-mobile-columns: {{ section.settings.mobile_columns }};
+    --number-of-mobile-gutters: {{ section.settings.mobile_columns | minus: 1 }};
+    --total-mobile-gutter-size: calc(var(--media-grid-col-gap) * var(--number-of-mobile-gutters));
+
+    --number-of-columns: {{ section.settings.desktop_columns }};
+    --number-of-gutters: {{ section.settings.desktop_columns | minus: 1 }};
+    --total-gutter-size: calc(var(--media-grid-col-gap) * var(--number-of-gutters));
+
+    {% if section.settings.disable_left_and_right_margins %}
+      --wrapper-left-and-right-margin: 0px;
+    {% endif %}
+    {% if section.settings.remove_grid_gaps %}
+      --media-grid-col-gap: 0px;
+      --media-grid-row-gap: 0px;
+      --media-grid-gap: 0px;
+    {% endif %}
+  }
+
+  #section-{{ section.id }} .grid-sizer,
+  #section-{{ section.id }} .masonry-item {
+    width: calc((100% - var(--total-mobile-gutter-size))/var(--number-of-mobile-columns))
+  }
+
+  @media (min-width: 990px) {
+    #section-{{ section.id }} .grid-sizer,
+    #section-{{ section.id }} .masonry-item {
+      width: calc((100% - var(--total-gutter-size))/var(--number-of-columns))
+    }
+  }
+{%- endstyle -%}
+
+<div class="grid-wrapper overflow-hidden">
+  <ul
+    x-data="ThemeModule_MasonryLayout()"
+    x-init="mounted()"
+    class="relative -mt-media-grid-row-gap"
+  >
+    <li class="grid-sizer"></li>
+    <li class="gutter-sizer w-media-grid-col-gap"></li>
+
+    {%- liquid
+      assign list_item_class = 'masonry-item mt-media-grid-row-gap'
+
+      # Calculate sizes
+
+      if settings.enable_sidebar
+        assign sidebar_width = 100.00 | divided_by: 12 | times: settings.sidebar_width_on_desktop | round: 2
+        assign desktop_sizes_base = 100 | minus: sidebar_width
+      else
+        assign desktop_sizes_base = 100
+      endif
+
+      assign desktop_sizes_css_base = desktop_sizes_base | append: 'vw'
+
+      if settings.enable_max_grid_width
+        assign desktop_sizes_css_base = 'min(' | append: settings.max_grid_width | append: 'px, ' | append: desktop_sizes_base | append: 'vw)'
+      endif
+
+      assign desktop_sizes = 'calc(' | append: desktop_sizes_css_base | append: ' / ' | append: section.settings.desktop_columns | append: ')'
+
+      assign mobile_sizes_in_vw = 100 | divided_by: section.settings.mobile_columns
+      assign mobile_sizes = mobile_sizes_in_vw | round: 2 | append: 'vw'
+
+      assign sizes = '(min-width: 990px) ' | append: desktop_sizes | append: ', ' | append: mobile_sizes
+
+      case content_source
+        when 'collection'
+          for product in products limit: section.settings.products_to_show
+            render 'tile-product', class: list_item_class, product: product, sizes: sizes
+          else
+            assign number_of_products_to_show = section.settings.products_to_show | default: 6
+            for i in (1..number_of_products_to_show)
+              capture placeholder_aspect_ratio
+                cycle 0.6, 1.0, 1.4, 0.7, 1.0, 0.8, 1.4, 1.6, 1.0, 0.9, 1.1
+              endcapture
+              render 'tile-placeholder', class: list_item_class, placeholder_index: forloop.index, type: 'product', media_wrapper_aspect_ratio: placeholder_aspect_ratio
+            endfor
+          endfor
+        when 'blocks'
+          for block in section.blocks
+            case block.type
+              when 'image'
+                assign media = block.settings.image
+                if media != blank
+                  render 'tile-image', class: list_item_class, image: block.settings.image, caption: block.settings.caption, link: block.settings.link, sizes: sizes
+                  continue
+                endif
+              when 'video'
+                assign media = block.settings.video
+                if media != blank
+                  render 'tile-video', class: list_item_class, video: block.settings.video, mode: block.settings.mode, playback: block.settings.playback, id: block.id, playback: block.settings.playback, caption: block.settings.caption, mode: block.settings.mode, link: block.settings.link, sizes: sizes
+                  continue
+                endif
+              when 'collection'
+                assign media = block.settings.collection
+                if media != blank
+                  render 'tile-collection', class: list_item_class, collection: block.settings.collection, sizes: sizes
+                  continue
+                endif
+              when 'product'
+                assign media = block.settings.product
+                if media != blank
+                  render 'tile-product', class: list_item_class, product: block.settings.product, sizes: sizes
+                  continue
+                endif
+            endcase
+            capture placeholder_aspect_ratio
+              cycle 0.6, 1.0, 1.4, 0.7, 1.0, 0.8, 1.4, 1.6, 1.0, 0.9, 1.1
+            endcapture
+            render 'tile-placeholder', class: list_item_class, type: block.type, caption: block.settings.caption, media_wrapper_aspect_ratio: placeholder_aspect_ratio
+          endfor
+        when 'collection_list'
+          for collection in collections
+            render 'tile-collection', class: list_item_class, collection: collection, sizes: sizes
+          else
+            for i in (1..3)
+              capture placeholder_aspect_ratio
+                cycle 0.6, 1.0, 1.4, 0.7, 1.0, 0.8, 1.4, 1.6, 1.0, 0.9, 1.1
+              endcapture
+              render 'tile-placeholder', class: list_item_class, type: 'collection', caption: block.settings.caption, media_wrapper_aspect_ratio: placeholder_aspect_ratio
+            endfor
+          endfor
+        when 'articles'
+          for article in articles
+            render 'tile-article', class: list_item_class, article: article, show_title: section.settings.show_title, show_author: section.settings.show_author, show_date: section.settings.show_date, show_excerpt: section.settings.show_excerpt, title_font: section.settings.title_font, sizes: sizes
+          else
+            for i in (1..3)
+              capture placeholder_aspect_ratio
+                cycle 0.6, 1.0, 1.4, 0.7, 1.0, 0.8, 1.4, 1.6, 1.0, 0.9, 1.1
+              endcapture
+              render 'tile-placeholder', class: list_item_class, type: 'image', caption: block.settings.caption, media_wrapper_aspect_ratio: placeholder_aspect_ratio
+            endfor
+          endfor
+        when 'product_media'
+          for media in product.media
+            unless media.id == product.featured_media.id and section.settings.hide_featured_media
+              case media.media_type
+                when 'video', 'external_video'
+                  render 'tile-video', class: list_item_class, video: media, mode: section.settings.video_mode, playback: section.settings.video_playback, id: media.id, sizes: sizes
+                when 'image'
+                  render 'tile-image', class: list_item_class, image: media, sizes: sizes
+              endcase
+            endunless
+          endfor
+      endcase
+    -%}
+  </ul>
+</div>
+
+{% unless request.design_mode %}
+  <script
+    src="{{ 'modules-masonry.bundle.min.js' | asset_url }}"
+    type="module"
+  ></script>
+{% endunless %}

@@ -1,0 +1,27 @@
+<div class="mt-spacer {{ block.settings.text_color }}" style="--spacing-adjust: {{ block.settings.space_above }};" {{ block.shopify_attributes }}>
+  <ul class="flex {% if block.settings.layout == 'horizontal' %}flex-wrap items-start gap-1{% else %}flex-col{% endif %} justify-start ">
+    {% if block.settings.linklist == empty %}
+      {% for i in (1..3) %}
+        <li>
+          <a
+            href="#"
+            class="inline-block text-base theme-link py-1"
+          >
+            {{ 'products.product.onboarding.supporting_link' | t }} {{ i }}
+          </a>
+        </li>
+      {% endfor %}
+    {% else %}
+      {% for supporting_link in block.settings.linklist.links %}
+        <li class="break-words">
+          <a
+            href="{{ supporting_link.url }}"
+            class="inline-block text-base theme-link py-1"
+          >
+            {{- supporting_link.title | escape | strip -}}
+          </a>
+        </li>
+      {% endfor %}
+    {% endif %}
+  </ul>
+</div>

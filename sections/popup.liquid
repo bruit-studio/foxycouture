@@ -1,0 +1,201 @@
+{% if section.settings.enable or request.design_mode %}
+
+  <div
+    x-data="ThemeSection_PromoPopup({
+      delay: {{ section.settings.delay }},
+      frequency: {{ section.settings.frequency }},
+      enabled: {{ section.settings.enable }},
+      sectionId: '{{ section.id }}',
+    })"
+    x-init="mounted"
+    data-section="promo-popup"
+  >
+    <div  x-show="$store.modals.promo.open">
+      <template x-ref="teleported" data-should-teleport="#promo-slot">
+        <template x-if="$store.modals.promo.contents === 'promoPopup'">
+          <div @click.outside="$store.modals.close('promo')" data-modal-label="{{ section.settings.title | strip | escape }}" class="bg-scheme-background text-scheme-text" style="outline: 2px solid tomato;">
+            
+            <div class="p-2 lg:p-4 w-full overflow-hidden">
+              <div class="relative flex items-center justify-end">
+                <button @click.prevent="$store.modals.close('promo')" class="block top-0 min-touch-target">
+                  <span class="sr-only">{{ 'general.accessibility.close_modal' | t }}</span>
+                  <span class="inline-block w-4 h-4">{%- render 'icon-close' -%}</span>
+                </button>
+              </div>
+            </div>
+
+            <div>
+              <div class="wrapper py-8">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-theme">
+                  <div class="col-span-full lg:col-span-6 xl:col-span-4 lg:col-end-[-1] xl:col-end-[-1]  space-y-4">
+                    {% if section.settings.title != blank %}
+                      <h2 class="font-heading text-heading-secondary break-words" tabindex="-1">
+                        {{ section.settings.title | strip }}
+                      </h2>
+                    {% endif %}
+    
+                    {% if section.settings.text != blank %}
+                      <div class="rte text-base">
+                        {{ section.settings.text }}
+                      </div>
+                    {% endif %}
+    
+                    {% if section.settings.call_to_action == 'newsletter' %}
+                      <div class="mt-10">
+                        {% form 'customer' %}
+                          {% if form.errors %}
+                            <p data-errors class="mb-1 text-scheme-error">
+                              {{ form.errors | default_errors }}
+                            </p>
+                          {% endif %}
+    
+                          {% if form.posted_successfully? %}
+                            <p data-success-message class="mb-1 text-scheme-accent">
+                              {{ 'general.newsletter_form.confirmation' | t }}
+                            </p>
+                          {% else %}
+                            <input
+                              type="hidden"
+                              name="contact[tags]"
+                              value="newsletter"
+                            />
+                            <label for="Email" class="sr-only">
+                              {{ 'general.newsletter_form.newsletter_email' | t }}
+                            </label>
+                            <input
+                              type="email"
+                              name="contact[email]"
+                              id="Email"
+                              class="w-full"
+                              value="{% if customer %}{{ customer.email }}{% endif %}"
+                              placeholder="{{ 'general.newsletter_form.newsletter_email' | t }}"
+                              autocorrect="off"
+                              autocapitalize="off"
+                            />
+                            <div class="mt-2">
+                              <button
+                                type="submit"
+                                class="btn btn--solid block w-full lg:w-auto"
+                              >
+                                {{ 'general.newsletter_form.submit' | t }}
+                              </button>
+                            </div>
+                          {% endif %}
+    
+                        {% endform %}
+                      </div>
+                    {% else %}
+                      <div class="mt-10">
+                        {% liquid
+                          assign cta_text = section.settings.cta_text
+                          assign cta_url = section.settings.cta_url
+                        %}
+                        {% if cta_url != blank %}
+                          <a
+                            class="btn btn--solid break-words w-full lg:w-auto"
+                            href="{{ cta_url }}"
+                          >
+                            {{ cta_text | strip }}
+                          </a>
+                        {% endif %}
+                      </div>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </template>
+      </template>
+    </div>
+  </div>
+{% else %}
+  {% if request.design_mode %}
+    <div x-data x-init="$store.modals.close('promo')"></div>
+  {% endif %}
+{% endif %}
+
+{% unless request.design_mode %}
+  <script src="{{ 'sections-promo-popup.bundle.min.js' | asset_url }}" type="module"></script>
+{% endunless %}
+
+{% schema %}
+{
+  "name": "Popup",
+  "class": "contents",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "enable",
+      "label": "Enable popup",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "delay",
+      "min": 2,
+      "max": 30,
+      "step": 1,
+      "label": "Delay",
+      "unit": "s",
+      "default": 4,
+      "info": "Delay won't be applied when inside theme editor."
+    },
+    {
+      "type": "range",
+      "id": "frequency",
+      "min": 2,
+      "max": 30,
+      "step": 1,
+      "label": "Frequency",
+      "unit": "d",
+      "default": 30,
+      "info": "Number of days before a closed popup reappears."
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Sign up to our newsletter"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text",
+      "default": "<p>Receive special offers and first look at new products.</p>"
+    },
+    {
+      "type": "radio",
+      "id": "call_to_action",
+      "label": "Call to action",
+      "options": [
+        {
+          "value": "newsletter",
+          "label": "Newsletter signup"
+        },
+        {
+          "value": "button",
+          "label": "Button"
+        }
+      ],
+      "default": "newsletter",
+      "info": "Customers who subscribe will have their email address added to the “accepts marketing” [customer list](/admin/customers?query=&accepts_marketing=1)."
+    },
+    {
+      "type": "url",
+      "id": "cta_url",
+      "label": "Button link"
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "label": "Button text",
+      "default": "Shop Now"
+    }
+  ]
+}
+{% endschema %}

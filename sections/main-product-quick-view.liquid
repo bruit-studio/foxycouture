@@ -1,0 +1,3001 @@
+
+
+<div
+  class="fixed left-0 top-0 right-0 bottom-0 lg:inset-0 z-110 max-lg:flex max-lg:items-end"
+  data-color-scheme="{{ settings.quick_view_color_scheme }}"
+  id="modals-quickViewDrawer"
+>
+  <div
+    class='fixed inset-0 {{ settings.modals_overlay_background_color }} {% if settings.modals_overlay_saturate %}backdrop-saturate-0{% endif %}'
+    style="--tw-bg-opacity: {{ settings.modals_overlay_opacity | divided_by: 100.0 }};"
+  >
+    <!-- Overlay -->
+  </div>
+  <div
+    class="relative w-full h-[90vh] lg:max-w-[var(--quick-view-max-width)]  lg:h-full bg-scheme-background text-scheme-text ml-auto overflow-hidden"
+    id="quick-view-drawer-slot"
+    role="dialog"
+    aria-modal="true"
+    tabindex="-1"
+  >
+    <div class="max-h-full flex flex-col h-screen">
+
+
+      <div class="p-2 lg:p-4 w-full overflow-hidden shrink-0">
+        <div class="relative flex items-center justify-between">
+          <a :href="$store.quickview.current_product_url">
+            <span class="sr-only">
+              {{- 'general.accessibility.open_in_full_view' | t -}}
+            </span>
+            <span class="inline-block w-4 h-4">
+              {%- render 'icon-expand' -%}
+            </span>
+          </a>
+          <button @click.prevent="$store.modals.close('cart')" class="block top-0 min-touch-target">
+            <span class="sr-only">{{ 'general.accessibility.close_modal' | t }}</span>
+            <span class="inline-block w-4 h-4">{%- render 'icon-close' -%}</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="flex overflow-hidden product-quick-view-section-wrapper">
+      {%- render 'product-template-quick-view' -%}
+      </div>
+
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Product",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Media"
+    },
+    {
+      "type": "select",
+      "id": "mobile_media_layout",
+      "label": "Layout on mobile",
+      "default": "carousel",
+      "options": [
+        {
+          "value": "carousel",
+          "label": "Carousel"
+        },
+        {
+          "value": "carousel_with_thumbnails",
+          "label": "Carousel with thumbnails"
+        },
+        {
+          "value": "single_column",
+          "label": "Single column"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "desktop_media_layout",
+      "label": "Layout on desktop",
+      "default": "single_column",
+      "options": [
+        {
+          "value": "single_column",
+          "label": "Single column"
+        },
+        {
+          "value": "two_columns",
+          "label": "Two columns"
+        },
+        {
+          "value": "carousel",
+          "label": "Carousel"
+        },
+        {
+          "value": "carousel_with_thumbnails",
+          "label": "Carousel with thumbnails"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "media_fit",
+      "label": "Media fit",
+      "options": [
+        {
+          "value": "natural",
+          "label": "Natural"
+        },
+        {
+          "value": "contain_to_square",
+          "label": "Contain to square"
+        },
+        {
+          "value": "contain_to_portrait",
+          "label": "Contain to portrait"
+        },
+        {
+          "value": "fill_to_square",
+          "label": "Fill to square"
+        },
+        {
+          "value": "fill_to_portrait",
+          "label": "Fill to portrait"
+        }
+      ],
+      "default": "natural"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_image_zoom",
+      "label": "Enable image zoom"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_video_looping",
+      "label": "Enable video looping",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_video_autoplay",
+      "label": "Enable video autoplay",
+      "default": true,
+      "info": "Video will be muted. Does not support YouTube or Vimeo."
+    },
+    {
+      "type": "checkbox",
+      "id": "single_media_mode",
+      "label": "Enable single media mode",
+      "info": "This will only show the media of the selected variant, or the featured media if no variant is selected."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "@app"
+    },
+    {
+      "type": "title",
+      "name": "Title",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "range",
+          "id": "space_above",
+          "min": 0,
+          "max": 2,
+          "step": 0.5,
+          "unit": "x",
+          "label": "Space above",
+          "default": 1
+        }
+      ]
+    },
+    {
+      "type": "price",
+      "name": "Price",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "range",
+          "id": "space_above",
+          "min": 0,
+          "max": 2,
+          "step": 0.5,
+          "unit": "x",
+          "label": "Space above",
+          "default": 1
+        }
+      ]
+    },
+    {
+      "type": "quantity_selector",
+      "name": "Quantity selector",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "range",
+          "id": "space_above",
+          "min": 0,
+          "max": 2,
+          "step": 0.5,
+          "unit": "x",
+          "label": "Space above",
+          "default": 1
+        }
+      ]
+    },
+    {
+      "type": "variant_picker",
+      "name": "Variant picker",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "hide_option_labels",
+          "label": "Hide option labels",
+          "default": true
+        },
+        {
+          "type": "radio",
+          "id": "option_style",
+          "label": "Options style",
+          "options": [
+            {
+              "value": "drop_down",
+              "label": "Drop down"
+            },
+            {
+              "value": "buttons",
+              "label": "Button"
+            },
+            {
+              "value": "radio",
+              "label": "Radio"
+            },
+            {
+              "value": "text_underline",
+              "label": "Text with underline"
+            }
+          ],
+          "default": "drop_down"
+        },
+        {
+          "type": "range",
+          "id": "space_above",
+          "min": 0,
+          "max": 2,
+          "step": 0.5,
+          "unit": "x",
+          "label": "Space above",
+          "default": 1
+        }
+      ]
+    },
+    {
+      "type": "buy_buttons",
+      "name": "Buy buttons",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "enable_payment_button",
+          "label": "Show dynamic checkout button",
+          "info": "Each customer will see their preferred payment method from those available on your store, such as PayPal or Apple Pay. [Learn more](https://help.shopify.com/manual/using-themes/change-the-layout/dynamic-checkout)",
+          "default": true
+        },
+        {
+          "type": "range",
+          "id": "space_above",
+          "min": 0,
+          "max": 2,
+          "step": 0.5,
+          "unit": "x",
+          "label": "Space above",
+          "default": 1
+        },
+        {
+          "type": "header",
+          "content": "Pickup availability"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_pickup_availability",
+          "label": "Show pickup availability [Learn more](https://help.shopify.com/en/manual/sell-in-person/pos-classic/shopify-pos-from-admin/buy-online-pickup-in-store#show-pickup-availability-to-your-customers)",
+          "default": true
+        },
+        {
+          "type": "header",
+          "content": "Gift card recipient"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_gift_card_recipient",
+          "default": false,
+          "label": "Show recipient information form for gift card products",
+          "info": "Gift card products can optionally be sent direct to a recipient along with a personal message. [Learn more](https://help.shopify.com/manual/online-store/themes/customizing-themes/add-gift-card-recipient-fields)"
+        }
+      ]
+    },
+    {
+      "type": "vendor",
+      "name": "Vendor",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "radio",
+          "id": "text_color",
+          "label": "Text color",
+          "options": [
+            {
+              "value": "text-scheme-text",
+              "label": "Text"
+            },
+            {
+              "value": "text-scheme-secondary",
+              "label": "Secondary"
+            }
+          ]
+        },
+        {
+          "type": "range",
+          "id": "space_above",
+          "min": 0,
+          "max": 2,
+          "step": 0.5,
+          "unit": "x",
+          "label": "Space above",
+          "default": 1
+        }
+      ]
+    },
+    {
+      "type": "description",
+      "name": "Description",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "truncate_description",
+          "label": "Truncate description",
+          "default": false
+        },
+        {
+          "type": "range",
+          "id": "max_words",
+          "min": 10,
+          "max": 100,
+          "step": 1,
+          "label": "Max words",
+          "default": 30
+        },
+        {
+          "type": "range",
+          "id": "space_above",
+          "min": 0,
+          "max": 2,
+          "step": 0.5,
+          "unit": "x",
+          "label": "Space above",
+          "default": 1
+        }
+      ]
+    },
+    {
+      "type": "star_rating",
+      "name": "Star rating",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "radio",
+          "id": "type",
+          "label": "Star rating type",
+          "default": "native",
+          "options": [
+            {
+              "value": "native",
+              "label": "Theme"
+            },
+            {
+              "value": "spr",
+              "label": "Shopify Product Reviews"
+            }
+          ]
+        },
+        {
+          "type": "range",
+          "id": "space_above",
+          "min": 0,
+          "max": 2,
+          "step": 0.5,
+          "unit": "x",
+          "label": "Space above",
+          "default": 1
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "name": "Text",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "default": "Text block",
+          "label": "Text"
+        },
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            {
+              "value": "none",
+              "label": "None"
+            },
+            {
+              "value": "bag",
+              "label": "Bag"
+            },
+            {
+              "value": "basket",
+              "label": "Basket"
+            },
+            {
+              "value": "box",
+              "label": "Box"
+            },
+            {
+              "value": "chat",
+              "label": "Chat"
+            },
+            {
+              "value": "checkmark",
+              "label": "Checkmark"
+            },
+            {
+              "value": "clock",
+              "label": "Clock"
+            },
+            {
+              "value": "coathanger",
+              "label": "Coathanger"
+            },
+            {
+              "value": "cog",
+              "label": "Cog"
+            },
+            {
+              "value": "dryer",
+              "label": "Dryer"
+            },
+            {
+              "value": "emoji-grin",
+              "label": "Emoji Grin"
+            },
+            {
+              "value": "eye",
+              "label": "Eye"
+            },
+            {
+              "value": "flag",
+              "label": "Flag"
+            },
+            {
+              "value": "gift",
+              "label": "Gift"
+            },
+            {
+              "value": "globe",
+              "label": "Globe"
+            },
+            {
+              "value": "heart",
+              "label": "Heart"
+            },
+            {
+              "value": "house",
+              "label": "House"
+            },
+            {
+              "value": "iron",
+              "label": "Iron"
+            },
+            {
+              "value": "leaf",
+              "label": "Leaf"
+            },
+            {
+              "value": "light-bulb",
+              "label": "Light Bulb"
+            },
+            {
+              "value": "lightning-bolt",
+              "label": "Lightning Bolt"
+            },
+            {
+              "value": "like",
+              "label": "Like"
+            },
+            {
+              "value": "lock",
+              "label": "Lock"
+            },
+            {
+              "value": "map-pin",
+              "label": "Map Pin"
+            },
+            {
+              "value": "medal",
+              "label": "Medal"
+            },
+            {
+              "value": "notepad",
+              "label": "Notepad"
+            },
+            {
+              "value": "paint-palette",
+              "label": "Paint Palette"
+            },
+            {
+              "value": "pants",
+              "label": "Pants"
+            },
+            {
+              "value": "person",
+              "label": "Person"
+            },
+            {
+              "value": "phone",
+              "label": "Phone"
+            },
+            {
+              "value": "plane",
+              "label": "Plane"
+            },
+            {
+              "value": "question-circle",
+              "label": "Question Circle"
+            },
+            {
+              "value": "recycle",
+              "label": "Recycle"
+            },
+            {
+              "value": "refresh-arrow",
+              "label": "Refresh Arrow"
+            },
+            {
+              "value": "ruler",
+              "label": "Ruler"
+            },
+            {
+              "value": "safety-pin",
+              "label": "Safety Pin"
+            },
+            {
+              "value": "shield",
+              "label": "Shield"
+            },
+            {
+              "value": "ship",
+              "label": "Ship"
+            },
+            {
+              "value": "shop",
+              "label": "Shop"
+            },
+            {
+              "value": "sneaker",
+              "label": "Sneaker"
+            },
+            {
+              "value": "star",
+              "label": "Star"
+            },
+            {
+              "value": "t-shirt",
+              "label": "T-Shirt"
+            },
+            {
+              "value": "tag",
+              "label": "Tag"
+            },
+            {
+              "value": "trophy",
+              "label": "Trophy"
+            },
+            {
+              "value": "truck-with-clock",
+              "label": "Truck with Clock"
+            },
+            {
+              "value": "truck",
+              "label": "Truck"
+            },
+            {
+              "value": "wallet",
+              "label": "Wallet"
+            },
+            {
+              "value": "washing-machine",
+              "label": "Washing Machine"
+            }
+          ],
+          "default": "none"
+        },
+        {
+          "type": "radio",
+          "id": "text_color",
+          "label": "Text color",
+          "options": [
+            {
+              "value": "text-scheme-text",
+              "label": "Text"
+            },
+            {
+              "value": "text-scheme-secondary",
+              "label": "Secondary"
+            }
+          ]
+        },
+        {
+          "type": "range",
+          "id": "space_above",
+          "min": 0,
+          "max": 2,
+          "step": 0.5,
+          "unit": "x",
+          "label": "Space above",
+          "default": 1
+        }
+      ]
+    },
+    {
+      "type": "rich_text",
+      "name": "Rich text",
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "content",
+          "default": "<p>Use this text to share additional information about your products with your customers.</p>",
+          "label": "Rich text"
+        },
+        {
+          "type": "range",
+          "id": "space_above",
+          "min": 0,
+          "max": 2,
+          "step": 0.5,
+          "unit": "x",
+          "label": "Space above",
+          "default": 1
+        }
+      ]
+    },
+    {
+      "type": "specifications",
+      "name": "Specifications",
+      "settings": [
+        {
+          "type": "radio",
+          "id": "content_text_alignment",
+          "label": "Content text alignment",
+          "options": [
+            {
+              "value": "text-left",
+              "label": "Left"
+            },
+            {
+              "value": "text-right",
+              "label": "Right"
+            }
+          ],
+          "default": "text-left"
+        },
+        {
+          "type": "radio",
+          "id": "text_color",
+          "label": "Text color",
+          "options": [
+            {
+              "value": "text-scheme-text",
+              "label": "Text"
+            },
+            {
+              "value": "text-scheme-secondary",
+              "label": "Secondary"
+            }
+          ]
+        },
+        {
+          "type": "checkbox",
+          "id": "show_borders",
+          "label": "Show borders",
+          "default": false
+        },
+        {
+          "type": "range",
+          "id": "space_above",
+          "min": 0,
+          "max": 2,
+          "step": 0.5,
+          "unit": "x",
+          "label": "Space above",
+          "default": 1
+        },
+        {
+          "type": "header",
+          "content": "Row 1"
+        },
+        {
+          "type": "text",
+          "id": "heading_1",
+          "default": "Heading",
+          "label": "Heading"
+        },
+        {
+          "type": "richtext",
+          "id": "content_1",
+          "default": "<p>Use this text to share additional information about your products with your customers.</p>",
+          "label": "Content"
+        },
+        {
+          "type": "header",
+          "content": "Row 2"
+        },
+        {
+          "type": "text",
+          "id": "heading_2",
+          "default": "Heading",
+          "label": "Heading"
+        },
+        {
+          "type": "richtext",
+          "id": "content_2",
+          "default": "<p>Use this text to share additional information about your products with your customers.</p>",
+          "label": "Content"
+        },
+        {
+          "type": "header",
+          "content": "Row 3"
+        },
+        {
+          "type": "text",
+          "id": "heading_3",
+          "default": "Heading",
+          "label": "Heading"
+        },
+        {
+          "type": "richtext",
+          "id": "content_3",
+          "default": "<p>Use this text to share additional information about your products with your customers.</p>",
+          "label": "Content"
+        },
+        {
+          "type": "header",
+          "content": "Row 4"
+        },
+        {
+          "type": "text",
+          "id": "heading_4",
+          "default": "Heading",
+          "label": "Heading"
+        },
+        {
+          "type": "richtext",
+          "id": "content_4",
+          "default": "<p>Use this text to share additional information about your products with your customers.</p>",
+          "label": "Content"
+        },
+        {
+          "type": "header",
+          "content": "Row 5"
+        },
+        {
+          "type": "text",
+          "id": "heading_5",
+          "default": "Heading",
+          "label": "Heading"
+        },
+        {
+          "type": "richtext",
+          "id": "content_5",
+          "default": "<p>Use this text to share additional information about your products with your customers.</p>",
+          "label": "Content"
+        }
+      ]
+    },
+    {
+      "type": "icon_list",
+      "name": "Icon list",
+      "settings": [
+        {
+          "type": "radio",
+          "id": "text_color",
+          "label": "Text color",
+          "options": [
+            {
+              "value": "text",
+              "label": "Text"
+            },
+            {
+              "value": "meta",
+              "label": "Secondary"
+            }
+          ],
+          "default": "text"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_borders",
+          "label": "Show borders",
+          "default": false
+        },
+        {
+          "type": "range",
+          "id": "space_above",
+          "min": 0,
+          "max": 2,
+          "step": 0.5,
+          "unit": "x",
+          "label": "Space above",
+          "default": 1
+        },
+        {
+          "type": "header",
+          "content": "Item 1"
+        },
+        {
+          "type": "text",
+          "id": "text_1",
+          "default": "List item",
+          "label": "Text"
+        },
+        {
+          "type": "select",
+          "id": "icon_1",
+          "label": "Icon",
+          "options": [
+            {
+              "value": "bag",
+              "label": "Bag"
+            },
+            {
+              "value": "basket",
+              "label": "Basket"
+            },
+            {
+              "value": "box",
+              "label": "Box"
+            },
+            {
+              "value": "chat",
+              "label": "Chat"
+            },
+            {
+              "value": "checkmark",
+              "label": "Checkmark"
+            },
+            {
+              "value": "clock",
+              "label": "Clock"
+            },
+            {
+              "value": "coathanger",
+              "label": "Coathanger"
+            },
+            {
+              "value": "cog",
+              "label": "Cog"
+            },
+            {
+              "value": "dryer",
+              "label": "Dryer"
+            },
+            {
+              "value": "emoji-grin",
+              "label": "Emoji Grin"
+            },
+            {
+              "value": "eye",
+              "label": "Eye"
+            },
+            {
+              "value": "flag",
+              "label": "Flag"
+            },
+            {
+              "value": "gift",
+              "label": "Gift"
+            },
+            {
+              "value": "globe",
+              "label": "Globe"
+            },
+            {
+              "value": "heart",
+              "label": "Heart"
+            },
+            {
+              "value": "house",
+              "label": "House"
+            },
+            {
+              "value": "iron",
+              "label": "Iron"
+            },
+            {
+              "value": "leaf",
+              "label": "Leaf"
+            },
+            {
+              "value": "light-bulb",
+              "label": "Light Bulb"
+            },
+            {
+              "value": "lightning-bolt",
+              "label": "Lightning Bolt"
+            },
+            {
+              "value": "like",
+              "label": "Like"
+            },
+            {
+              "value": "lock",
+              "label": "Lock"
+            },
+            {
+              "value": "map-pin",
+              "label": "Map Pin"
+            },
+            {
+              "value": "medal",
+              "label": "Medal"
+            },
+            {
+              "value": "notepad",
+              "label": "Notepad"
+            },
+            {
+              "value": "paint-palette",
+              "label": "Paint Palette"
+            },
+            {
+              "value": "pants",
+              "label": "Pants"
+            },
+            {
+              "value": "person",
+              "label": "Person"
+            },
+            {
+              "value": "phone",
+              "label": "Phone"
+            },
+            {
+              "value": "plane",
+              "label": "Plane"
+            },
+            {
+              "value": "question-circle",
+              "label": "Question Circle"
+            },
+            {
+              "value": "recycle",
+              "label": "Recycle"
+            },
+            {
+              "value": "refresh-arrow",
+              "label": "Refresh Arrow"
+            },
+            {
+              "value": "ruler",
+              "label": "Ruler"
+            },
+            {
+              "value": "safety-pin",
+              "label": "Safety Pin"
+            },
+            {
+              "value": "shield",
+              "label": "Shield"
+            },
+            {
+              "value": "ship",
+              "label": "Ship"
+            },
+            {
+              "value": "shop",
+              "label": "Shop"
+            },
+            {
+              "value": "sneaker",
+              "label": "Sneaker"
+            },
+            {
+              "value": "star",
+              "label": "Star"
+            },
+            {
+              "value": "t-shirt",
+              "label": "T-Shirt"
+            },
+            {
+              "value": "tag",
+              "label": "Tag"
+            },
+            {
+              "value": "trophy",
+              "label": "Trophy"
+            },
+            {
+              "value": "truck-with-clock",
+              "label": "Truck with Clock"
+            },
+            {
+              "value": "truck",
+              "label": "Truck"
+            },
+            {
+              "value": "wallet",
+              "label": "Wallet"
+            },
+            {
+              "value": "washing-machine",
+              "label": "Washing Machine"
+            }
+          ],
+          "default": "box"
+        },
+        {
+          "type": "header",
+          "content": "Item 2"
+        },
+        {
+          "type": "text",
+          "id": "text_2",
+          "default": "List item",
+          "label": "Text"
+        },
+        {
+          "type": "select",
+          "id": "icon_2",
+          "label": "Icon",
+          "options": [
+            {
+              "value": "bag",
+              "label": "Bag"
+            },
+            {
+              "value": "basket",
+              "label": "Basket"
+            },
+            {
+              "value": "box",
+              "label": "Box"
+            },
+            {
+              "value": "chat",
+              "label": "Chat"
+            },
+            {
+              "value": "checkmark",
+              "label": "Checkmark"
+            },
+            {
+              "value": "clock",
+              "label": "Clock"
+            },
+            {
+              "value": "coathanger",
+              "label": "Coathanger"
+            },
+            {
+              "value": "cog",
+              "label": "Cog"
+            },
+            {
+              "value": "dryer",
+              "label": "Dryer"
+            },
+            {
+              "value": "emoji-grin",
+              "label": "Emoji Grin"
+            },
+            {
+              "value": "eye",
+              "label": "Eye"
+            },
+            {
+              "value": "flag",
+              "label": "Flag"
+            },
+            {
+              "value": "gift",
+              "label": "Gift"
+            },
+            {
+              "value": "globe",
+              "label": "Globe"
+            },
+            {
+              "value": "heart",
+              "label": "Heart"
+            },
+            {
+              "value": "house",
+              "label": "House"
+            },
+            {
+              "value": "iron",
+              "label": "Iron"
+            },
+            {
+              "value": "leaf",
+              "label": "Leaf"
+            },
+            {
+              "value": "light-bulb",
+              "label": "Light Bulb"
+            },
+            {
+              "value": "lightning-bolt",
+              "label": "Lightning Bolt"
+            },
+            {
+              "value": "like",
+              "label": "Like"
+            },
+            {
+              "value": "lock",
+              "label": "Lock"
+            },
+            {
+              "value": "map-pin",
+              "label": "Map Pin"
+            },
+            {
+              "value": "medal",
+              "label": "Medal"
+            },
+            {
+              "value": "notepad",
+              "label": "Notepad"
+            },
+            {
+              "value": "paint-palette",
+              "label": "Paint Palette"
+            },
+            {
+              "value": "pants",
+              "label": "Pants"
+            },
+            {
+              "value": "person",
+              "label": "Person"
+            },
+            {
+              "value": "phone",
+              "label": "Phone"
+            },
+            {
+              "value": "plane",
+              "label": "Plane"
+            },
+            {
+              "value": "question-circle",
+              "label": "Question Circle"
+            },
+            {
+              "value": "recycle",
+              "label": "Recycle"
+            },
+            {
+              "value": "refresh-arrow",
+              "label": "Refresh Arrow"
+            },
+            {
+              "value": "ruler",
+              "label": "Ruler"
+            },
+            {
+              "value": "safety-pin",
+              "label": "Safety Pin"
+            },
+            {
+              "value": "shield",
+              "label": "Shield"
+            },
+            {
+              "value": "ship",
+              "label": "Ship"
+            },
+            {
+              "value": "shop",
+              "label": "Shop"
+            },
+            {
+              "value": "sneaker",
+              "label": "Sneaker"
+            },
+            {
+              "value": "star",
+              "label": "Star"
+            },
+            {
+              "value": "t-shirt",
+              "label": "T-Shirt"
+            },
+            {
+              "value": "tag",
+              "label": "Tag"
+            },
+            {
+              "value": "trophy",
+              "label": "Trophy"
+            },
+            {
+              "value": "truck-with-clock",
+              "label": "Truck with Clock"
+            },
+            {
+              "value": "truck",
+              "label": "Truck"
+            },
+            {
+              "value": "wallet",
+              "label": "Wallet"
+            },
+            {
+              "value": "washing-machine",
+              "label": "Washing Machine"
+            }
+          ],
+          "default": "ruler"
+        },
+        {
+          "type": "header",
+          "content": "Item 3"
+        },
+        {
+          "type": "text",
+          "id": "text_3",
+          "default": "List item",
+          "label": "Text"
+        },
+        {
+          "type": "select",
+          "id": "icon_3",
+          "label": "Icon",
+          "options": [
+            {
+              "value": "bag",
+              "label": "Bag"
+            },
+            {
+              "value": "basket",
+              "label": "Basket"
+            },
+            {
+              "value": "box",
+              "label": "Box"
+            },
+            {
+              "value": "chat",
+              "label": "Chat"
+            },
+            {
+              "value": "checkmark",
+              "label": "Checkmark"
+            },
+            {
+              "value": "clock",
+              "label": "Clock"
+            },
+            {
+              "value": "coathanger",
+              "label": "Coathanger"
+            },
+            {
+              "value": "cog",
+              "label": "Cog"
+            },
+            {
+              "value": "dryer",
+              "label": "Dryer"
+            },
+            {
+              "value": "emoji-grin",
+              "label": "Emoji Grin"
+            },
+            {
+              "value": "eye",
+              "label": "Eye"
+            },
+            {
+              "value": "flag",
+              "label": "Flag"
+            },
+            {
+              "value": "gift",
+              "label": "Gift"
+            },
+            {
+              "value": "globe",
+              "label": "Globe"
+            },
+            {
+              "value": "heart",
+              "label": "Heart"
+            },
+            {
+              "value": "house",
+              "label": "House"
+            },
+            {
+              "value": "iron",
+              "label": "Iron"
+            },
+            {
+              "value": "leaf",
+              "label": "Leaf"
+            },
+            {
+              "value": "light-bulb",
+              "label": "Light Bulb"
+            },
+            {
+              "value": "lightning-bolt",
+              "label": "Lightning Bolt"
+            },
+            {
+              "value": "like",
+              "label": "Like"
+            },
+            {
+              "value": "lock",
+              "label": "Lock"
+            },
+            {
+              "value": "map-pin",
+              "label": "Map Pin"
+            },
+            {
+              "value": "medal",
+              "label": "Medal"
+            },
+            {
+              "value": "notepad",
+              "label": "Notepad"
+            },
+            {
+              "value": "paint-palette",
+              "label": "Paint Palette"
+            },
+            {
+              "value": "pants",
+              "label": "Pants"
+            },
+            {
+              "value": "person",
+              "label": "Person"
+            },
+            {
+              "value": "phone",
+              "label": "Phone"
+            },
+            {
+              "value": "plane",
+              "label": "Plane"
+            },
+            {
+              "value": "question-circle",
+              "label": "Question Circle"
+            },
+            {
+              "value": "recycle",
+              "label": "Recycle"
+            },
+            {
+              "value": "refresh-arrow",
+              "label": "Refresh Arrow"
+            },
+            {
+              "value": "ruler",
+              "label": "Ruler"
+            },
+            {
+              "value": "safety-pin",
+              "label": "Safety Pin"
+            },
+            {
+              "value": "shield",
+              "label": "Shield"
+            },
+            {
+              "value": "ship",
+              "label": "Ship"
+            },
+            {
+              "value": "shop",
+              "label": "Shop"
+            },
+            {
+              "value": "sneaker",
+              "label": "Sneaker"
+            },
+            {
+              "value": "star",
+              "label": "Star"
+            },
+            {
+              "value": "t-shirt",
+              "label": "T-Shirt"
+            },
+            {
+              "value": "tag",
+              "label": "Tag"
+            },
+            {
+              "value": "trophy",
+              "label": "Trophy"
+            },
+            {
+              "value": "truck-with-clock",
+              "label": "Truck with Clock"
+            },
+            {
+              "value": "truck",
+              "label": "Truck"
+            },
+            {
+              "value": "wallet",
+              "label": "Wallet"
+            },
+            {
+              "value": "washing-machine",
+              "label": "Washing Machine"
+            }
+          ],
+          "default": "globe"
+        },
+        {
+          "type": "header",
+          "content": "Item 4"
+        },
+        {
+          "type": "text",
+          "id": "text_4",
+          "default": "List item",
+          "label": "Text"
+        },
+        {
+          "type": "select",
+          "id": "icon_4",
+          "label": "Icon",
+          "options": [
+            {
+              "value": "bag",
+              "label": "Bag"
+            },
+            {
+              "value": "basket",
+              "label": "Basket"
+            },
+            {
+              "value": "box",
+              "label": "Box"
+            },
+            {
+              "value": "chat",
+              "label": "Chat"
+            },
+            {
+              "value": "checkmark",
+              "label": "Checkmark"
+            },
+            {
+              "value": "clock",
+              "label": "Clock"
+            },
+            {
+              "value": "coathanger",
+              "label": "Coathanger"
+            },
+            {
+              "value": "cog",
+              "label": "Cog"
+            },
+            {
+              "value": "dryer",
+              "label": "Dryer"
+            },
+            {
+              "value": "emoji-grin",
+              "label": "Emoji Grin"
+            },
+            {
+              "value": "eye",
+              "label": "Eye"
+            },
+            {
+              "value": "flag",
+              "label": "Flag"
+            },
+            {
+              "value": "gift",
+              "label": "Gift"
+            },
+            {
+              "value": "globe",
+              "label": "Globe"
+            },
+            {
+              "value": "heart",
+              "label": "Heart"
+            },
+            {
+              "value": "house",
+              "label": "House"
+            },
+            {
+              "value": "iron",
+              "label": "Iron"
+            },
+            {
+              "value": "leaf",
+              "label": "Leaf"
+            },
+            {
+              "value": "light-bulb",
+              "label": "Light Bulb"
+            },
+            {
+              "value": "lightning-bolt",
+              "label": "Lightning Bolt"
+            },
+            {
+              "value": "like",
+              "label": "Like"
+            },
+            {
+              "value": "lock",
+              "label": "Lock"
+            },
+            {
+              "value": "map-pin",
+              "label": "Map Pin"
+            },
+            {
+              "value": "medal",
+              "label": "Medal"
+            },
+            {
+              "value": "notepad",
+              "label": "Notepad"
+            },
+            {
+              "value": "paint-palette",
+              "label": "Paint Palette"
+            },
+            {
+              "value": "pants",
+              "label": "Pants"
+            },
+            {
+              "value": "person",
+              "label": "Person"
+            },
+            {
+              "value": "phone",
+              "label": "Phone"
+            },
+            {
+              "value": "plane",
+              "label": "Plane"
+            },
+            {
+              "value": "question-circle",
+              "label": "Question Circle"
+            },
+            {
+              "value": "recycle",
+              "label": "Recycle"
+            },
+            {
+              "value": "refresh-arrow",
+              "label": "Refresh Arrow"
+            },
+            {
+              "value": "ruler",
+              "label": "Ruler"
+            },
+            {
+              "value": "safety-pin",
+              "label": "Safety Pin"
+            },
+            {
+              "value": "shield",
+              "label": "Shield"
+            },
+            {
+              "value": "ship",
+              "label": "Ship"
+            },
+            {
+              "value": "shop",
+              "label": "Shop"
+            },
+            {
+              "value": "sneaker",
+              "label": "Sneaker"
+            },
+            {
+              "value": "star",
+              "label": "Star"
+            },
+            {
+              "value": "t-shirt",
+              "label": "T-Shirt"
+            },
+            {
+              "value": "tag",
+              "label": "Tag"
+            },
+            {
+              "value": "trophy",
+              "label": "Trophy"
+            },
+            {
+              "value": "truck-with-clock",
+              "label": "Truck with Clock"
+            },
+            {
+              "value": "truck",
+              "label": "Truck"
+            },
+            {
+              "value": "wallet",
+              "label": "Wallet"
+            },
+            {
+              "value": "washing-machine",
+              "label": "Washing Machine"
+            }
+          ],
+          "default": "washing-machine"
+        },
+        {
+          "type": "header",
+          "content": "Item 5"
+        },
+        {
+          "type": "text",
+          "id": "text_5",
+          "default": "List item",
+          "label": "Text"
+        },
+        {
+          "type": "select",
+          "id": "icon_5",
+          "label": "Icon",
+          "options": [
+            {
+              "value": "bag",
+              "label": "Bag"
+            },
+            {
+              "value": "basket",
+              "label": "Basket"
+            },
+            {
+              "value": "box",
+              "label": "Box"
+            },
+            {
+              "value": "chat",
+              "label": "Chat"
+            },
+            {
+              "value": "checkmark",
+              "label": "Checkmark"
+            },
+            {
+              "value": "clock",
+              "label": "Clock"
+            },
+            {
+              "value": "coathanger",
+              "label": "Coathanger"
+            },
+            {
+              "value": "cog",
+              "label": "Cog"
+            },
+            {
+              "value": "dryer",
+              "label": "Dryer"
+            },
+            {
+              "value": "emoji-grin",
+              "label": "Emoji Grin"
+            },
+            {
+              "value": "eye",
+              "label": "Eye"
+            },
+            {
+              "value": "flag",
+              "label": "Flag"
+            },
+            {
+              "value": "gift",
+              "label": "Gift"
+            },
+            {
+              "value": "globe",
+              "label": "Globe"
+            },
+            {
+              "value": "heart",
+              "label": "Heart"
+            },
+            {
+              "value": "house",
+              "label": "House"
+            },
+            {
+              "value": "iron",
+              "label": "Iron"
+            },
+            {
+              "value": "leaf",
+              "label": "Leaf"
+            },
+            {
+              "value": "light-bulb",
+              "label": "Light Bulb"
+            },
+            {
+              "value": "lightning-bolt",
+              "label": "Lightning Bolt"
+            },
+            {
+              "value": "like",
+              "label": "Like"
+            },
+            {
+              "value": "lock",
+              "label": "Lock"
+            },
+            {
+              "value": "map-pin",
+              "label": "Map Pin"
+            },
+            {
+              "value": "medal",
+              "label": "Medal"
+            },
+            {
+              "value": "notepad",
+              "label": "Notepad"
+            },
+            {
+              "value": "paint-palette",
+              "label": "Paint Palette"
+            },
+            {
+              "value": "pants",
+              "label": "Pants"
+            },
+            {
+              "value": "person",
+              "label": "Person"
+            },
+            {
+              "value": "phone",
+              "label": "Phone"
+            },
+            {
+              "value": "plane",
+              "label": "Plane"
+            },
+            {
+              "value": "question-circle",
+              "label": "Question Circle"
+            },
+            {
+              "value": "recycle",
+              "label": "Recycle"
+            },
+            {
+              "value": "refresh-arrow",
+              "label": "Refresh Arrow"
+            },
+            {
+              "value": "ruler",
+              "label": "Ruler"
+            },
+            {
+              "value": "safety-pin",
+              "label": "Safety Pin"
+            },
+            {
+              "value": "shield",
+              "label": "Shield"
+            },
+            {
+              "value": "ship",
+              "label": "Ship"
+            },
+            {
+              "value": "shop",
+              "label": "Shop"
+            },
+            {
+              "value": "sneaker",
+              "label": "Sneaker"
+            },
+            {
+              "value": "star",
+              "label": "Star"
+            },
+            {
+              "value": "t-shirt",
+              "label": "T-Shirt"
+            },
+            {
+              "value": "tag",
+              "label": "Tag"
+            },
+            {
+              "value": "trophy",
+              "label": "Trophy"
+            },
+            {
+              "value": "truck-with-clock",
+              "label": "Truck with Clock"
+            },
+            {
+              "value": "truck",
+              "label": "Truck"
+            },
+            {
+              "value": "wallet",
+              "label": "Wallet"
+            },
+            {
+              "value": "washing-machine",
+              "label": "Washing Machine"
+            }
+          ],
+          "default": "truck"
+        }
+      ]
+    },
+    {
+      "type": "collapsible_tabs",
+      "name": "Collapsible tabs",
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "show_borders",
+          "label": "Show borders",
+          "default": true
+        },
+        {
+          "type": "range",
+          "id": "space_above",
+          "min": 0,
+          "max": 2,
+          "step": 0.5,
+          "unit": "x",
+          "label": "Space above",
+          "default": 1
+        },
+        {
+          "type": "header",
+          "content": "Item 1"
+        },
+        {
+          "type": "text",
+          "id": "heading_1",
+          "default": "Collapsible tab",
+          "label": "Heading"
+        },
+        {
+          "type": "richtext",
+          "id": "content_1",
+          "label": "Tab content",
+          "default": "<p>Use this text to share additional information about your products with your customers.</p>"
+        },
+        {
+          "type": "page",
+          "id": "page_1",
+          "label": "Tab content from page"
+        },
+        {
+          "type": "select",
+          "id": "icon_1",
+          "label": "Icon",
+          "options": [
+            {
+              "value": "none",
+              "label": "None"
+            },
+            {
+              "value": "bag",
+              "label": "Bag"
+            },
+            {
+              "value": "basket",
+              "label": "Basket"
+            },
+            {
+              "value": "box",
+              "label": "Box"
+            },
+            {
+              "value": "chat",
+              "label": "Chat"
+            },
+            {
+              "value": "checkmark",
+              "label": "Checkmark"
+            },
+            {
+              "value": "clock",
+              "label": "Clock"
+            },
+            {
+              "value": "coathanger",
+              "label": "Coathanger"
+            },
+            {
+              "value": "cog",
+              "label": "Cog"
+            },
+            {
+              "value": "dryer",
+              "label": "Dryer"
+            },
+            {
+              "value": "emoji-grin",
+              "label": "Emoji Grin"
+            },
+            {
+              "value": "eye",
+              "label": "Eye"
+            },
+            {
+              "value": "flag",
+              "label": "Flag"
+            },
+            {
+              "value": "gift",
+              "label": "Gift"
+            },
+            {
+              "value": "globe",
+              "label": "Globe"
+            },
+            {
+              "value": "heart",
+              "label": "Heart"
+            },
+            {
+              "value": "house",
+              "label": "House"
+            },
+            {
+              "value": "iron",
+              "label": "Iron"
+            },
+            {
+              "value": "leaf",
+              "label": "Leaf"
+            },
+            {
+              "value": "light-bulb",
+              "label": "Light Bulb"
+            },
+            {
+              "value": "lightning-bolt",
+              "label": "Lightning Bolt"
+            },
+            {
+              "value": "like",
+              "label": "Like"
+            },
+            {
+              "value": "lock",
+              "label": "Lock"
+            },
+            {
+              "value": "map-pin",
+              "label": "Map Pin"
+            },
+            {
+              "value": "medal",
+              "label": "Medal"
+            },
+            {
+              "value": "notepad",
+              "label": "Notepad"
+            },
+            {
+              "value": "paint-palette",
+              "label": "Paint Palette"
+            },
+            {
+              "value": "pants",
+              "label": "Pants"
+            },
+            {
+              "value": "person",
+              "label": "Person"
+            },
+            {
+              "value": "phone",
+              "label": "Phone"
+            },
+            {
+              "value": "plane",
+              "label": "Plane"
+            },
+            {
+              "value": "question-circle",
+              "label": "Question Circle"
+            },
+            {
+              "value": "recycle",
+              "label": "Recycle"
+            },
+            {
+              "value": "refresh-arrow",
+              "label": "Refresh Arrow"
+            },
+            {
+              "value": "ruler",
+              "label": "Ruler"
+            },
+            {
+              "value": "safety-pin",
+              "label": "Safety Pin"
+            },
+            {
+              "value": "shield",
+              "label": "Shield"
+            },
+            {
+              "value": "ship",
+              "label": "Ship"
+            },
+            {
+              "value": "shop",
+              "label": "Shop"
+            },
+            {
+              "value": "sneaker",
+              "label": "Sneaker"
+            },
+            {
+              "value": "star",
+              "label": "Star"
+            },
+            {
+              "value": "t-shirt",
+              "label": "T-Shirt"
+            },
+            {
+              "value": "tag",
+              "label": "Tag"
+            },
+            {
+              "value": "trophy",
+              "label": "Trophy"
+            },
+            {
+              "value": "truck-with-clock",
+              "label": "Truck with Clock"
+            },
+            {
+              "value": "truck",
+              "label": "Truck"
+            },
+            {
+              "value": "wallet",
+              "label": "Wallet"
+            },
+            {
+              "value": "washing-machine",
+              "label": "Washing Machine"
+            }
+          ],
+          "default": "none"
+        },
+        {
+          "type": "header",
+          "content": "Item 2"
+        },
+        {
+          "type": "checkbox",
+          "id": "enable_2",
+          "label": "Enable",
+          "default": true
+        },
+        {
+          "type": "text",
+          "id": "heading_2",
+          "default": "Collapsible tab",
+          "label": "Heading"
+        },
+        {
+          "type": "richtext",
+          "id": "content_2",
+          "label": "Tab content",
+          "default": "<p>Use this text to share additional information about your products with your customers.</p>"
+        },
+        {
+          "type": "page",
+          "id": "page_2",
+          "label": "Tab content from page"
+        },
+        {
+          "type": "select",
+          "id": "icon_2",
+          "label": "Icon",
+          "options": [
+            {
+              "value": "none",
+              "label": "None"
+            },
+            {
+              "value": "bag",
+              "label": "Bag"
+            },
+            {
+              "value": "basket",
+              "label": "Basket"
+            },
+            {
+              "value": "box",
+              "label": "Box"
+            },
+            {
+              "value": "chat",
+              "label": "Chat"
+            },
+            {
+              "value": "checkmark",
+              "label": "Checkmark"
+            },
+            {
+              "value": "clock",
+              "label": "Clock"
+            },
+            {
+              "value": "coathanger",
+              "label": "Coathanger"
+            },
+            {
+              "value": "cog",
+              "label": "Cog"
+            },
+            {
+              "value": "dryer",
+              "label": "Dryer"
+            },
+            {
+              "value": "emoji-grin",
+              "label": "Emoji Grin"
+            },
+            {
+              "value": "eye",
+              "label": "Eye"
+            },
+            {
+              "value": "flag",
+              "label": "Flag"
+            },
+            {
+              "value": "gift",
+              "label": "Gift"
+            },
+            {
+              "value": "globe",
+              "label": "Globe"
+            },
+            {
+              "value": "heart",
+              "label": "Heart"
+            },
+            {
+              "value": "house",
+              "label": "House"
+            },
+            {
+              "value": "iron",
+              "label": "Iron"
+            },
+            {
+              "value": "leaf",
+              "label": "Leaf"
+            },
+            {
+              "value": "light-bulb",
+              "label": "Light Bulb"
+            },
+            {
+              "value": "lightning-bolt",
+              "label": "Lightning Bolt"
+            },
+            {
+              "value": "like",
+              "label": "Like"
+            },
+            {
+              "value": "lock",
+              "label": "Lock"
+            },
+            {
+              "value": "map-pin",
+              "label": "Map Pin"
+            },
+            {
+              "value": "medal",
+              "label": "Medal"
+            },
+            {
+              "value": "notepad",
+              "label": "Notepad"
+            },
+            {
+              "value": "paint-palette",
+              "label": "Paint Palette"
+            },
+            {
+              "value": "pants",
+              "label": "Pants"
+            },
+            {
+              "value": "person",
+              "label": "Person"
+            },
+            {
+              "value": "phone",
+              "label": "Phone"
+            },
+            {
+              "value": "plane",
+              "label": "Plane"
+            },
+            {
+              "value": "question-circle",
+              "label": "Question Circle"
+            },
+            {
+              "value": "recycle",
+              "label": "Recycle"
+            },
+            {
+              "value": "refresh-arrow",
+              "label": "Refresh Arrow"
+            },
+            {
+              "value": "ruler",
+              "label": "Ruler"
+            },
+            {
+              "value": "safety-pin",
+              "label": "Safety Pin"
+            },
+            {
+              "value": "shield",
+              "label": "Shield"
+            },
+            {
+              "value": "ship",
+              "label": "Ship"
+            },
+            {
+              "value": "shop",
+              "label": "Shop"
+            },
+            {
+              "value": "sneaker",
+              "label": "Sneaker"
+            },
+            {
+              "value": "star",
+              "label": "Star"
+            },
+            {
+              "value": "t-shirt",
+              "label": "T-Shirt"
+            },
+            {
+              "value": "tag",
+              "label": "Tag"
+            },
+            {
+              "value": "trophy",
+              "label": "Trophy"
+            },
+            {
+              "value": "truck-with-clock",
+              "label": "Truck with Clock"
+            },
+            {
+              "value": "truck",
+              "label": "Truck"
+            },
+            {
+              "value": "wallet",
+              "label": "Wallet"
+            },
+            {
+              "value": "washing-machine",
+              "label": "Washing Machine"
+            }
+          ],
+          "default": "none"
+        },
+        {
+          "type": "header",
+          "content": "Item 3"
+        },
+        {
+          "type": "checkbox",
+          "id": "enable_3",
+          "label": "Enable",
+          "default": true
+        },
+        {
+          "type": "text",
+          "id": "heading_3",
+          "default": "Collapsible tab",
+          "label": "Heading"
+        },
+        {
+          "type": "richtext",
+          "id": "content_3",
+          "label": "Tab content",
+          "default": "<p>Use this text to share additional information about your products with your customers.</p>"
+        },
+        {
+          "type": "page",
+          "id": "page_3",
+          "label": "Tab content from page"
+        },
+        {
+          "type": "select",
+          "id": "icon_3",
+          "label": "Icon",
+          "options": [
+            {
+              "value": "none",
+              "label": "None"
+            },
+            {
+              "value": "bag",
+              "label": "Bag"
+            },
+            {
+              "value": "basket",
+              "label": "Basket"
+            },
+            {
+              "value": "box",
+              "label": "Box"
+            },
+            {
+              "value": "chat",
+              "label": "Chat"
+            },
+            {
+              "value": "checkmark",
+              "label": "Checkmark"
+            },
+            {
+              "value": "clock",
+              "label": "Clock"
+            },
+            {
+              "value": "coathanger",
+              "label": "Coathanger"
+            },
+            {
+              "value": "cog",
+              "label": "Cog"
+            },
+            {
+              "value": "dryer",
+              "label": "Dryer"
+            },
+            {
+              "value": "emoji-grin",
+              "label": "Emoji Grin"
+            },
+            {
+              "value": "eye",
+              "label": "Eye"
+            },
+            {
+              "value": "flag",
+              "label": "Flag"
+            },
+            {
+              "value": "gift",
+              "label": "Gift"
+            },
+            {
+              "value": "globe",
+              "label": "Globe"
+            },
+            {
+              "value": "heart",
+              "label": "Heart"
+            },
+            {
+              "value": "house",
+              "label": "House"
+            },
+            {
+              "value": "iron",
+              "label": "Iron"
+            },
+            {
+              "value": "leaf",
+              "label": "Leaf"
+            },
+            {
+              "value": "light-bulb",
+              "label": "Light Bulb"
+            },
+            {
+              "value": "lightning-bolt",
+              "label": "Lightning Bolt"
+            },
+            {
+              "value": "like",
+              "label": "Like"
+            },
+            {
+              "value": "lock",
+              "label": "Lock"
+            },
+            {
+              "value": "map-pin",
+              "label": "Map Pin"
+            },
+            {
+              "value": "medal",
+              "label": "Medal"
+            },
+            {
+              "value": "notepad",
+              "label": "Notepad"
+            },
+            {
+              "value": "paint-palette",
+              "label": "Paint Palette"
+            },
+            {
+              "value": "pants",
+              "label": "Pants"
+            },
+            {
+              "value": "person",
+              "label": "Person"
+            },
+            {
+              "value": "phone",
+              "label": "Phone"
+            },
+            {
+              "value": "plane",
+              "label": "Plane"
+            },
+            {
+              "value": "question-circle",
+              "label": "Question Circle"
+            },
+            {
+              "value": "recycle",
+              "label": "Recycle"
+            },
+            {
+              "value": "refresh-arrow",
+              "label": "Refresh Arrow"
+            },
+            {
+              "value": "ruler",
+              "label": "Ruler"
+            },
+            {
+              "value": "safety-pin",
+              "label": "Safety Pin"
+            },
+            {
+              "value": "shield",
+              "label": "Shield"
+            },
+            {
+              "value": "ship",
+              "label": "Ship"
+            },
+            {
+              "value": "shop",
+              "label": "Shop"
+            },
+            {
+              "value": "sneaker",
+              "label": "Sneaker"
+            },
+            {
+              "value": "star",
+              "label": "Star"
+            },
+            {
+              "value": "t-shirt",
+              "label": "T-Shirt"
+            },
+            {
+              "value": "tag",
+              "label": "Tag"
+            },
+            {
+              "value": "trophy",
+              "label": "Trophy"
+            },
+            {
+              "value": "truck-with-clock",
+              "label": "Truck with Clock"
+            },
+            {
+              "value": "truck",
+              "label": "Truck"
+            },
+            {
+              "value": "wallet",
+              "label": "Wallet"
+            },
+            {
+              "value": "washing-machine",
+              "label": "Washing Machine"
+            }
+          ],
+          "default": "none"
+        }
+      ]
+    },
+    {
+      "type": "supporting_links",
+      "name": "Supporting links",
+      "settings": [
+        {
+          "type": "link_list",
+          "id": "linklist",
+          "label": "Supporting links menu",
+          "info": "This menu won't show dropdown items"
+        },
+        {
+          "type": "radio",
+          "id": "layout",
+          "label": "Layout",
+          "default": "vertical",
+          "options": [
+            {
+              "value": "vertical",
+              "label": "Vertical"
+            },
+            {
+              "value": "horizontal",
+              "label": "Horizontal"
+            }
+          ]
+        },
+        {
+          "type": "radio",
+          "id": "text_color",
+          "label": "Text color",
+          "options": [
+            {
+              "value": "text-scheme-text",
+              "label": "Text"
+            },
+            {
+              "value": "text-scheme-secondary",
+              "label": "Secondary"
+            }
+          ]
+        },
+        {
+          "type": "range",
+          "id": "space_above",
+          "min": 0,
+          "max": 2,
+          "step": 0.5,
+          "unit": "x",
+          "label": "Space above",
+          "default": 1
+        }
+      ]
+    },
+    {
+      "type": "popup",
+      "name": "Pop-up",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            {
+              "value": "none",
+              "label": "None"
+            },
+            {
+              "value": "bag",
+              "label": "Bag"
+            },
+            {
+              "value": "basket",
+              "label": "Basket"
+            },
+            {
+              "value": "box",
+              "label": "Box"
+            },
+            {
+              "value": "chat",
+              "label": "Chat"
+            },
+            {
+              "value": "checkmark",
+              "label": "Checkmark"
+            },
+            {
+              "value": "clock",
+              "label": "Clock"
+            },
+            {
+              "value": "coathanger",
+              "label": "Coathanger"
+            },
+            {
+              "value": "cog",
+              "label": "Cog"
+            },
+            {
+              "value": "dryer",
+              "label": "Dryer"
+            },
+            {
+              "value": "emoji-grin",
+              "label": "Emoji Grin"
+            },
+            {
+              "value": "eye",
+              "label": "Eye"
+            },
+            {
+              "value": "flag",
+              "label": "Flag"
+            },
+            {
+              "value": "gift",
+              "label": "Gift"
+            },
+            {
+              "value": "globe",
+              "label": "Globe"
+            },
+            {
+              "value": "heart",
+              "label": "Heart"
+            },
+            {
+              "value": "house",
+              "label": "House"
+            },
+            {
+              "value": "iron",
+              "label": "Iron"
+            },
+            {
+              "value": "leaf",
+              "label": "Leaf"
+            },
+            {
+              "value": "light-bulb",
+              "label": "Light Bulb"
+            },
+            {
+              "value": "lightning-bolt",
+              "label": "Lightning Bolt"
+            },
+            {
+              "value": "like",
+              "label": "Like"
+            },
+            {
+              "value": "lock",
+              "label": "Lock"
+            },
+            {
+              "value": "map-pin",
+              "label": "Map Pin"
+            },
+            {
+              "value": "medal",
+              "label": "Medal"
+            },
+            {
+              "value": "notepad",
+              "label": "Notepad"
+            },
+            {
+              "value": "paint-palette",
+              "label": "Paint Palette"
+            },
+            {
+              "value": "pants",
+              "label": "Pants"
+            },
+            {
+              "value": "person",
+              "label": "Person"
+            },
+            {
+              "value": "phone",
+              "label": "Phone"
+            },
+            {
+              "value": "plane",
+              "label": "Plane"
+            },
+            {
+              "value": "question-circle",
+              "label": "Question Circle"
+            },
+            {
+              "value": "recycle",
+              "label": "Recycle"
+            },
+            {
+              "value": "refresh-arrow",
+              "label": "Refresh Arrow"
+            },
+            {
+              "value": "ruler",
+              "label": "Ruler"
+            },
+            {
+              "value": "safety-pin",
+              "label": "Safety Pin"
+            },
+            {
+              "value": "shield",
+              "label": "Shield"
+            },
+            {
+              "value": "ship",
+              "label": "Ship"
+            },
+            {
+              "value": "shop",
+              "label": "Shop"
+            },
+            {
+              "value": "sneaker",
+              "label": "Sneaker"
+            },
+            {
+              "value": "star",
+              "label": "Star"
+            },
+            {
+              "value": "t-shirt",
+              "label": "T-Shirt"
+            },
+            {
+              "value": "tag",
+              "label": "Tag"
+            },
+            {
+              "value": "trophy",
+              "label": "Trophy"
+            },
+            {
+              "value": "truck-with-clock",
+              "label": "Truck with Clock"
+            },
+            {
+              "value": "truck",
+              "label": "Truck"
+            },
+            {
+              "value": "wallet",
+              "label": "Wallet"
+            },
+            {
+              "value": "washing-machine",
+              "label": "Washing Machine"
+            }
+          ],
+          "default": "none"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "default": "Pop-up link text",
+          "label": "Link label"
+        },
+        {
+          "id": "page",
+          "type": "page",
+          "label": "Page"
+        },
+        {
+          "type": "radio",
+          "id": "text_color",
+          "label": "Text color",
+          "options": [
+            {
+              "value": "text-scheme-text",
+              "label": "Text"
+            },
+            {
+              "value": "text-scheme-secondary",
+              "label": "Secondary"
+            }
+          ]
+        },
+        {
+          "type": "range",
+          "id": "space_above",
+          "min": 0,
+          "max": 2,
+          "step": 0.5,
+          "unit": "x",
+          "label": "Space above",
+          "default": 1
+        }
+      ]
+    },
+    {
+      "type": "share",
+      "name": "Share",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "radio",
+          "id": "text_color",
+          "label": "Text color",
+          "options": [
+            {
+              "value": "text-scheme-text",
+              "label": "Text"
+            },
+            {
+              "value": "text-scheme-secondary",
+              "label": "Secondary"
+            }
+          ]
+        },
+        {
+          "type": "range",
+          "id": "space_above",
+          "min": 0,
+          "max": 2,
+          "step": 0.5,
+          "unit": "x",
+          "label": "Space above",
+          "default": 1
+        }
+      ]
+    },
+    {
+      "type": "inventory_status",
+      "name": "Inventory status",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "range",
+          "id": "threshold",
+          "min": 0,
+          "max": 20,
+          "step": 1,
+          "label": "Low inventory threshold",
+          "default": 5
+        },
+        {
+          "type": "range",
+          "id": "space_above",
+          "min": 0,
+          "max": 2,
+          "step": 0.5,
+          "unit": "x",
+          "label": "Space above",
+          "default": 1
+        }
+      ]
+    },
+    {
+      "type": "complementary",
+      "name": "Complementary products",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "To select complementary products, add the Search & Discovery app. [Learn more](https://help.shopify.com/manual/online-store/search-and-discovery/product-recommendations)"
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "default": "Pairs well with",
+          "label": "Heading"
+        },
+        {
+          "type": "range",
+          "id": "product_list_limit",
+          "min": 1,
+          "max": 10,
+          "step": 1,
+          "default": 10,
+          "label": "Maximum products to show"
+        },
+        {
+          "type": "select",
+          "id": "products_per_row_desktop",
+          "label": "Products per row - desktop",
+          "default": "2",
+          "options": [
+            {
+              "value": "2",
+              "label": "2"
+            },
+            {
+              "value": "3",
+              "label": "3"
+            }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "products_per_row_mobile",
+          "label": "Products per row - mobile",
+          "default": "1",
+          "options": [
+            {
+              "value": "1",
+              "label": "1"
+            },
+            {
+              "value": "2",
+              "label": "2"
+            }
+          ]
+        },
+        {
+          "type": "range",
+          "id": "space_above",
+          "min": 0,
+          "max": 2,
+          "step": 0.5,
+          "unit": "x",
+          "label": "Space above",
+          "default": 1
+        }
+      ]
+    },
+    {
+      "type": "liquid",
+      "name": "Custom Liquid",
+      "settings": [
+        {
+          "type": "liquid",
+          "id": "liquid",
+          "label": "Liquid",
+          "info": "Add app snippets, other Liquid code, or HTML to create advanced customizations.",
+          "default": "<p style=\"text-align: center;\">Add custom Liquid code.</p>"
+        },
+        {
+          "type": "range",
+          "id": "space_above",
+          "min": 0,
+          "max": 2,
+          "step": 0.5,
+          "unit": "x",
+          "label": "Space above",
+          "default": 1
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

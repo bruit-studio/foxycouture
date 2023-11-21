@@ -1,0 +1,14 @@
+{%- if settings.use_arrow_icons_in_carousels_slideshows -%}
+  <div class="flex items-center justify-end gap-2">
+    <button aria-controls="CarouselTrack-{{ section.id }}" :aria-label="current_slide === 1 ? '{{ 'general.accessibility.slideshow.go_to_last_slide' | t }}' : '{{ 'general.accessibility.slideshow.previous_slide' | t }}'"  role="button" @click="prevSlide" class="flex items-center justify-center min-touch-target">
+      <span class="inline-block {% if settings.arrow_style == 'wide' %}w-12 h-6{% else %}w-6 h-6{% endif %}">{%- render 'icon-arrow-left' %}</span>
+    </button>
+    <button aria-controls="CarouselTrack-{{ section.id }}" :aria-label="current_slide === total_slides ? '{{ 'general.accessibility.slideshow.go_to_first_slide' | t }}' : '{{ 'general.accessibility.slideshow.next_slide' | t }}'"  role="button" @click="nextSlide" class="flex items-center justify-center min-touch-target">
+      <span class="inline-block {% if settings.arrow_style == 'wide' %}w-12 h-6{% else %}w-6 h-6{% endif %}">{%- render 'icon-arrow-right' %}</span>
+    </button>
+  </div>
+{%- else -%}
+  <button aria-controls="CarouselTrack-{{ section.id }}"  :aria-label="current_slide === 1 ? '{{ 'general.accessibility.slideshow.go_to_last_slide' | t }}' : '{{ 'general.accessibility.slideshow.previous_slide' | t }}'" role="button" @click="prevSlide" class="hover:underline">Previous</button>
+  &nbsp;/&nbsp;
+  <button aria-controls="CarouselTrack-{{ section.id }}" :aria-label="current_slide === total_slides ? '{{ 'general.accessibility.slideshow.go_to_first_slide' | t }}' : '{{ 'general.accessibility.slideshow.next_slide' | t }}'"  role="button" @click="nextSlide" class="hover:underline">Next</button>
+{%- endif -%}

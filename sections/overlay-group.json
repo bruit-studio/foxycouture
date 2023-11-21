@@ -1,0 +1,50 @@
+{
+  "type": "aside",
+  "name": "Overlay",
+  "sections": {
+    "menu": {
+      "type": "menu-drawer",
+      "blocks": {
+        "menu": {
+          "type": "menu",
+          "settings": {
+            "menu": "main-menu",
+            "nested_navigation_style": "accordion",
+            "accordion_icon": "plus_minus",
+            "show_cart": false,
+            "show_collection_products_count": true
+          }
+        }
+      },
+      "block_order": [
+        "menu"
+      ],
+      "settings": {
+        "show_search": true,
+        "show_locale_selector": true,
+        "show_country_selector": true,
+        "drawer_position": "rightDrawer",
+        "vertical_space_between_blocks": 0,
+        "desktop_text_scale": 3,
+        "mobile_text_scale": 2
+      }
+    },
+    "popup": {
+      "type": "popup",
+      "settings": {
+        "enable": true,
+        "delay": 4,
+        "frequency": 30,
+        "title": "Sign up to our newsletter",
+        "text": "<p>Receive special offers and first look at new products.<\/p>",
+        "call_to_action": "button",
+        "cta_url": "",
+        "cta_text": "Shop Now"
+      }
+    }
+  },
+  "order": [
+    "menu",
+    "popup"
+  ]
+}

@@ -1,0 +1,263 @@
+{%- liquid
+  unless loading == 'eager'
+    assign loading = 'lazy'
+    assign preload = false
+  else
+    assign preload = true
+  endunless
+
+  assign media_class = 'track-loaded w-full'
+
+  assign wrapper_class = ''
+
+
+  case media_fit
+    when 'contain_to_square'
+      assign wrapper_class = 'relative overflow-hidden aspect-w-1 aspect-h-1'
+      assign media_class = media_class | append: ' h-full object-contain'
+    when 'contain_to_portrait'
+      assign wrapper_class = 'relative overflow-hidden aspect-w-3 aspect-h-4'
+      assign media_class = media_class | append: ' h-full object-contain'
+    when 'fill_to_square'
+      assign wrapper_class = 'relative overflow-hidden aspect-w-1 aspect-h-1'
+      assign media_class = media_class | append: ' absolute inset-0 w-full h-full object-cover'
+    when 'fill_to_portrait'
+      assign wrapper_class = 'relative overflow-hidden aspect-w-3 aspect-h-4'
+      assign media_class = media_class | append: ' absolute inset-0 w-full h-full object-cover'
+    else
+      assign wrapper_class = 'relative overflow-hidden aspect-css-var'      
+      assign media_class = media_class | append: ' absolute inset-0 w-full h-full object-cover'
+  endcase
+
+  assign autoplay = section.settings.enable_video_autoplay
+  assign loop = section.settings.enable_video_looping
+-%}
+
+<div 
+  class="{{ wrapper_class }}"
+  {% if media_fit == 'natural' %}
+    style="--ratio: {{ media.aspect_ratio }}"
+  {% endif %}
+  data-product-single-media-wrapper="{{ media.id }}"
+  {% if media.media_type == 'image' %}
+    data-product-media-type-image data-product-image-index="{{ image_index }}"
+    {% if section.settings.enable_image_zoom
+      and media.media_type == 'image'
+    %}
+      role="button"
+      :class="`cursor-zoom-in`"
+      @click.prevent="openZoom({{ media.id }})"
+    {% endif %}
+  {% endif %}
+>
+  {% case media.media_type %}
+    {% when 'video' or 'external_video' %}
+      {%- liquid
+        assign video = media 
+        assign player_id = 'player-' | append: section.id | append: '-' | append: media.id
+      -%}
+      {%- if media.media_type == 'video' and autoplay -%}
+      <div class="tile-media-wrapper overflow-hidden relative {{ wrapper_class }}">
+        <div
+          id="{{ section.id }}-{{ media.id }}"
+          class="w-full h-full"
+          x-data="Theme_Video('','autoplay')"
+          x-intersect:enter.half="play"
+          x-intersect:leave.half="pause"
+        >
+          <div
+            class="html-video-wrapper {{ wrapper_class }}"
+            x-data="HTMLVideo"
+            @play="play"
+            @pause="pause"
+          >
+            {{
+              video
+              | video_tag:
+                autoplay: false,
+                image_size: '2048x',
+                loop: true,
+                controls: false,
+                preload: 'none',
+                class: media_class,
+                muted: true,
+                id: player_id,
+                x-ref: 'video'
+            }}
+          </div>
+        </div>
+      </div>
+      {%- else -%}
+      <div class="tile-media-wrapper rounded-media overflow-hidden relative {{ wrapper_class }}">
+        <div
+          id="{{ section.id }}-{{ media.id }}"
+          class="w-full h-full"
+          x-data='Theme_Video()'
+        >
+          <div
+            class="relative w-full h-full"
+          > 
+            <template x-if="!enabled">
+              <button
+                @click="enable"
+                class="absolute inset-0 h-full w-full group/button"
+                type="button"
+                {% if labels_display == 'text_overlay_on_hover' or labels_display == 'follow_mouse_on_hover' %}
+                x-ref="tileLink"
+                aria-labelledby="Section-{{ section.id }}-Video-{{ video.id }}-label"
+                {% if show_caption and caption != '' %}
+                x-on:mouseenter="showLabel" x-on:mouseleave="hideLabel"
+                x-on:focus="showLabel" x-on:blur="hideLabel"
+                @keyup.escape="hideLabel"
+                {% endif %}
+                {% endif %}
+              >
+                <span
+                  class="z-40 absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 rounded-full w-14 h-14 lg:w-20 lg:h-20 bg-scheme-background text-scheme-background-overlay flex items-center justify-center group-hover/button:bg-scheme-accent group-hover/button:text-scheme-accent-overlay transition-opacity"
+                >
+                  <span class="w-5 h-5 inline-block">
+                    <svg class="theme-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <path fill="currentColor" d="m20.978 12.377-17.546 9.57a.429.429 0 0 1-.634-.377V2.43c0-.326.349-.533.634-.377l17.546 9.57a.429.429 0 0 1 0 .754Z"/>
+                    </svg>
+                  </span>
+                </span>
+                {%- if video != blank -%}
+                {{ video.preview_image | image_url: width: 2000 | image_tag: class: media_class, loading: 'lazy', sizes: sizes }}
+                {%- else -%}
+                {{ 'image' | placeholder_svg_tag: 'w-full h-full bg-scheme-placeholder-background text-scheme-placeholder-foreground fill-current' }}
+                {%- endif -%}
+              </button>
+            </template>
+            <template x-if="enabled">
+              
+              {%- case video.media_type -%}
+              {%- when 'external_video' -%}
+                {%- if video.host == 'youtube' -%}
+                  <div
+                    class="{{ wrapper_class }}"
+                    x-data="YouTubeEmbed"
+                    @play="play"
+                    @pause="pause"
+                    {% if request.design_mode %}
+                      @deinit="deinit"
+                    {% endif %}
+                  >
+                    {{
+                      video
+                      | external_video_url:
+                        enablejsapi: 1,
+                        autoplay: true,
+                        loop: loop,
+                        playlist: video.external_id
+                      | external_video_tag:
+                        id: player_id,
+                        class: media_class,
+                        loading: 'lazy',
+                        x-ref: 'video',
+                        alpineonloadattr: 'onIFrameLoad'
+                      | replace: 'alpineonloadattr', 'x-on:load'
+                    }}
+                  </div>
+                {%- else -%}
+                  <div
+                    class="{{ wrapper_class }}"
+                    x-data="VimeoEmbed"
+                    @play="play"
+                    @pause="pause"
+                    {% if request.design_mode %}
+                      @deinit="deinit"
+                    {% endif %}
+                  >
+                    {{
+                      video
+                      | external_video_url:
+                        autoplay: true,
+                        loop: loop,
+                        player_id: media.id
+                      | external_video_tag:
+                        id: player_id,
+                        class: media_class,
+                        loading: 'lazy',
+                        x-ref: 'video'
+                    }}
+                  </div>
+                {%- endif -%}
+              {%- when 'video' -%}
+                <div
+                  class="html-video-wrapper {{ wrapper_class }}"
+                  x-data="HTMLVideo"
+                  @play="play"
+                  @pause="pause"
+                >
+                  {%- if video != blank -%}
+                  {{
+                    video
+                    | video_tag:
+                      autoplay: true,
+                      image_size: '2048x',
+                      loop: loop,
+                      controls: true,
+                      preload: 'none',
+                      class: media_class,
+                      muted: false,
+                      id: player_id,
+                      x-ref: 'video'
+                  }}
+                  {%- else -%}
+                  <video autoplay muted class="{{ media_class }}">
+                    <source src="{{ 'placeholder-video.mp4' | asset_url }}" type="video/mp4">
+                    Your browser does not support the video tag.
+                  </video>
+                  {%- endif -%}
+                </div>
+              {%- endcase -%}
+            </template>
+          </div>
+        </div>
+      </div>
+      {%- endif -%}
+
+      {% unless request.design_mode %}
+        <script src="{{ 'video.js' | asset_url }}" type="module"></script>
+        {% case video.media_type %}
+          {% when 'external_video' %}
+            {% if video.host == 'youtube' %}
+              <script
+                src="{{ 'youtube-embed.js' | asset_url }}"
+                type="module"
+              ></script>
+            {% elsif video.host == 'vimeo' %}
+              <script
+                src="{{ 'vimeo-embed.js' | asset_url }}"
+                type="module"
+              ></script>
+            {% endif %}
+          {% when 'video' %}
+            <script src="{{ 'html5-video.js' | asset_url }}" type="module"></script>
+        {% endcase %}
+      {% endunless %}
+
+    {% when 'model' %}
+      <div
+        x-data="Theme_Model"
+        class="relative w-full"
+        style="padding-top: 100%;"
+        x-intersect.once="_init()"
+      >
+        <div x-show="!enabled">
+          {{ media | image_url: width: 1000 | image_tag: class: 'absolute inset-0 w-full h-full', loading: 'lazy' }}
+        </div>
+        <template x-if="enabled">
+          {{ media | model_viewer_tag: image_size: '1000x', reveal: 'interaction', toggleable: true, data-model-id: media.id, class: 'absolute inset-0 w-full h-full', background-color: 'white' }}
+        </template>
+      </div>
+
+      {% unless request.design_mode %}
+        <script src="{{ 'product-model.js' | asset_url }}" type="module"></script>
+      {% endunless %}
+      <link id="ModelViewerStyle" rel="stylesheet" href="https://cdn.shopify.com/shopifycloud/model-viewer-ui/assets/v1.0/model-viewer-ui.css" media="print" onload="this.media='all'">
+      {{ 'shopify-model-viewer-ui.css' | asset_url | stylesheet_tag }}
+    {% else %}
+      {{ media | image_url: width: 2000 | image_tag: sizes: sizes, loading: loading, preload: preload, class: media_class }}
+  {% endcase %}
+</div>

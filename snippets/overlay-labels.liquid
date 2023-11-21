@@ -1,0 +1,40 @@
+{%- if labels_display == 'follow_mouse_on_hover' -%}
+  <div
+    x-cloak
+    x-data="ThemeFollowMouse()"
+    x-show="labelContent !== ''"
+    class="top-0 left-0 fixed z-30 font-heading pointer-events-none z-10  max-w-[50vw] translate-x-[var(--x-px)] translate-y-[var(--y-px)] overflow-hidden"
+    :class="focusVisible ? 'focus-visible top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2' : ''"
+    style="mix-blend-mode: {{ settings.overlay_label_blend_mode }}; --x: 0; --y: 0; --x-px: calc(var(--x) * 1px); --y-px: calc(var(--y) * 1px);">
+    <span empty:hidden x-html="labelContent" class="text-follow-mouse-on-hover inline px-4 box-decoration-clone  {{ settings.overlay_label_background_color }} {{ settings.overlay_label_text_color }}" ></span>
+  </div>
+  {% unless request.design_mode %}
+    <script src="{{ 'follow-mouse.js' | asset_url }}" type="module"></script>
+  {% endunless %}
+{%- endif -%}
+
+{%- if labels_display == 'text_overlay_on_hover' -%}
+<div x-data="LabelOverlayOnHover" x-cloak x-transition x-show="labelShown" class="fixed inset-0  pointer-events-none z-30 " style="mix-blend-mode: {{ settings.overlay_label_blend_mode }}; display: none;">
+  {%- if settings.sidebar_desktop_layout == 'screen_height' -%}
+    <div class="main-site-grid h-full">
+      <div class="main-site-grid--sidebar"></div>
+      <div class="main-site-grid--container flex items-center justify-center">
+        <div class="max-w-[90vw] text-center break-words">
+          <span  x-html="hoverLabelContent" class="text-text-overlay-on-hover empty:hidden inline box-decoration-clone font-heading px-4 {{ settings.overlay_label_background_color }} {{ settings.overlay_label_text_color }}">
+          </span>
+        </div>
+      </div>
+    </div>
+  {%- else -%}
+  <div class="hidden lg:block items-center justify-center">
+    <div class="max-w-[90vw] text-center break-words">
+      <span  x-html="hoverLabelContent" class="text-text-overlay-on-hover empty:hidden inline box-decoration-clone font-heading px-4 {{ settings.overlay_label_background_color }} {{ settings.overlay_label_text_color }}">
+      </span>
+    </div>
+  </div>
+  {%- endif -%}
+</div>
+{% unless request.design_mode %}
+  <script src="{{ 'label-overlay-on-hover.js' | asset_url }}" type="module"></script>
+{% endunless %}
+{%- endif -%}
