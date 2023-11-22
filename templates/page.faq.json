@@ -39,50 +39,18 @@
             "title": "Are the items listed on your site also available in your shop?",
             "expanded_content": "<p>Yes. Each item on our site is also available in our shop. There are also many other items in our shop that are not listed on our website. If there is a specific item you are looking for and you do not see it listed on our site, feel free to contact us at (831)-625-9995 or by email at <a href=\"mailto:foxycouturecarmel@yahoo.com\">foxycouturecarmel@yahoo.com<\/a>.<\/p>"
           }
-        },
-        "template--16441890046142__585e0429-2418-4cc7-886c-2c4cb67a34bc-row-5": {
-          "type": "row",
-          "settings": {
-            "title": "Heading",
-            "expanded_content": "<p>Use this text to share information about your brand with your customers.<\/p>"
-          }
-        },
-        "template--16441890046142__585e0429-2418-4cc7-886c-2c4cb67a34bc-row-6": {
-          "type": "row",
-          "settings": {
-            "title": "Heading",
-            "expanded_content": "<p>Use this text to share information about your brand with your customers.<\/p>"
-          }
-        },
-        "template--16441890046142__585e0429-2418-4cc7-886c-2c4cb67a34bc-row-7": {
-          "type": "row",
-          "settings": {
-            "title": "Heading",
-            "expanded_content": "<p>Use this text to share information about your brand with your customers.<\/p>"
-          }
-        },
-        "template--16441890046142__585e0429-2418-4cc7-886c-2c4cb67a34bc-row-8": {
-          "type": "row",
-          "settings": {
-            "title": "Heading",
-            "expanded_content": "<p>Use this text to share information about your brand with your customers.<\/p>"
-          }
         }
       },
       "block_order": [
         "template--16441890046142__585e0429-2418-4cc7-886c-2c4cb67a34bc-row-1",
         "template--16441890046142__585e0429-2418-4cc7-886c-2c4cb67a34bc-row-2",
         "template--16441890046142__585e0429-2418-4cc7-886c-2c4cb67a34bc-row-3",
-        "template--16441890046142__585e0429-2418-4cc7-886c-2c4cb67a34bc-row-4",
-        "template--16441890046142__585e0429-2418-4cc7-886c-2c4cb67a34bc-row-5",
-        "template--16441890046142__585e0429-2418-4cc7-886c-2c4cb67a34bc-row-6",
-        "template--16441890046142__585e0429-2418-4cc7-886c-2c4cb67a34bc-row-7",
-        "template--16441890046142__585e0429-2418-4cc7-886c-2c4cb67a34bc-row-8"
+        "template--16441890046142__585e0429-2418-4cc7-886c-2c4cb67a34bc-row-4"
       ],
       "settings": {
         "title": "General Questions",
-        "heading_font": "font-heading text-secondary",
-        "expanded_content_max_width": "max-w-lg",
+        "heading_font": "font-main",
+        "expanded_content_max_width": "max-w-xl",
         "color_scheme": "",
         "space_above": 1,
         "space_below": 1
