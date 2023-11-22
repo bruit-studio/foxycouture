@@ -99,7 +99,7 @@
       "settings": {
         "title": "",
         "grid_type": "standard",
-        "mobile_columns": "1",
+        "mobile_columns": "2",
         "desktop_columns": 3,
         "standard_layout_align_items": "items-start",
         "modular_layout_variation": 1,
