@@ -10,13 +10,13 @@
   endfor
 -%}
 {%- if use_collection_vendor_link -%}
+  <h2> hello testing </h2>
   <p
-    {{ block.shopify_attributes }}
-    class="relative mt-spacer {{ block.settings.text_color }};"
-    style="--spacing-adjust: {{ block.settings.space_above }};"
+  {{ block.shopify_attributes }}
+    class="relative mt-spacer {{ block.settings.text_color }} " style="--spacing-adjust: {{ block.settings.space_above }};"
   >
     <a
-      class="theme-link"
+      class="product-vendor theme-link"
       href="{{ vendor_collection.url }}"
     >
       {{- vendor_collection.title -}}
@@ -25,8 +25,7 @@
 {%- else -%}
   <p
     {{ block.shopify_attributes }}
-    class="relative [&>a]:theme-link mt-spacer {{ block.settings.text_color }}"
-    style="--spacing-adjust: {{ block.settings.space_above }};"
+    class="relative [&>a]:theme-link mt-spacer {{ block.settings.text_color }}" style="--spacing-adjust: {{ block.settings.space_above }};"
   >
     {{ product.vendor | link_to_vendor }}
   </p>

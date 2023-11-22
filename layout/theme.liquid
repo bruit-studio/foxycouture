@@ -16,7 +16,9 @@
       >
     {%- endif -%}
 
-    {%- unless settings.type_header_font.system? and settings.type_body_font.system? -%}
+    {%- unless settings.type_header_font.system?
+      and settings.type_body_font.system?
+    -%}
       <link rel="preconnect" href="https://fonts.shopifycdn.com" crossorigin>
     {%- endunless -%}
 
@@ -158,8 +160,9 @@
     </script>
 
     {%- render 'css-bridge' -%}
-    {{ 'base.bundle.css' | asset_url | stylesheet_tag }}
+
     {{ 'custom.css' | asset_url | stylesheet_tag }}
+    {{ 'base.bundle.css' | asset_url | stylesheet_tag }}
     <link rel="stylesheet" href="https://use.typekit.net/jgr1ros.css">
   </head>
 
@@ -181,7 +184,9 @@
                 <script type="module">
                   document.documentElement.style.setProperty(
                     '--hero-height',
-                    `${document.getElementById('heroGroupWrapper').offsetHeight}px`
+                    `${
+                      document.getElementById('heroGroupWrapper').offsetHeight
+                    }px`
                   );
                 </script>
               </div>

@@ -155,14 +155,12 @@
         >
           <div class="flex-auto">
             <h2
-              class="ml-6 relative flex text-sm break-words items-center"
+              class="uppercase relative flex text-sm break-words items-center"
             >
-              <div class="absolute -left-6 w-5 h-5 mr-1 mt-[0.0625rem] basis-5 grow-0 shrink-0">
+              <div class="grow-0 shrink-0">
                 <template x-if="currentVariantAvailabilityClosestLocation.available">
-                  {%- render 'icon-check' -%}
                 </template>
                 <template x-if="!currentVariantAvailabilityClosestLocation.available">
-                  {%- render 'icon-error' -%}
                 </template>
               </div>
               <span
@@ -170,14 +168,14 @@
               ></span>
             </h2>
             <small
-              class="block ml-6 mt-2 text-sm"
+              class="uppercase block mt-1 text-sm"
               x-html="currentVariantAvailabilityClosestLocation.pickup_time"
             ></small>
             <button
               type="button"
               @click="$store.availability.current_variant = currentVariantId; $store.modals.open('availability')"
               aria-haspopup="dialog"
-              class="ml-6 mt-2 text-sm theme-link text-left"
+              class="mt-1 text-sm theme-link text-left"
             >
               <span
                 x-html="currentVariantAvailabilityClosestLocation.modal_text"

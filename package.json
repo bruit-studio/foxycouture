@@ -1,0 +1,15 @@
+{
+  "scripts": {
+    "dev": "shopify theme dev -s foxycouturecarmel",
+    "build": "vite build --minify",
+    "watch": "vite build --watch"
+  },
+  "dependencies": {
+    "vite": "^5.0.2"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.16",
+    "postcss": "^8.4.31",
+    "tailwindcss": "^3.3.5"
+  }
+}
