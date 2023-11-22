@@ -55,10 +55,122 @@
         "space_above": 1,
         "space_below": 1
       }
+    },
+    "74b32910-2690-44ff-8892-41329bd4f3b1": {
+      "type": "collapsible-rows",
+      "blocks": {
+        "ceaa67f5-b152-4344-9592-e3b3ead759ae": {
+          "type": "row",
+          "settings": {
+            "title": "What payment methods are accepted?",
+            "expanded_content": "<p>Visa, Mastercard, American Express, Discover, , PayPal JCB, Diners Club, Elo, Shop Pay, Apple Pay, & Google Pay. <\/p>"
+          }
+        },
+        "8747705d-8ace-4c3e-9841-2ed2e45b1959": {
+          "type": "row",
+          "settings": {
+            "title": "Will I be charged tax?",
+            "expanded_content": "<p>We are required to collect local sales tax in CA. Updated April 1, 2020.<\/p>"
+          }
+        },
+        "40574c34-97ef-41fb-8278-b8934faff6e7": {
+          "type": "row",
+          "settings": {
+            "title": "How can I change or cancel my order?",
+            "expanded_content": "<p>If you wish to change or cancel your order, please contact<a href=\"mailto:foxycouturecarmel@yahoo.com\">foxycouturecarmel@yahoo.com <\/a>immediately after placing your order to make any changes. You will not be able to make changes to your order once it has shipped. We apologize for any inconvenience and will do our best to assist you.<\/p>"
+          }
+        },
+        "aa40fc8d-aff0-43df-8969-98bca24f3b8e": {
+          "type": "row",
+          "settings": {
+            "title": "When will my order ship?",
+            "expanded_content": "<p>Most orders will ship within 1 business day. Orders placed on weekends or holidays will begin processing the next business day.<\/p>"
+          }
+        },
+        "59045c99-76cd-465a-9302-8ae40a99501c": {
+          "type": "row",
+          "settings": {
+            "title": "Do you ship internationally?",
+            "expanded_content": "<p>We are currently only shipping domestically to the United States.<\/p><p>At the moment, we are only shipping domestically to the United States. The following will be implemented should we decide to expand our shipping zone to international customers.<\/p><p>Please be aware that your country may charge customs, VAT and other fees for imported goods. Foxy Couture is not responsible for any fees associated with your order. <\/p><p>In the event that you decide to return a purchase, you must cover the cost of shipping as well as any customs, VAT and other fees that may be associated with your purchase.<\/p>"
+          }
+        },
+        "450ba590-751a-4213-ac3c-af3b09e14ac8": {
+          "type": "row",
+          "settings": {
+            "title": "How much is shipping?",
+            "expanded_content": "<p>Shipping cost is based on the size, weight, value and delivery location of the item being shipped. Each package requires a signature upon delivery and is insured for the full value of the item being shipped.<\/p>"
+          }
+        },
+        "c3ad529c-3a15-41c0-8ba2-b1c1d7ffef31": {
+          "type": "row",
+          "settings": {
+            "title": "International Buyers:",
+            "expanded_content": "<p>At the moment, we are only shipping domestically to the United States. The following will be implemented should we decide to expand our shipping zone to international customers.<\/p><p>Please be aware that your country may charge customs, VAT and other fees for imported goods. Foxy Couture is not responsible for any fees associated with your order. <\/p><p>In the event that you decide to return a purchase, you must cover the cost of shipping as well as any customs, VAT and other fees that may be associated with your purchase.<\/p>"
+          }
+        }
+      },
+      "block_order": [
+        "ceaa67f5-b152-4344-9592-e3b3ead759ae",
+        "8747705d-8ace-4c3e-9841-2ed2e45b1959",
+        "40574c34-97ef-41fb-8278-b8934faff6e7",
+        "aa40fc8d-aff0-43df-8969-98bca24f3b8e",
+        "59045c99-76cd-465a-9302-8ae40a99501c",
+        "450ba590-751a-4213-ac3c-af3b09e14ac8",
+        "c3ad529c-3a15-41c0-8ba2-b1c1d7ffef31"
+      ],
+      "settings": {
+        "title": "Orders and Shipping",
+        "heading_font": "font-main",
+        "expanded_content_max_width": "max-w-xl",
+        "color_scheme": "",
+        "space_above": 1,
+        "space_below": 1
+      }
+    },
+    "44980a9c-3999-4d6c-aef1-100ccb5ae979": {
+      "type": "collapsible-rows",
+      "blocks": {
+        "905b734f-ea0e-4eb8-9e21-aec7de069096": {
+          "type": "row",
+          "settings": {
+            "title": "Final Sale Items",
+            "expanded_content": "<p>The Following items are final sale:<\/p><ul><li>Gift Cards<\/li><li>Handbags<\/li><li>Wallets, belts and small accessories<\/li><li>Jewelry<\/li><li>All Sale items<\/li><\/ul>"
+          }
+        },
+        "54816a22-46b6-43d7-9255-6886963b131b": {
+          "type": "row",
+          "settings": {
+            "title": "Returns",
+            "expanded_content": "<p>If for any reason you are unsatisfied with your purchase and your item is returnable, please email us within 3 days of receiving your package. If we do not hear from you within 3 days the sale will be final. For a return request email us at foxycouturecarmel@gmail.com and include the following information:<br\/><\/p><ol><li>Order #<\/li><li>Item you wish to return<\/li><li>Reason for return<\/li><\/ol><p>Please contact us within 3 days of receiving your item. We will email you your return authorization and our return shipping address. You will have 5 days to ship your item back to us. Items must be returned in the condition they were received. If they have an inventory tag, item must be returned with tag still attached. This includes no oder, no alterations and no split seams. Foxy photographs and documents the condition of each item at the time of packaging in order to verify return condition.<\/p><p><strong>RETURN SHIPPING CHARGES <\/strong>are non-refundable. Packages that arrive with a COST AT DELIVERY will be denied and the merchandise will be non-refundable.<\/p>"
+          }
+        },
+        "40e0c6a5-0b17-4961-a260-95882ce0bb60": {
+          "type": "row",
+          "settings": {
+            "title": "Heading",
+            "expanded_content": "<p>Use this text to share information about your brand with your customers.<\/p>"
+          }
+        }
+      },
+      "block_order": [
+        "905b734f-ea0e-4eb8-9e21-aec7de069096",
+        "54816a22-46b6-43d7-9255-6886963b131b",
+        "40e0c6a5-0b17-4961-a260-95882ce0bb60"
+      ],
+      "settings": {
+        "title": "Return and Refund Policy",
+        "heading_font": "font-main",
+        "expanded_content_max_width": "max-w-xl",
+        "color_scheme": "",
+        "space_above": 1,
+        "space_below": 1
+      }
     }
   },
   "order": [
     "main",
-    "585e0429-2418-4cc7-886c-2c4cb67a34bc"
+    "585e0429-2418-4cc7-886c-2c4cb67a34bc",
+    "74b32910-2690-44ff-8892-41329bd4f3b1",
+    "44980a9c-3999-4d6c-aef1-100ccb5ae979"
   ]
 }
