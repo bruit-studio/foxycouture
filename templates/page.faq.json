@@ -2,70 +2,95 @@
   "sections": {
     "main": {
       "type": "main-page",
-      "disabled": true,
       "settings": {
+        "text_alignment": "text-left",
+        "color_scheme": "",
+        "space_above": 1,
+        "space_below": 1
       }
     },
-    "faq": {
-      "type": "faq",
+    "585e0429-2418-4cc7-886c-2c4cb67a34bc": {
+      "type": "collapsible-rows",
       "blocks": {
-        "question-1": {
-          "type": "question",
+        "template--16441890046142__585e0429-2418-4cc7-886c-2c4cb67a34bc-row-1": {
+          "type": "row",
           "settings": {
+            "title": "How do you authenticate your products?",
+            "expanded_content": "<p>Every Foxy Couture employee has been professionally trained to authenticate items from thousands of luxury designers and brands. Each item is personally inspected by Foxy’s founder and owner. There are many ways to authenticate items based on the brand and the year the item was made. We do not authenticate items based on the consignor that brings them in. Each item is treated with the same thorough inspection. If we ever have any doubt over the authenticity, the item will either be brought to the brand store for a spa treatment, or we return the item to the consignor.<\/p>"
           }
         },
-        "question-2": {
-          "type": "question",
+        "template--16441890046142__585e0429-2418-4cc7-886c-2c4cb67a34bc-row-2": {
+          "type": "row",
           "settings": {
+            "title": "Where do you get your products?",
+            "expanded_content": "<p>Foxy Couture has maintained a storefront in Carmel-by-the-Sea for almost 10 years, but before then we held pop-ups all over Los Angeles and San Francisco, building relationships with consignors all over the globe. <\/p><p>Foxy Couture is a consignment shop, however about 25% of our shop is also self-curated. This means that we purchase items we find interesting or rare, or that we think our customers would enjoy, and place them for sale in our shop.<br\/><\/p>"
           }
         },
-        "question-3": {
-          "type": "question",
+        "template--16441890046142__585e0429-2418-4cc7-886c-2c4cb67a34bc-row-3": {
+          "type": "row",
           "settings": {
+            "title": "If there is an item I want to purchase, will you find it for me?",
+            "expanded_content": "<p>We do not take special orders on items not currently in our inventory, but if you send us an email with the item’s description or a photo of the item you are looking for, we will put you on our call list should the item come in.<\/p>"
           }
         },
-        "question-4": {
-          "type": "question",
+        "template--16441890046142__585e0429-2418-4cc7-886c-2c4cb67a34bc-row-4": {
+          "type": "row",
           "settings": {
+            "title": "Are the items listed on your site also available in your shop?",
+            "expanded_content": "<p>Yes. Each item on our site is also available in our shop. There are also many other items in our shop that are not listed on our website. If there is a specific item you are looking for and you do not see it listed on our site, feel free to contact us at (831)-625-9995 or by email at <a href=\"mailto:foxycouturecarmel@yahoo.com\">foxycouturecarmel@yahoo.com<\/a>.<\/p>"
           }
         },
-        "question-5": {
-          "type": "question",
+        "template--16441890046142__585e0429-2418-4cc7-886c-2c4cb67a34bc-row-5": {
+          "type": "row",
           "settings": {
+            "title": "Heading",
+            "expanded_content": "<p>Use this text to share information about your brand with your customers.<\/p>"
           }
         },
-        "question-6": {
-          "type": "question",
+        "template--16441890046142__585e0429-2418-4cc7-886c-2c4cb67a34bc-row-6": {
+          "type": "row",
           "settings": {
+            "title": "Heading",
+            "expanded_content": "<p>Use this text to share information about your brand with your customers.<\/p>"
           }
         },
-        "question-7": {
-          "type": "question",
+        "template--16441890046142__585e0429-2418-4cc7-886c-2c4cb67a34bc-row-7": {
+          "type": "row",
           "settings": {
+            "title": "Heading",
+            "expanded_content": "<p>Use this text to share information about your brand with your customers.<\/p>"
           }
         },
-        "question-8": {
-          "type": "question",
+        "template--16441890046142__585e0429-2418-4cc7-886c-2c4cb67a34bc-row-8": {
+          "type": "row",
           "settings": {
+            "title": "Heading",
+            "expanded_content": "<p>Use this text to share information about your brand with your customers.<\/p>"
           }
         }
       },
       "block_order": [
-        "question-1",
-        "question-2",
-        "question-3",
-        "question-4",
-        "question-5",
-        "question-6",
-        "question-7",
-        "question-8"
+        "template--16441890046142__585e0429-2418-4cc7-886c-2c4cb67a34bc-row-1",
+        "template--16441890046142__585e0429-2418-4cc7-886c-2c4cb67a34bc-row-2",
+        "template--16441890046142__585e0429-2418-4cc7-886c-2c4cb67a34bc-row-3",
+        "template--16441890046142__585e0429-2418-4cc7-886c-2c4cb67a34bc-row-4",
+        "template--16441890046142__585e0429-2418-4cc7-886c-2c4cb67a34bc-row-5",
+        "template--16441890046142__585e0429-2418-4cc7-886c-2c4cb67a34bc-row-6",
+        "template--16441890046142__585e0429-2418-4cc7-886c-2c4cb67a34bc-row-7",
+        "template--16441890046142__585e0429-2418-4cc7-886c-2c4cb67a34bc-row-8"
       ],
       "settings": {
+        "title": "General Questions",
+        "heading_font": "font-heading text-secondary",
+        "expanded_content_max_width": "max-w-lg",
+        "color_scheme": "",
+        "space_above": 1,
+        "space_below": 1
       }
     }
   },
   "order": [
     "main",
-    "faq"
+    "585e0429-2418-4cc7-886c-2c4cb67a34bc"
   ]
 }
