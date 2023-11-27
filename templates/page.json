@@ -14,8 +14,8 @@
       "type": "custom-liquid",
       "settings": {
         "title": "",
-        "custom_liquid": "<ul>\n  {%- for product_vendor in shop.vendors -%}\n    <li>{{ product_vendor | link_to_vendor }}<\/li>\n  {%- endfor -%}\n<\/ul>",
-        "text_alignment": "text-center",
+        "custom_liquid": "<ul>\n  {%- for product_vendor in shop.vendors -%}\n    <li class= \"vendor-large\">{{ product_vendor | link_to_vendor }}<\/li>\n  {%- endfor -%}\n<\/ul>",
+        "text_alignment": "text-left",
         "liquid_only": false,
         "show_top_border": false,
         "color_scheme": "",
