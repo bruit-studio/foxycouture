@@ -2,6 +2,7 @@
   "sections": {
     "main": {
       "type": "main-page",
+      "disabled": true,
       "settings": {
         "text_alignment": "text-left",
         "color_scheme": "",
@@ -9,38 +10,22 @@
         "space_below": 1
       }
     },
-    "1788dd2d-4b5a-44ac-954f-41b6ab0d02ea": {
-      "type": "rich-text",
+    "86b8bd58-c8bb-49ea-9cff-9a500425ec3a": {
+      "type": "custom-liquid",
       "settings": {
-        "title": "Thank you for your interest in consigning with Foxy Couture",
-        "richtext": "<p>Below are some guidelines to give you a better understanding of how we operate as a business and what we are looking for when it comes to new consignments. <\/p><p>- We have a small shop so space is limited, which means we are very selective about the pieces we bring into the shop. <\/p><p>- While we specialize in gently used to pristine condition designer clothing and accessories, we also maintain our massive love affair for vintage items. <\/p><p>- If you check out the items listed on our website you will gain a good idea of the designers and items we carry, but if you are unsure about an item please feel free to contact us or just stop in during normal business hours and we will let you know if we are interested in consigning it!<\/p><p>Below is a link to our application. If you have any further questions do not hesitate to get in touch.<\/p>",
-        "text_alignment": "text-left",
-        "cta_link": "",
-        "cta_label": "",
+        "title": "",
+        "custom_liquid": "<ul>\n  {%- for product_vendor in shop.vendors -%}\n    <li>{{ product_vendor | link_to_vendor }}<\/li>\n  {%- endfor -%}\n<\/ul>",
+        "text_alignment": "text-center",
+        "liquid_only": false,
         "show_top_border": false,
         "color_scheme": "",
-        "space_above": 0,
-        "space_below": 1
-      }
-    },
-    "eb8e1d56-b98a-4cc9-9ea8-873ca4fc4ecb": {
-      "type": "rich-text",
-      "settings": {
-        "title": "Consignment Application",
-        "richtext": "<p>We pridefully vet all our sellers' consigned items for product quality and origin. To continue providing a high level of customer service, we require all prospective sellers to submit a signed application. Applications are available upon request. Please note we may contact you for additional information regarding the items you wish to consign and or the application in general.<\/p><p>Thank you!<\/p><p>LINK TO CONSIGNMENT APPLICATION<\/p>",
-        "text_alignment": "text-left",
-        "cta_link": "",
-        "cta_label": "",
-        "show_top_border": false,
-        "color_scheme": "",
-        "space_above": 0,
+        "space_above": 1,
         "space_below": 1
       }
     }
   },
   "order": [
     "main",
-    "1788dd2d-4b5a-44ac-954f-41b6ab0d02ea",
-    "eb8e1d56-b98a-4cc9-9ea8-873ca4fc4ecb"
+    "86b8bd58-c8bb-49ea-9cff-9a500425ec3a"
   ]
 }
