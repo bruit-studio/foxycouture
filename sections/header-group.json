@@ -22,7 +22,7 @@
         "1ebcbcbd-48cc-4c11-8881-395b9d4ec1c8": {
           "type": "horizontal_menu",
           "settings": {
-            "menu": "main-menu-02",
+            "menu": "main-menu-1",
             "nested_navigation_style": "mega_menu",
             "desktop_text_alignment": "lg:justify-start",
             "show_cart": false,
