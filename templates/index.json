@@ -119,10 +119,28 @@
         "remove_grid_gaps": true
       }
     },
+    "f1170993-eed5-4e7e-98cb-1ddb7f8a708a": {
+      "type": "feature-text-with-rich-text",
+      "settings": {
+        "feature_text": "<p><strong>“For any lover of vintage couture, plan to spend a few hours here marveling at all the wares.”<br\/><\/strong><\/p>",
+        "font": "font-heading",
+        "desktop_text_scale": 3,
+        "mobile_text_scale": 2,
+        "feature_text_position_on_desktop": "right",
+        "feature_text_width_on_desktop": "9",
+        "richtext": "<p>- VOGUE<\/p>",
+        "cta_link": "",
+        "cta_label": "",
+        "show_top_border": false,
+        "color_scheme": "",
+        "space_above": 1,
+        "space_below": 1
+      }
+    },
     "105903cc-d1ae-41c6-9335-76c5c5235186": {
       "type": "feature-text",
       "settings": {
-        "richtext": "<p>Featured Picks:<br\/>Holiday Party Dresses<\/p>",
+        "richtext": "<p>NEW ARRIVALS<\/p>",
         "cta_link": "",
         "cta_label": "",
         "font": "font-heading",
@@ -231,24 +249,6 @@
         "remove_grid_gaps": true
       }
     },
-    "686451f2-dd4e-4ed4-af6d-a6533046455d": {
-      "type": "feature-text",
-      "settings": {
-        "richtext": "<p>“It's like hanging out with your best girlfriend in the ultimate closet.”      - Nikki P<\/p>",
-        "cta_link": "",
-        "cta_label": "",
-        "font": "font-heading",
-        "desktop_text_scale": 2,
-        "mobile_text_scale": 2,
-        "text_alignment": "text-center",
-        "content_width_on_desktop": "6",
-        "content_position_on_desktop": "center",
-        "show_top_border": false,
-        "color_scheme": "",
-        "space_above": 0.5,
-        "space_below": 1
-      }
-    },
     "3f3b8370-7d3d-4f0b-ab6b-84d75b0fea1e": {
       "type": "collection-list",
       "settings": {
@@ -276,24 +276,6 @@
         "space_below": 1,
         "disable_left_and_right_margins": false,
         "remove_grid_gaps": true
-      }
-    },
-    "f1170993-eed5-4e7e-98cb-1ddb7f8a708a": {
-      "type": "feature-text-with-rich-text",
-      "settings": {
-        "feature_text": "<p><strong>“For any lover of vintage couture, plan to spend a few hours here marveling at all the wares.”<br\/><\/strong><\/p>",
-        "font": "font-heading",
-        "desktop_text_scale": 3,
-        "mobile_text_scale": 2,
-        "feature_text_position_on_desktop": "right",
-        "feature_text_width_on_desktop": "9",
-        "richtext": "<p>- VOGUE<\/p>",
-        "cta_link": "",
-        "cta_label": "",
-        "show_top_border": false,
-        "color_scheme": "",
-        "space_above": 1,
-        "space_below": 1
       }
     },
     "34a77569-b513-4661-bac9-f9dfbc461d9c": {
@@ -383,14 +365,13 @@
   "order": [
     "105e1b66-1a94-44c3-832f-2a59cb1169d2",
     "b90d0582-1386-4ede-acfa-e726be1cf1f4",
+    "f1170993-eed5-4e7e-98cb-1ddb7f8a708a",
     "105903cc-d1ae-41c6-9335-76c5c5235186",
     "8f386aa6-a2c0-404b-aaa6-52c0ca860668",
     "scrolling-text",
     "ae8745c0-3f54-453b-85a7-f4905731bab9",
     "94fa4807-c5a1-4f1d-b497-a4ba75caa07d",
-    "686451f2-dd4e-4ed4-af6d-a6533046455d",
     "3f3b8370-7d3d-4f0b-ab6b-84d75b0fea1e",
-    "f1170993-eed5-4e7e-98cb-1ddb7f8a708a",
     "34a77569-b513-4661-bac9-f9dfbc461d9c",
     "40e59f3a-391c-4dc3-921b-687def71a658"
   ]
