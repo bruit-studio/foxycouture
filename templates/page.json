@@ -12,14 +12,14 @@
     "1788dd2d-4b5a-44ac-954f-41b6ab0d02ea": {
       "type": "rich-text",
       "settings": {
-        "title": "Thank you for your interest in consigning an item with Foxy Couture",
+        "title": "Thank you for your interest in consigning with Foxy Couture",
         "richtext": "<p>Below are some guidelines to give you a better understanding of how we operate as a business and what we are looking for when it comes to new consignments. <\/p><p>- We have a small shop so space is limited, which means we are very selective about the pieces we bring into the shop. <\/p><p>- While we specialize in gently used to pristine condition designer clothing and accessories, we also maintain our massive love affair for vintage items. <\/p><p>- If you check out the items listed on our website you will gain a good idea of the designers and items we carry, but if you are unsure about an item please feel free to contact us or just stop in during normal business hours and we will let you know if we are interested in consigning it!<\/p><p>Below is a link to our application. If you have any further questions do not hesitate to get in touch.<\/p>",
         "text_alignment": "text-left",
         "cta_link": "",
         "cta_label": "",
         "show_top_border": false,
         "color_scheme": "",
-        "space_above": 1,
+        "space_above": 0,
         "space_below": 1
       }
     },
