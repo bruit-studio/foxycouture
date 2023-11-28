@@ -151,7 +151,7 @@
         "labels_show_titles_and_captions": true,
         "labels_show_product_prices": true,
         "labels_display": "text_overlay_on_hover",
-        "labels_always_show_on_mobile": true,
+        "labels_always_show_on_mobile": false,
         "color_scheme": "",
         "space_above": 0,
         "space_below": 0,
