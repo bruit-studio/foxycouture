@@ -68,15 +68,15 @@
     "a786e919-1885-407f-a7f9-8926d94569d8": {
       "type": "feature-text",
       "settings": {
-        "richtext": "<h3>Foxy loves Chanel<\/h3>",
+        "richtext": "<h3>Rare & Iconic Vintage<\/h3>",
         "cta_link": "",
         "cta_label": "",
         "font": "font-heading",
         "desktop_text_scale": 0,
         "mobile_text_scale": 0,
-        "text_alignment": "text-left",
+        "text_alignment": "text-center",
         "content_width_on_desktop": "12",
-        "content_position_on_desktop": "left",
+        "content_position_on_desktop": "center",
         "show_top_border": false,
         "color_scheme": "",
         "space_above": 1.5,
@@ -86,11 +86,11 @@
     "b90d0582-1386-4ede-acfa-e726be1cf1f4": {
       "type": "collage",
       "blocks": {
-        "37169fde-5065-4055-9223-100933aca8fa": {
+        "c24f62f6-9da2-4435-bd1f-9d5f74cb78ff": {
           "type": "image",
           "settings": {
-            "image": "shopify:\/\/shop_images\/german-fashion-designer-karl-lagerfeld-acknowledges-applause-following-the-presentation-of-his-chanel-springsummer-2006-ready-to-wear-collection-in-paris-on-october-7-2005-upi-photowi_52f57301-cec4-4ed6-9bcf-42e273817322.jpg",
-            "caption": "Chanel Spring 2006 Fashion Show",
+            "image": "shopify:\/\/shop_images\/Foxy-Loves-Chanel.png",
+            "caption": "",
             "link": ""
           }
         },
@@ -112,6 +112,14 @@
             "link": ""
           }
         },
+        "37169fde-5065-4055-9223-100933aca8fa": {
+          "type": "image",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/german-fashion-designer-karl-lagerfeld-acknowledges-applause-following-the-presentation-of-his-chanel-springsummer-2006-ready-to-wear-collection-in-paris-on-october-7-2005-upi-photowi_52f57301-cec4-4ed6-9bcf-42e273817322.jpg",
+            "caption": "Chanel Spring 2006 Fashion Show",
+            "link": ""
+          }
+        },
         "b4a83b46-ad39-48e7-aab0-d7f3f983bed3": {
           "type": "image",
           "settings": {
@@ -119,21 +127,14 @@
             "caption": "CHANEL RARE VINTAGE 1980'S LARGE PISTOL EARRINGS",
             "link": ""
           }
-        },
-        "c24f62f6-9da2-4435-bd1f-9d5f74cb78ff": {
-          "type": "image",
-          "settings": {
-            "caption": "",
-            "link": ""
-          }
         }
       },
       "block_order": [
-        "37169fde-5065-4055-9223-100933aca8fa",
+        "c24f62f6-9da2-4435-bd1f-9d5f74cb78ff",
         "0023dfc3-bf11-461a-b909-ad2842d32b06",
         "71fc2da2-6e19-442f-97b3-8a64574b0cf0",
-        "b4a83b46-ad39-48e7-aab0-d7f3f983bed3",
-        "c24f62f6-9da2-4435-bd1f-9d5f74cb78ff"
+        "37169fde-5065-4055-9223-100933aca8fa",
+        "b4a83b46-ad39-48e7-aab0-d7f3f983bed3"
       ],
       "settings": {
         "title": "",
