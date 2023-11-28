@@ -24,7 +24,7 @@
       "settings": {
         "title": "",
         "custom_liquid": "<br\/> \nCARMEL'S BEST-KEPT SECRET<br\/> FOR DESIGNER & VINTAGE RESALE",
-        "text_alignment": "text-left",
+        "text_alignment": "text-center",
         "liquid_only": false,
         "show_top_border": false,
         "color_scheme": "",
