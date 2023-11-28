@@ -317,7 +317,7 @@
         "content_position_on_desktop": "left",
         "show_top_border": false,
         "color_scheme": "",
-        "space_above": 1,
+        "space_above": 1.5,
         "space_below": 0
       }
     },
@@ -381,7 +381,7 @@
         "labels_always_show_on_mobile": false,
         "color_scheme": "",
         "space_above": 0,
-        "space_below": 1,
+        "space_below": 1.5,
         "disable_left_and_right_margins": true,
         "remove_grid_gaps": true
       }
