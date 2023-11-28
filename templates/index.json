@@ -228,7 +228,7 @@
         "speed": 120,
         "direction": "",
         "color_scheme": "",
-        "space_above": 2,
+        "space_above": 1.5,
         "space_below": 0.5
       }
     },
@@ -271,7 +271,7 @@
         "741801c1-4783-4604-8ec5-e7fc99a49be9"
       ],
       "settings": {
-        "title": "GUCCI",
+        "title": "",
         "grid_type": "standard",
         "mobile_columns": "2",
         "desktop_columns": 3,
@@ -296,7 +296,7 @@
     "3f3b8370-7d3d-4f0b-ab6b-84d75b0fea1e": {
       "type": "collection-list",
       "settings": {
-        "title": "Collections",
+        "title": "",
         "collection_list": [
           "new-arrivals",
           "staff-picks",
@@ -306,7 +306,7 @@
           "the-party-edit"
         ],
         "grid_type": "standard",
-        "mobile_columns": "1",
+        "mobile_columns": "2",
         "desktop_columns": 3,
         "standard_layout_align_items": "items-baseline",
         "modular_layout_variation": 1,
@@ -319,7 +319,7 @@
         "labels_display": "below_media",
         "labels_always_show_on_mobile": false,
         "color_scheme": "",
-        "space_above": 0,
+        "space_above": 1.5,
         "space_below": 0,
         "disable_left_and_right_margins": true,
         "remove_grid_gaps": true
