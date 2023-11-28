@@ -47,36 +47,22 @@
         "remove_grid_gaps": true
       }
     },
-    "fa77e93a-5aff-4a84-a161-6caa60b3ae16": {
-      "type": "rich-text",
-      "settings": {
-        "title": "Heading",
-        "richtext": "<p>Use this text to share information about your brand with your customers. Describe a product, share announcements, or welcome customers to your store.<\/p>",
-        "text_alignment": "text-left",
-        "cta_link": "",
-        "cta_label": "",
-        "show_top_border": false,
-        "color_scheme": "",
-        "space_above": 1,
-        "space_below": 1
-      }
-    },
     "f1170993-eed5-4e7e-98cb-1ddb7f8a708a": {
       "type": "feature-text-with-rich-text",
       "settings": {
-        "feature_text": "<h2>“For any lover of vintage couture, plan to spend a few hours here marveling at all the wares.”<br\/><\/h2><h2><\/h2><p>- VOGUE<\/p>",
+        "feature_text": "<h4>“For any lover of vintage couture, plan to spend a few hours here marveling at all the wares.”<br\/><\/h4><h2><\/h2><p>- VOGUE<\/p>",
         "font": "font-heading",
         "desktop_text_scale": 0,
         "mobile_text_scale": 0,
         "feature_text_position_on_desktop": "left",
-        "feature_text_width_on_desktop": "9",
+        "feature_text_width_on_desktop": "6",
         "richtext": "",
         "cta_link": "",
         "cta_label": "",
         "show_top_border": false,
         "color_scheme": "",
-        "space_above": 1,
-        "space_below": 1
+        "space_above": 0.5,
+        "space_below": 1.5
       }
     },
     "b90d0582-1386-4ede-acfa-e726be1cf1f4": {
@@ -380,7 +366,6 @@
   },
   "order": [
     "105e1b66-1a94-44c3-832f-2a59cb1169d2",
-    "fa77e93a-5aff-4a84-a161-6caa60b3ae16",
     "f1170993-eed5-4e7e-98cb-1ddb7f8a708a",
     "b90d0582-1386-4ede-acfa-e726be1cf1f4",
     "105903cc-d1ae-41c6-9335-76c5c5235186",
