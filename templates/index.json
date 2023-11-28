@@ -266,33 +266,15 @@
         "labels_always_show_on_mobile": false,
         "color_scheme": "",
         "space_above": 0,
-        "space_below": 0,
+        "space_below": 2,
         "disable_left_and_right_margins": true,
         "remove_grid_gaps": true
-      }
-    },
-    "66cf7143-9ff4-4569-9cba-885604a501a5": {
-      "type": "feature-text",
-      "settings": {
-        "richtext": "<h3>COLLECTIONS<br\/>Susan-ism?<\/h3>",
-        "cta_link": "",
-        "cta_label": "",
-        "font": "font-heading",
-        "desktop_text_scale": 2,
-        "mobile_text_scale": 1,
-        "text_alignment": "text-left",
-        "content_width_on_desktop": "12",
-        "content_position_on_desktop": "left",
-        "show_top_border": false,
-        "color_scheme": "",
-        "space_above": 1.5,
-        "space_below": 0
       }
     },
     "3f3b8370-7d3d-4f0b-ab6b-84d75b0fea1e": {
       "type": "collection-list",
       "settings": {
-        "title": "",
+        "title": "Collections",
         "collection_list": [
           "rare-iconic-vintage",
           "new-arrivals",
@@ -490,7 +472,6 @@
     "scrolling-text",
     "ae8745c0-3f54-453b-85a7-f4905731bab9",
     "94fa4807-c5a1-4f1d-b497-a4ba75caa07d",
-    "66cf7143-9ff4-4569-9cba-885604a501a5",
     "3f3b8370-7d3d-4f0b-ab6b-84d75b0fea1e",
     "34a77569-b513-4661-bac9-f9dfbc461d9c",
     "40e59f3a-391c-4dc3-921b-687def71a658",
