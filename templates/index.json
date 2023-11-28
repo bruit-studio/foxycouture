@@ -249,6 +249,14 @@
     "94fa4807-c5a1-4f1d-b497-a4ba75caa07d": {
       "type": "collage",
       "blocks": {
+        "741801c1-4783-4604-8ec5-e7fc99a49be9": {
+          "type": "image",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/DSC08319_1800x1800-Close-Crop-BG.jpg",
+            "caption": "Shop Now",
+            "link": "shopify:\/\/products\/gucci-red-and-blue-iconic-circle-tweed-button-front-maxi-skirt-nwt"
+          }
+        },
         "531e6524-6a9b-4211-9c59-ae77922e1910": {
           "type": "image",
           "settings": {
@@ -257,18 +265,19 @@
             "link": ""
           }
         },
-        "741801c1-4783-4604-8ec5-e7fc99a49be9": {
+        "4c8522ff-8e3b-4555-aae3-ee43dce1eeee": {
           "type": "image",
           "settings": {
-            "image": "shopify:\/\/shop_images\/DSC08319_1800x1800-Close-Crop-BG.jpg",
-            "caption": "Shop Now",
-            "link": "shopify:\/\/products\/gucci-red-and-blue-iconic-circle-tweed-button-front-maxi-skirt-nwt"
+            "image": "shopify:\/\/shop_images\/54-7.png",
+            "caption": "",
+            "link": ""
           }
         }
       },
       "block_order": [
+        "741801c1-4783-4604-8ec5-e7fc99a49be9",
         "531e6524-6a9b-4211-9c59-ae77922e1910",
-        "741801c1-4783-4604-8ec5-e7fc99a49be9"
+        "4c8522ff-8e3b-4555-aae3-ee43dce1eeee"
       ],
       "settings": {
         "title": "",
@@ -295,6 +304,7 @@
     },
     "3f3b8370-7d3d-4f0b-ab6b-84d75b0fea1e": {
       "type": "collection-list",
+      "disabled": true,
       "settings": {
         "title": "",
         "collection_list": [
@@ -328,67 +338,55 @@
     "d76d4ba8-753c-4d29-8243-1edb0acff425": {
       "type": "collage",
       "blocks": {
-        "d83aa2ed-8c6a-4cfc-963e-8fab118e482a": {
+        "d52eceab-4c4c-4e75-ad1b-2169018fbec9": {
           "type": "image",
           "settings": {
-            "image": "shopify:\/\/shop_images\/52_ca67ba8b-0ae1-4b97-9dd0-47db06ba2aa3.png",
-            "caption": "SHOP ALL CHANEL",
-            "link": ""
-          }
-        },
-        "67d44808-bdc1-4162-9471-5321c3fe4285": {
-          "type": "image",
-          "settings": {
-            "image": "shopify:\/\/shop_images\/Longline_Jacket.png",
-            "caption": "SHOP CHANEL 2006 LEATHER LONGLINE JACKET",
-            "link": ""
-          }
-        },
-        "894cc1d1-f2d8-4d2d-9df1-5db9477447eb": {
-          "type": "video",
-          "settings": {
-            "video": "shopify:\/\/files\/videos\/CC-Longline-test.mov",
-            "mode": "autoplay",
-            "playback": "inline",
-            "caption": "Chanel Spring 2006 Fashion Show",
-            "link": ""
-          }
-        },
-        "5667c470-f1a0-4fd7-858a-7f062454f7a9": {
-          "type": "image",
-          "settings": {
-            "image": "shopify:\/\/shop_images\/german-fashion-designer-karl-lagerfeld-acknowledges-applause-following-the-presentation-of-his-chanel-springsummer-2006-ready-to-wear-collection-in-paris-on-october-7-2005-upi-photowi_52f57301-cec4-4ed6-9bcf-42e273817322.jpg",
+            "image": "shopify:\/\/shop_images\/53-4.png",
             "caption": "",
             "link": ""
           }
         },
-        "4139d313-6006-4407-a903-245af5a7b503": {
-          "type": "image",
+        "b7e261f9-9973-483a-a46f-30e6723e84ec": {
+          "type": "collection",
           "settings": {
-            "image": "shopify:\/\/shop_images\/53_cbddfc09-93e0-40e8-8ef8-ccbe682a3c1b.png",
-            "caption": "",
-            "link": ""
+            "collection": "rare-iconic-vintage"
           }
         },
-        "1bc37e33-07de-41ae-8e6f-42fb076adf9c": {
-          "type": "image",
+        "f9ac347f-9bf1-4f1d-9b05-c3a539943d92": {
+          "type": "collection",
           "settings": {
-            "image": "shopify:\/\/shop_images\/Cuff.png",
-            "caption": "",
-            "link": ""
+            "collection": "new-arrivals"
+          }
+        },
+        "e4917957-7a73-4d11-873a-eaaf661fa581": {
+          "type": "collection",
+          "settings": {
+            "collection": "staff-picks"
+          }
+        },
+        "ff453f8e-694a-47ca-824f-b2b5d4241e7d": {
+          "type": "collection",
+          "settings": {
+            "collection": "the-winter-edit"
+          }
+        },
+        "29ceeeee-a4f6-4164-bb10-abe2a2ceb5e2": {
+          "type": "collection",
+          "settings": {
+            "collection": "the-party-edit"
           }
         }
       },
       "block_order": [
-        "d83aa2ed-8c6a-4cfc-963e-8fab118e482a",
-        "67d44808-bdc1-4162-9471-5321c3fe4285",
-        "894cc1d1-f2d8-4d2d-9df1-5db9477447eb",
-        "5667c470-f1a0-4fd7-858a-7f062454f7a9",
-        "4139d313-6006-4407-a903-245af5a7b503",
-        "1bc37e33-07de-41ae-8e6f-42fb076adf9c"
+        "d52eceab-4c4c-4e75-ad1b-2169018fbec9",
+        "b7e261f9-9973-483a-a46f-30e6723e84ec",
+        "f9ac347f-9bf1-4f1d-9b05-c3a539943d92",
+        "e4917957-7a73-4d11-873a-eaaf661fa581",
+        "ff453f8e-694a-47ca-824f-b2b5d4241e7d",
+        "29ceeeee-a4f6-4164-bb10-abe2a2ceb5e2"
       ],
       "settings": {
-        "title": "Rare and Iconic Vintage",
+        "title": "",
         "grid_type": "standard",
         "mobile_columns": "2",
         "desktop_columns": 3,
@@ -404,7 +402,7 @@
         "labels_display": "text_overlay_on_hover",
         "labels_always_show_on_mobile": false,
         "color_scheme": "",
-        "space_above": 0,
+        "space_above": 1.5,
         "space_below": 0,
         "disable_left_and_right_margins": true,
         "remove_grid_gaps": true
