@@ -65,6 +65,24 @@
         "space_below": 1.5
       }
     },
+    "a786e919-1885-407f-a7f9-8926d94569d8": {
+      "type": "feature-text",
+      "settings": {
+        "richtext": "<h3>Rare & Iconic Vintage<\/h3>",
+        "cta_link": "",
+        "cta_label": "",
+        "font": "font-heading",
+        "desktop_text_scale": 2,
+        "mobile_text_scale": 1,
+        "text_alignment": "text-left",
+        "content_width_on_desktop": "12",
+        "content_position_on_desktop": "left",
+        "show_top_border": false,
+        "color_scheme": "",
+        "space_above": 1.5,
+        "space_below": 0
+      }
+    },
     "b90d0582-1386-4ede-acfa-e726be1cf1f4": {
       "type": "collage",
       "blocks": {
@@ -246,9 +264,27 @@
         "labels_always_show_on_mobile": false,
         "color_scheme": "",
         "space_above": 0,
-        "space_below": 1,
+        "space_below": 0,
         "disable_left_and_right_margins": true,
         "remove_grid_gaps": true
+      }
+    },
+    "66cf7143-9ff4-4569-9cba-885604a501a5": {
+      "type": "feature-text",
+      "settings": {
+        "richtext": "<h3>NEW ARRIVALS<br\/>Layer up in our favorite winter pieces. <\/h3>",
+        "cta_link": "",
+        "cta_label": "",
+        "font": "font-heading",
+        "desktop_text_scale": 2,
+        "mobile_text_scale": 1,
+        "text_alignment": "text-left",
+        "content_width_on_desktop": "12",
+        "content_position_on_desktop": "left",
+        "show_top_border": false,
+        "color_scheme": "",
+        "space_above": 1.5,
+        "space_below": 0
       }
     },
     "3f3b8370-7d3d-4f0b-ab6b-84d75b0fea1e": {
@@ -367,12 +403,14 @@
   "order": [
     "105e1b66-1a94-44c3-832f-2a59cb1169d2",
     "f1170993-eed5-4e7e-98cb-1ddb7f8a708a",
+    "a786e919-1885-407f-a7f9-8926d94569d8",
     "b90d0582-1386-4ede-acfa-e726be1cf1f4",
     "105903cc-d1ae-41c6-9335-76c5c5235186",
     "8f386aa6-a2c0-404b-aaa6-52c0ca860668",
     "scrolling-text",
     "ae8745c0-3f54-453b-85a7-f4905731bab9",
     "94fa4807-c5a1-4f1d-b497-a4ba75caa07d",
+    "66cf7143-9ff4-4569-9cba-885604a501a5",
     "3f3b8370-7d3d-4f0b-ab6b-84d75b0fea1e",
     "34a77569-b513-4661-bac9-f9dfbc461d9c",
     "40e59f3a-391c-4dc3-921b-687def71a658"
