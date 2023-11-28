@@ -48,20 +48,8 @@
         },
         "4c8b30d0-dace-4375-8ae6-f3b2ebd77cb1": {
           "type": "menu",
-          "disabled": true,
           "settings": {
             "menu": "footer-shopping",
-            "layout": "vertical",
-            "desktop_text_alignment": "lg:justify-start",
-            "show_menu_heading": true,
-            "separate_with_comma": false,
-            "block_width_on_desktop": "2"
-          }
-        },
-        "4647426a-5b39-4348-8e05-c30d91a65c7c": {
-          "type": "menu",
-          "settings": {
-            "menu": "footer-contact",
             "layout": "vertical",
             "desktop_text_alignment": "lg:justify-start",
             "show_menu_heading": true,
@@ -80,22 +68,10 @@
             "block_width_on_desktop": "3"
           }
         },
-        "ce552287-25da-431e-b889-a1e1cf212137": {
-          "type": "menu",
-          "disabled": true,
-          "settings": {
-            "menu": "footer-social",
-            "layout": "vertical",
-            "desktop_text_alignment": "lg:justify-start",
-            "show_menu_heading": true,
-            "separate_with_comma": false,
-            "block_width_on_desktop": "2"
-          }
-        },
         "6e29bb77-1d9b-418e-aa4d-855e99475fce": {
           "type": "rich_text",
           "settings": {
-            "heading": "VISIT",
+            "heading": "Visit",
             "richtext": "<p>San Carlos St. 2SW of 5th Ave<br\/><br\/>THU-SUN: 11-5 <br\/>TUE: CLOSED <br\/>WED: CLOSED <br\/><\/p>",
             "text_alignment": "text-left",
             "block_width_on_desktop": "3"
@@ -105,9 +81,7 @@
       "block_order": [
         "93a64130-8ccb-4bf1-b0af-7537a9a00e83",
         "4c8b30d0-dace-4375-8ae6-f3b2ebd77cb1",
-        "4647426a-5b39-4348-8e05-c30d91a65c7c",
         "0987e12e-1bd7-4f4e-ba2e-c039877e76ae",
-        "ce552287-25da-431e-b889-a1e1cf212137",
         "6e29bb77-1d9b-418e-aa4d-855e99475fce"
       ],
       "settings": {
