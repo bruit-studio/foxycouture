@@ -119,28 +119,19 @@
             "caption": "Chanel Spring 2006 Fashion Show",
             "link": ""
           }
-        },
-        "b4a83b46-ad39-48e7-aab0-d7f3f983bed3": {
-          "type": "image",
-          "settings": {
-            "image": "shopify:\/\/shop_images\/Chanel-Gun-Earrings.png",
-            "caption": "CHANEL RARE VINTAGE 1980'S LARGE PISTOL EARRINGS",
-            "link": ""
-          }
         }
       },
       "block_order": [
         "c24f62f6-9da2-4435-bd1f-9d5f74cb78ff",
         "0023dfc3-bf11-461a-b909-ad2842d32b06",
         "71fc2da2-6e19-442f-97b3-8a64574b0cf0",
-        "37169fde-5065-4055-9223-100933aca8fa",
-        "b4a83b46-ad39-48e7-aab0-d7f3f983bed3"
+        "37169fde-5065-4055-9223-100933aca8fa"
       ],
       "settings": {
         "title": "",
         "grid_type": "standard",
         "mobile_columns": "2",
-        "desktop_columns": 4,
+        "desktop_columns": 3,
         "standard_layout_align_items": "items-start",
         "modular_layout_variation": 1,
         "modular_grid_item_aspect_ratio": 1,
