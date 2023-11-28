@@ -2,14 +2,15 @@
   "sections": {
     "banner": {
       "type": "main-collection-banner",
-      "disabled": true,
       "settings": {
         "show_collection_title": true,
         "show_collection_description": true,
         "show_collection_image": false,
         "enable_full_bleed": true,
         "collection_image_aspect_ratio": "natural",
-        "color_scheme": "primary"
+        "color_scheme": "primary",
+        "space_above": 1,
+        "space_below": 1
       }
     },
     "main": {
@@ -17,11 +18,15 @@
       "settings": {
         "products_to_show": 50,
         "section_height": "var(--full-screen-excluding-header-and-hero)",
+        "max_width_of_slides": 80,
         "labels_show_titles_and_captions": true,
         "labels_show_product_prices": false,
         "labels_display": "footer",
         "labels_always_show_on_mobile": false,
         "show_index_and_total_slides": false,
+        "auto_rotate": false,
+        "change_slides_speed": 5,
+        "quick_view": "disabled",
         "color_scheme": "primary"
       }
     }
