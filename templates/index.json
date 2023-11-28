@@ -408,24 +408,6 @@
         "remove_grid_gaps": true
       }
     },
-    "b2a91ef8-0367-4fe6-acb2-72ee9f4d039f": {
-      "type": "feature-text",
-      "settings": {
-        "richtext": "<h3>Never Miss a Drop @foxycouturecarmel<\/h3>",
-        "cta_link": "",
-        "cta_label": "",
-        "font": "font-heading",
-        "desktop_text_scale": 0,
-        "mobile_text_scale": 0,
-        "text_alignment": "text-center",
-        "content_width_on_desktop": "12",
-        "content_position_on_desktop": "center",
-        "show_top_border": false,
-        "color_scheme": "",
-        "space_above": 1.5,
-        "space_below": 0
-      }
-    },
     "f6375ede-753f-4db8-86ab-ac084a6f4718": {
       "type": "collage",
       "blocks": {
@@ -449,6 +431,7 @@
         "b898d3c7-b125-426a-ba53-ef8aae2e46c2",
         "75331a48-5811-410f-a1f7-796e85488bfd"
       ],
+      "disabled": true,
       "settings": {
         "title": "",
         "grid_type": "standard",
@@ -486,7 +469,6 @@
     "3f3b8370-7d3d-4f0b-ab6b-84d75b0fea1e",
     "34a77569-b513-4661-bac9-f9dfbc461d9c",
     "40e59f3a-391c-4dc3-921b-687def71a658",
-    "b2a91ef8-0367-4fe6-acb2-72ee9f4d039f",
     "f6375ede-753f-4db8-86ab-ac084a6f4718"
   ]
 }
