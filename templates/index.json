@@ -295,7 +295,7 @@
         "media_fill_space": true,
         "labels_show_titles_and_captions": true,
         "labels_display": "follow_mouse_on_hover",
-        "labels_always_show_on_mobile": true,
+        "labels_always_show_on_mobile": false,
         "color_scheme": "",
         "space_above": 0,
         "space_below": 0,
