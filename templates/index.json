@@ -325,6 +325,91 @@
         "remove_grid_gaps": true
       }
     },
+    "d76d4ba8-753c-4d29-8243-1edb0acff425": {
+      "type": "collage",
+      "blocks": {
+        "d83aa2ed-8c6a-4cfc-963e-8fab118e482a": {
+          "type": "image",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/52_ca67ba8b-0ae1-4b97-9dd0-47db06ba2aa3.png",
+            "caption": "SHOP ALL CHANEL",
+            "link": ""
+          }
+        },
+        "67d44808-bdc1-4162-9471-5321c3fe4285": {
+          "type": "image",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/Longline_Jacket.png",
+            "caption": "SHOP CHANEL 2006 LEATHER LONGLINE JACKET",
+            "link": ""
+          }
+        },
+        "894cc1d1-f2d8-4d2d-9df1-5db9477447eb": {
+          "type": "video",
+          "settings": {
+            "video": "shopify:\/\/files\/videos\/CC-Longline-test.mov",
+            "mode": "autoplay",
+            "playback": "inline",
+            "caption": "Chanel Spring 2006 Fashion Show",
+            "link": ""
+          }
+        },
+        "5667c470-f1a0-4fd7-858a-7f062454f7a9": {
+          "type": "image",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/german-fashion-designer-karl-lagerfeld-acknowledges-applause-following-the-presentation-of-his-chanel-springsummer-2006-ready-to-wear-collection-in-paris-on-october-7-2005-upi-photowi_52f57301-cec4-4ed6-9bcf-42e273817322.jpg",
+            "caption": "",
+            "link": ""
+          }
+        },
+        "4139d313-6006-4407-a903-245af5a7b503": {
+          "type": "image",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/53_cbddfc09-93e0-40e8-8ef8-ccbe682a3c1b.png",
+            "caption": "",
+            "link": ""
+          }
+        },
+        "1bc37e33-07de-41ae-8e6f-42fb076adf9c": {
+          "type": "image",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/Cuff.png",
+            "caption": "",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "d83aa2ed-8c6a-4cfc-963e-8fab118e482a",
+        "67d44808-bdc1-4162-9471-5321c3fe4285",
+        "894cc1d1-f2d8-4d2d-9df1-5db9477447eb",
+        "5667c470-f1a0-4fd7-858a-7f062454f7a9",
+        "4139d313-6006-4407-a903-245af5a7b503",
+        "1bc37e33-07de-41ae-8e6f-42fb076adf9c"
+      ],
+      "settings": {
+        "title": "Rare and Iconic Vintage",
+        "grid_type": "standard",
+        "mobile_columns": "2",
+        "desktop_columns": 3,
+        "standard_layout_align_items": "items-start",
+        "modular_layout_variation": 1,
+        "modular_grid_item_aspect_ratio": 1,
+        "irregular_layout_variation": 1,
+        "irregular_alignment_of_items": "items-center justify-center",
+        "media_aspect_ratio": "0.6667",
+        "media_fill_space": true,
+        "labels_show_titles_and_captions": true,
+        "labels_show_product_prices": true,
+        "labels_display": "text_overlay_on_hover",
+        "labels_always_show_on_mobile": false,
+        "color_scheme": "",
+        "space_above": 0,
+        "space_below": 0,
+        "disable_left_and_right_margins": true,
+        "remove_grid_gaps": true
+      }
+    },
     "34a77569-b513-4661-bac9-f9dfbc461d9c": {
       "type": "feature-text",
       "settings": {
@@ -467,6 +552,7 @@
     "ae8745c0-3f54-453b-85a7-f4905731bab9",
     "94fa4807-c5a1-4f1d-b497-a4ba75caa07d",
     "3f3b8370-7d3d-4f0b-ab6b-84d75b0fea1e",
+    "d76d4ba8-753c-4d29-8243-1edb0acff425",
     "34a77569-b513-4661-bac9-f9dfbc461d9c",
     "40e59f3a-391c-4dc3-921b-687def71a658",
     "f6375ede-753f-4db8-86ab-ac084a6f4718"
