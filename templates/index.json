@@ -62,25 +62,7 @@
         "show_top_border": false,
         "color_scheme": "",
         "space_above": 0.5,
-        "space_below": 1
-      }
-    },
-    "a786e919-1885-407f-a7f9-8926d94569d8": {
-      "type": "feature-text",
-      "settings": {
-        "richtext": "<h3>Rare & Iconic Vintage<\/h3>",
-        "cta_link": "",
-        "cta_label": "",
-        "font": "font-heading",
-        "desktop_text_scale": 0,
-        "mobile_text_scale": 0,
-        "text_alignment": "text-center",
-        "content_width_on_desktop": "12",
-        "content_position_on_desktop": "center",
-        "show_top_border": false,
-        "color_scheme": "",
-        "space_above": 1.5,
-        "space_below": 0
+        "space_below": 2
       }
     },
     "b90d0582-1386-4ede-acfa-e726be1cf1f4": {
@@ -146,7 +128,7 @@
         "6ea0b02e-fae1-4873-b382-01d1522d18e3"
       ],
       "settings": {
-        "title": "",
+        "title": "Rare and Iconic Vintage",
         "grid_type": "standard",
         "mobile_columns": "2",
         "desktop_columns": 3,
@@ -465,7 +447,6 @@
   "order": [
     "105e1b66-1a94-44c3-832f-2a59cb1169d2",
     "59a77197-b648-41a7-8068-a765ca0024b0",
-    "a786e919-1885-407f-a7f9-8926d94569d8",
     "b90d0582-1386-4ede-acfa-e726be1cf1f4",
     "105903cc-d1ae-41c6-9335-76c5c5235186",
     "8f386aa6-a2c0-404b-aaa6-52c0ca860668",
