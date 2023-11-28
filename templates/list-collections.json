@@ -1,10 +1,36 @@
 {
   "sections": {
+    "b7a3764c-156c-4826-b470-3b06b84b40f0": {
+      "type": "feature-text",
+      "settings": {
+        "richtext": "<h1>Shop By Collection<\/h1>",
+        "cta_link": "",
+        "cta_label": "",
+        "font": "font-heading",
+        "desktop_text_scale": 2,
+        "mobile_text_scale": 2,
+        "text_alignment": "text-left",
+        "content_width_on_desktop": "12",
+        "content_position_on_desktop": "left",
+        "show_top_border": false,
+        "color_scheme": "",
+        "space_above": 1,
+        "space_below": 0
+      }
+    },
     "collections-list": {
       "type": "main-list-collections",
       "settings": {
         "collection_list": [
-
+          "rare-iconic-vintage",
+          "sale",
+          "staff-picks",
+          "the-autumn-edit",
+          "the-bridal-edit",
+          "the-party-edit",
+          "the-spring-edit",
+          "the-summer-edit",
+          "the-winter-edit"
         ],
         "grid_type": "standard",
         "mobile_columns": "1",
@@ -20,7 +46,7 @@
         "labels_display": "follow_mouse_on_hover",
         "labels_always_show_on_mobile": false,
         "color_scheme": "primary",
-        "space_above": 1,
+        "space_above": 0,
         "space_below": 1,
         "disable_left_and_right_margins": true,
         "remove_grid_gaps": true
@@ -28,6 +54,7 @@
     }
   },
   "order": [
+    "b7a3764c-156c-4826-b470-3b06b84b40f0",
     "collections-list"
   ]
 }
