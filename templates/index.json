@@ -71,7 +71,7 @@
         "c24f62f6-9da2-4435-bd1f-9d5f74cb78ff": {
           "type": "image",
           "settings": {
-            "image": "shopify:\/\/shop_images\/52_d2191cf0-003a-4122-8c5b-12c46d930b90.png",
+            "image": "shopify:\/\/shop_images\/52_ca67ba8b-0ae1-4b97-9dd0-47db06ba2aa3.png",
             "caption": "SHOP ALL CHANEL",
             "link": ""
           }
@@ -79,7 +79,7 @@
         "0023dfc3-bf11-461a-b909-ad2842d32b06": {
           "type": "image",
           "settings": {
-            "image": "shopify:\/\/shop_images\/Longline_Jacket.jpg",
+            "image": "shopify:\/\/shop_images\/Longline_Jacket.png",
             "caption": "SHOP CHANEL 2006 LEATHER LONGLINE JACKET",
             "link": ""
           }
@@ -102,18 +102,18 @@
             "link": ""
           }
         },
-        "35a02d2c-7efb-4591-9c68-89260acb8644": {
+        "6ea0b02e-fae1-4873-b382-01d1522d18e3": {
           "type": "image",
           "settings": {
-            "image": "shopify:\/\/shop_images\/Longline_Jacket2.jpg",
+            "image": "shopify:\/\/shop_images\/53_cbddfc09-93e0-40e8-8ef8-ccbe682a3c1b.png",
             "caption": "",
             "link": ""
           }
         },
-        "6ea0b02e-fae1-4873-b382-01d1522d18e3": {
+        "35a02d2c-7efb-4591-9c68-89260acb8644": {
           "type": "image",
           "settings": {
-            "image": "shopify:\/\/shop_images\/53_e5ba296a-5419-4df8-b436-a0a67ee05f54.png",
+            "image": "shopify:\/\/shop_images\/Cuff.png",
             "caption": "",
             "link": ""
           }
@@ -124,8 +124,8 @@
         "0023dfc3-bf11-461a-b909-ad2842d32b06",
         "71fc2da2-6e19-442f-97b3-8a64574b0cf0",
         "37169fde-5065-4055-9223-100933aca8fa",
-        "35a02d2c-7efb-4591-9c68-89260acb8644",
-        "6ea0b02e-fae1-4873-b382-01d1522d18e3"
+        "6ea0b02e-fae1-4873-b382-01d1522d18e3",
+        "35a02d2c-7efb-4591-9c68-89260acb8644"
       ],
       "settings": {
         "title": "Rare and Iconic Vintage",
