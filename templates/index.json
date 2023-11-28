@@ -55,7 +55,7 @@
         "cta_label": "",
         "font": "font-heading",
         "desktop_text_scale": 0,
-        "mobile_text_scale": 0,
+        "mobile_text_scale": 2,
         "text_alignment": "text-center",
         "content_width_on_desktop": "6",
         "content_position_on_desktop": "center",
@@ -164,8 +164,8 @@
         "cta_link": "",
         "cta_label": "",
         "font": "font-heading",
-        "desktop_text_scale": 2,
-        "mobile_text_scale": 1,
+        "desktop_text_scale": 4,
+        "mobile_text_scale": 3,
         "text_alignment": "text-center",
         "content_width_on_desktop": "6",
         "content_position_on_desktop": "center",
@@ -272,7 +272,7 @@
     "66cf7143-9ff4-4569-9cba-885604a501a5": {
       "type": "feature-text",
       "settings": {
-        "richtext": "<h3>NEW ARRIVALS<br\/>Layer up in our favorite winter pieces. <\/h3>",
+        "richtext": "<h3>COLLECTIONS<br\/>Susan-ism?<\/h3>",
         "cta_link": "",
         "cta_label": "",
         "font": "font-heading",
@@ -394,7 +394,71 @@
         "labels_always_show_on_mobile": false,
         "color_scheme": "",
         "space_above": 0.5,
-        "space_below": 2,
+        "space_below": 1,
+        "disable_left_and_right_margins": true,
+        "remove_grid_gaps": true
+      }
+    },
+    "b2a91ef8-0367-4fe6-acb2-72ee9f4d039f": {
+      "type": "feature-text",
+      "settings": {
+        "richtext": "<h3>Rare & Iconic Vintage<\/h3>",
+        "cta_link": "",
+        "cta_label": "",
+        "font": "font-heading",
+        "desktop_text_scale": 0,
+        "mobile_text_scale": 0,
+        "text_alignment": "text-left",
+        "content_width_on_desktop": "12",
+        "content_position_on_desktop": "left",
+        "show_top_border": false,
+        "color_scheme": "",
+        "space_above": 1.5,
+        "space_below": 0
+      }
+    },
+    "f6375ede-753f-4db8-86ab-ac084a6f4718": {
+      "type": "collage",
+      "blocks": {
+        "b898d3c7-b125-426a-ba53-ef8aae2e46c2": {
+          "type": "image",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/Group_44_1.jpg",
+            "caption": "",
+            "link": ""
+          }
+        },
+        "75331a48-5811-410f-a1f7-796e85488bfd": {
+          "type": "image",
+          "settings": {
+            "caption": "Test",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "b898d3c7-b125-426a-ba53-ef8aae2e46c2",
+        "75331a48-5811-410f-a1f7-796e85488bfd"
+      ],
+      "settings": {
+        "title": "",
+        "grid_type": "standard",
+        "mobile_columns": "2",
+        "desktop_columns": 6,
+        "standard_layout_align_items": "items-start",
+        "modular_layout_variation": 1,
+        "modular_grid_item_aspect_ratio": 1,
+        "irregular_layout_variation": 1,
+        "irregular_alignment_of_items": "items-center justify-center",
+        "media_aspect_ratio": "1",
+        "media_fill_space": false,
+        "labels_show_titles_and_captions": false,
+        "labels_show_product_prices": false,
+        "labels_display": "follow_mouse_on_hover",
+        "labels_always_show_on_mobile": false,
+        "color_scheme": "",
+        "space_above": 0,
+        "space_below": 0,
         "disable_left_and_right_margins": true,
         "remove_grid_gaps": true
       }
@@ -413,6 +477,8 @@
     "66cf7143-9ff4-4569-9cba-885604a501a5",
     "3f3b8370-7d3d-4f0b-ab6b-84d75b0fea1e",
     "34a77569-b513-4661-bac9-f9dfbc461d9c",
-    "40e59f3a-391c-4dc3-921b-687def71a658"
+    "40e59f3a-391c-4dc3-921b-687def71a658",
+    "b2a91ef8-0367-4fe6-acb2-72ee9f4d039f",
+    "f6375ede-753f-4db8-86ab-ac084a6f4718"
   ]
 }
