@@ -55,7 +55,7 @@
         "cta_label": "",
         "font": "rte font-main",
         "desktop_text_scale": 1,
-        "mobile_text_scale": 2,
+        "mobile_text_scale": 0,
         "text_alignment": "text-center",
         "content_width_on_desktop": "6",
         "content_position_on_desktop": "center",
