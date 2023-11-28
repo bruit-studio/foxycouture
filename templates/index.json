@@ -393,7 +393,7 @@
         "labels_display": "below_media",
         "labels_always_show_on_mobile": false,
         "color_scheme": "",
-        "space_above": 0.5,
+        "space_above": 0,
         "space_below": 1,
         "disable_left_and_right_margins": true,
         "remove_grid_gaps": true
@@ -402,7 +402,7 @@
     "b2a91ef8-0367-4fe6-acb2-72ee9f4d039f": {
       "type": "feature-text",
       "settings": {
-        "richtext": "<h3>Rare & Iconic Vintage<\/h3>",
+        "richtext": "<h3>Never Miss a Drop @foxycouturecarmel<\/h3>",
         "cta_link": "",
         "cta_label": "",
         "font": "font-heading",
@@ -451,7 +451,7 @@
         "irregular_layout_variation": 1,
         "irregular_alignment_of_items": "items-center justify-center",
         "media_aspect_ratio": "1",
-        "media_fill_space": false,
+        "media_fill_space": true,
         "labels_show_titles_and_captions": false,
         "labels_show_product_prices": false,
         "labels_display": "follow_mouse_on_hover",
