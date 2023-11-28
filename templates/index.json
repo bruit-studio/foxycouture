@@ -292,7 +292,7 @@
         "irregular_layout_variation": 1,
         "irregular_alignment_of_items": "items-center justify-center",
         "media_aspect_ratio": "0.6667",
-        "media_fill_space": false,
+        "media_fill_space": true,
         "labels_show_titles_and_captions": true,
         "labels_display": "follow_mouse_on_hover",
         "labels_always_show_on_mobile": true,
