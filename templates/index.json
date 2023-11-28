@@ -86,10 +86,10 @@
     "b90d0582-1386-4ede-acfa-e726be1cf1f4": {
       "type": "collage",
       "blocks": {
-        "b4a83b46-ad39-48e7-aab0-d7f3f983bed3": {
+        "37169fde-5065-4055-9223-100933aca8fa": {
           "type": "image",
           "settings": {
-            "image": "shopify:\/\/shop_images\/Chanel-Gun-Earrings.png",
+            "image": "shopify:\/\/shop_images\/german-fashion-designer-karl-lagerfeld-acknowledges-applause-following-the-presentation-of-his-chanel-springsummer-2006-ready-to-wear-collection-in-paris-on-october-7-2005-upi-photowi.jpg",
             "caption": "",
             "link": ""
           }
@@ -98,7 +98,7 @@
           "type": "image",
           "settings": {
             "image": "shopify:\/\/shop_images\/Mar31-16_1800x1800_3b2c8d5b-c09b-4617-b66d-d4a68636c3f3.png",
-            "caption": "",
+            "caption": "CHANEL 2006 LEATHER LONGLINE JACKET",
             "link": ""
           }
         },
@@ -112,20 +112,28 @@
             "link": ""
           }
         },
-        "37169fde-5065-4055-9223-100933aca8fa": {
+        "b4a83b46-ad39-48e7-aab0-d7f3f983bed3": {
           "type": "image",
           "settings": {
-            "image": "shopify:\/\/shop_images\/pearlblog_1728x_f6bef4ac-a0cd-463d-aac4-6b7b7ee44479.jpg",
+            "image": "shopify:\/\/shop_images\/Chanel-Gun-Earrings.png",
+            "caption": "CHANEL RARE VINTAGE 1980'S LARGE PISTOL EARRINGS",
+            "link": ""
+          }
+        },
+        "c24f62f6-9da2-4435-bd1f-9d5f74cb78ff": {
+          "type": "image",
+          "settings": {
             "caption": "",
             "link": ""
           }
         }
       },
       "block_order": [
-        "b4a83b46-ad39-48e7-aab0-d7f3f983bed3",
+        "37169fde-5065-4055-9223-100933aca8fa",
         "0023dfc3-bf11-461a-b909-ad2842d32b06",
         "71fc2da2-6e19-442f-97b3-8a64574b0cf0",
-        "37169fde-5065-4055-9223-100933aca8fa"
+        "b4a83b46-ad39-48e7-aab0-d7f3f983bed3",
+        "c24f62f6-9da2-4435-bd1f-9d5f74cb78ff"
       ],
       "settings": {
         "title": "",
