@@ -312,8 +312,8 @@
         "labels_display": "follow_mouse_on_hover",
         "labels_always_show_on_mobile": false,
         "color_scheme": "",
-        "space_above": 1,
-        "space_below": 1,
+        "space_above": 0,
+        "space_below": 0,
         "disable_left_and_right_margins": false,
         "remove_grid_gaps": true
       }
@@ -464,6 +464,17 @@
         "disable_left_and_right_margins": true,
         "remove_grid_gaps": true
       }
+    },
+    "68f2753d-eea4-449a-a59c-d811abaec0b9": {
+      "type": "newsletter",
+      "settings": {
+        "title": "Placeholder copy for newsletter",
+        "richtext": "",
+        "show_top_border": true,
+        "color_scheme": "",
+        "space_above": 0,
+        "space_below": 0
+      }
     }
   },
   "order": [
@@ -481,6 +492,7 @@
     "34a77569-b513-4661-bac9-f9dfbc461d9c",
     "40e59f3a-391c-4dc3-921b-687def71a658",
     "b2a91ef8-0367-4fe6-acb2-72ee9f4d039f",
-    "f6375ede-753f-4db8-86ab-ac084a6f4718"
+    "f6375ede-753f-4db8-86ab-ac084a6f4718",
+    "68f2753d-eea4-449a-a59c-d811abaec0b9"
   ]
 }
