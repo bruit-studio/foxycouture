@@ -168,8 +168,33 @@
         "space_below": 0
       }
     },
+    "d8c21fd1-43d1-44eb-89d4-729b87904d8d": {
+      "type": "products-carousel",
+      "settings": {
+        "title": "",
+        "product_list": [
+          "chrome-hearts-black-leather-vest",
+          "gucci-vintage-large-diana-pigskin-bamboo-handle-tote-1990s"
+        ],
+        "item_width_mobile": 80,
+        "item_width_desktop": 40,
+        "snap_alignment": "snap-start",
+        "align_items": "items-start",
+        "labels_show_titles_and_captions": true,
+        "labels_show_product_prices": false,
+        "labels_display": "below_media",
+        "labels_show_product_vendor": false,
+        "labels_always_show_on_mobile": false,
+        "show_index_and_total_slides": true,
+        "quick_view": "disabled",
+        "color_scheme": "",
+        "space_above": 1,
+        "space_below": 1
+      }
+    },
     "8f386aa6-a2c0-404b-aaa6-52c0ca860668": {
       "type": "products-slideshow",
+      "disabled": true,
       "settings": {
         "title": "",
         "product_list": [
@@ -218,24 +243,6 @@
         "color_scheme": "scheme1",
         "space_above": 0,
         "space_below": 2
-      }
-    },
-    "70317feb-f0cc-4280-927b-f3af6c9918b5": {
-      "type": "feature-text",
-      "settings": {
-        "richtext": "<h3>Layer up in our favorite winter pieces. <\/h3>",
-        "cta_link": "shopify:\/\/collections\/new-arrivals",
-        "cta_label": "Shop New Arrivals",
-        "font": "font-heading",
-        "desktop_text_scale": 4,
-        "mobile_text_scale": 3,
-        "text_alignment": "text-center",
-        "content_width_on_desktop": "6",
-        "content_position_on_desktop": "center",
-        "show_top_border": false,
-        "color_scheme": "",
-        "space_above": 1.5,
-        "space_below": 0
       }
     },
     "94fa4807-c5a1-4f1d-b497-a4ba75caa07d": {
@@ -470,10 +477,10 @@
     "59a77197-b648-41a7-8068-a765ca0024b0",
     "b90d0582-1386-4ede-acfa-e726be1cf1f4",
     "105903cc-d1ae-41c6-9335-76c5c5235186",
+    "d8c21fd1-43d1-44eb-89d4-729b87904d8d",
     "8f386aa6-a2c0-404b-aaa6-52c0ca860668",
     "scrolling-text",
     "ae8745c0-3f54-453b-85a7-f4905731bab9",
-    "70317feb-f0cc-4280-927b-f3af6c9918b5",
     "94fa4807-c5a1-4f1d-b497-a4ba75caa07d",
     "3f3b8370-7d3d-4f0b-ab6b-84d75b0fea1e",
     "34a77569-b513-4661-bac9-f9dfbc461d9c",
