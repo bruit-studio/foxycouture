@@ -294,9 +294,12 @@
       "settings": {
         "title": "",
         "collection_list": [
-          "archive",
-          "dresses-gowns",
-          "frontpage"
+          "rare-iconic-vintage",
+          "new-arrivals",
+          "staff-picks",
+          "the-bridal-edit",
+          "the-party-edit",
+          "the-winter-edit"
         ],
         "grid_type": "standard",
         "mobile_columns": "2",
