@@ -223,12 +223,6 @@
     "94fa4807-c5a1-4f1d-b497-a4ba75caa07d": {
       "type": "collage",
       "blocks": {
-        "6befb905-06bd-4653-bb95-d30915f773aa": {
-          "type": "product",
-          "settings": {
-            "product": "gucci-red-and-blue-iconic-circle-tweed-button-front-maxi-skirt-nwt"
-          }
-        },
         "531e6524-6a9b-4211-9c59-ae77922e1910": {
           "type": "image",
           "settings": {
@@ -236,17 +230,25 @@
             "caption": "",
             "link": ""
           }
+        },
+        "741801c1-4783-4604-8ec5-e7fc99a49be9": {
+          "type": "image",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/DSC08319_1800x1800-Close-Crop-BG.jpg",
+            "caption": "GUCCI ALESSANDRO MICHELE PRINT MAXI SKIRT",
+            "link": ""
+          }
         }
       },
       "block_order": [
-        "6befb905-06bd-4653-bb95-d30915f773aa",
-        "531e6524-6a9b-4211-9c59-ae77922e1910"
+        "531e6524-6a9b-4211-9c59-ae77922e1910",
+        "741801c1-4783-4604-8ec5-e7fc99a49be9"
       ],
       "settings": {
-        "title": "Gucci Beatrice Skirt",
+        "title": "GUCCI ALESSANDRO MICHELE PRINT MAXI SKIRT",
         "grid_type": "standard",
         "mobile_columns": "2",
-        "desktop_columns": 3,
+        "desktop_columns": 2,
         "standard_layout_align_items": "items-start",
         "modular_layout_variation": 1,
         "modular_grid_item_aspect_ratio": 1,
@@ -261,7 +263,7 @@
         "color_scheme": "",
         "space_above": 0,
         "space_below": 2,
-        "disable_left_and_right_margins": true,
+        "disable_left_and_right_margins": false,
         "remove_grid_gaps": true
       }
     },
