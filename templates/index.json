@@ -90,7 +90,7 @@
           "type": "image",
           "settings": {
             "image": "shopify:\/\/shop_images\/Foxy-Loves-Chanel.png",
-            "caption": "",
+            "caption": "SHOP ALL CHANEL",
             "link": ""
           }
         },
@@ -127,6 +127,13 @@
             "caption": "",
             "link": ""
           }
+        },
+        "6ea0b02e-fae1-4873-b382-01d1522d18e3": {
+          "type": "image",
+          "settings": {
+            "caption": "",
+            "link": ""
+          }
         }
       },
       "block_order": [
@@ -134,7 +141,8 @@
         "0023dfc3-bf11-461a-b909-ad2842d32b06",
         "71fc2da2-6e19-442f-97b3-8a64574b0cf0",
         "37169fde-5065-4055-9223-100933aca8fa",
-        "35a02d2c-7efb-4591-9c68-89260acb8644"
+        "35a02d2c-7efb-4591-9c68-89260acb8644",
+        "6ea0b02e-fae1-4873-b382-01d1522d18e3"
       ],
       "settings": {
         "title": "",
