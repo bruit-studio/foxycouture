@@ -186,7 +186,7 @@
         "show_index_and_total_slides": true,
         "auto_rotate": false,
         "change_slides_speed": 3,
-        "quick_view": "disabled",
+        "quick_view": "enabled_on_desktop",
         "color_scheme": "scheme1"
       }
     },
