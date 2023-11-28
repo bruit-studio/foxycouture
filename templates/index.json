@@ -235,8 +235,8 @@
           "type": "image",
           "settings": {
             "image": "shopify:\/\/shop_images\/DSC08319_1800x1800-Close-Crop-BG.jpg",
-            "caption": "GUCCI ALESSANDRO MICHELE PRINT MAXI SKIRT",
-            "link": ""
+            "caption": "Shop Now",
+            "link": "shopify:\/\/products\/gucci-red-and-blue-iconic-circle-tweed-button-front-maxi-skirt-nwt"
           }
         }
       },
@@ -245,7 +245,7 @@
         "741801c1-4783-4604-8ec5-e7fc99a49be9"
       ],
       "settings": {
-        "title": "GUCCI ALESSANDRO MICHELE PRINT MAXI SKIRT",
+        "title": "",
         "grid_type": "standard",
         "mobile_columns": "2",
         "desktop_columns": 2,
