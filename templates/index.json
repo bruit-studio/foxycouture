@@ -57,7 +57,7 @@
         "desktop_text_scale": 0,
         "mobile_text_scale": 2,
         "text_alignment": "text-left",
-        "content_width_on_desktop": "6",
+        "content_width_on_desktop": "4",
         "content_position_on_desktop": "left",
         "show_top_border": false,
         "color_scheme": "",
@@ -86,53 +86,46 @@
     "b90d0582-1386-4ede-acfa-e726be1cf1f4": {
       "type": "collage",
       "blocks": {
-        "0023dfc3-bf11-461a-b909-ad2842d32b06": {
-          "type": "image",
-          "settings": {
-            "caption": "",
-            "link": ""
-          }
-        },
-        "fc1f9b4a-168c-4acd-b83c-e4fb7f92ee86": {
-          "type": "product",
-          "settings": {
-            "product": "chanel-in-love-heart-crossbody-bag-2022"
-          }
-        },
         "b4a83b46-ad39-48e7-aab0-d7f3f983bed3": {
           "type": "image",
           "settings": {
+            "image": "shopify:\/\/shop_images\/Chanel-Gun-Earrings.png",
             "caption": "",
             "link": ""
           }
         },
-        "2203cb1d-050d-4cfb-bcbf-52be295c4426": {
-          "type": "product",
-          "settings": {
-            "product": "gucci-maroon-s-m"
-          }
-        },
-        "6b61ed28-5476-4e4a-9d95-abc25dd52eb5": {
-          "type": "collection",
-          "settings": {
-            "collection": ""
-          }
-        },
-        "2d3296da-5e79-4cc0-81ab-7cc7b6dd4e2a": {
+        "0023dfc3-bf11-461a-b909-ad2842d32b06": {
           "type": "image",
           "settings": {
-            "caption": "Test",
+            "image": "shopify:\/\/shop_images\/Mar31-16_1800x1800_3b2c8d5b-c09b-4617-b66d-d4a68636c3f3.png",
+            "caption": "",
+            "link": ""
+          }
+        },
+        "71fc2da2-6e19-442f-97b3-8a64574b0cf0": {
+          "type": "video",
+          "settings": {
+            "video": "shopify:\/\/files\/videos\/CC-Longline-test.mov",
+            "mode": "autoplay",
+            "playback": "inline",
+            "caption": "Chanel Spring 2006 Fashion Show",
+            "link": ""
+          }
+        },
+        "37169fde-5065-4055-9223-100933aca8fa": {
+          "type": "image",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/pearlblog_1728x_f6bef4ac-a0cd-463d-aac4-6b7b7ee44479.jpg",
+            "caption": "",
             "link": ""
           }
         }
       },
       "block_order": [
-        "0023dfc3-bf11-461a-b909-ad2842d32b06",
-        "fc1f9b4a-168c-4acd-b83c-e4fb7f92ee86",
         "b4a83b46-ad39-48e7-aab0-d7f3f983bed3",
-        "2203cb1d-050d-4cfb-bcbf-52be295c4426",
-        "6b61ed28-5476-4e4a-9d95-abc25dd52eb5",
-        "2d3296da-5e79-4cc0-81ab-7cc7b6dd4e2a"
+        "0023dfc3-bf11-461a-b909-ad2842d32b06",
+        "71fc2da2-6e19-442f-97b3-8a64574b0cf0",
+        "37169fde-5065-4055-9223-100933aca8fa"
       ],
       "settings": {
         "title": "",
@@ -145,7 +138,7 @@
         "irregular_layout_variation": 1,
         "irregular_alignment_of_items": "items-center justify-center",
         "media_aspect_ratio": "0.6667",
-        "media_fill_space": false,
+        "media_fill_space": true,
         "labels_show_titles_and_captions": true,
         "labels_show_product_prices": true,
         "labels_display": "text_overlay_on_hover",
