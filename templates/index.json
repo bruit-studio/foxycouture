@@ -6,13 +6,15 @@
         "bc830f03-1b0e-41bb-8a33-0a3531257f36": {
           "type": "image",
           "settings": {
+            "image": "shopify:\/\/shop_images\/Foxy-Test-02.png",
             "caption": "",
             "link": ""
           }
         },
-        "a369f4db-e3d2-44fc-b411-d3275719fd06": {
+        "7c54e1a8-659d-40e3-9d63-5587855eb18f": {
           "type": "image",
           "settings": {
+            "image": "shopify:\/\/shop_images\/Foxy-Test-01.png",
             "caption": "",
             "link": ""
           }
@@ -20,29 +22,61 @@
       },
       "block_order": [
         "bc830f03-1b0e-41bb-8a33-0a3531257f36",
-        "a369f4db-e3d2-44fc-b411-d3275719fd06"
+        "7c54e1a8-659d-40e3-9d63-5587855eb18f"
       ],
       "settings": {
         "title": "",
         "grid_type": "standard",
-        "mobile_columns": "2",
+        "mobile_columns": "1",
         "desktop_columns": 2,
         "standard_layout_align_items": "items-start",
         "modular_layout_variation": 1,
         "modular_grid_item_aspect_ratio": 1,
         "irregular_layout_variation": 1,
         "irregular_alignment_of_items": "items-center justify-center",
-        "media_aspect_ratio": "0.6667",
-        "media_fill_space": false,
+        "media_aspect_ratio": "natural",
+        "media_fill_space": true,
         "labels_show_titles_and_captions": false,
         "labels_show_product_prices": false,
         "labels_display": "below_media",
         "labels_always_show_on_mobile": false,
         "color_scheme": "",
         "space_above": 0,
-        "space_below": 1,
+        "space_below": 0,
         "disable_left_and_right_margins": true,
         "remove_grid_gaps": true
+      }
+    },
+    "fa77e93a-5aff-4a84-a161-6caa60b3ae16": {
+      "type": "rich-text",
+      "settings": {
+        "title": "Heading",
+        "richtext": "<p>Use this text to share information about your brand with your customers. Describe a product, share announcements, or welcome customers to your store.<\/p>",
+        "text_alignment": "text-left",
+        "cta_link": "",
+        "cta_label": "",
+        "show_top_border": false,
+        "color_scheme": "",
+        "space_above": 1,
+        "space_below": 1
+      }
+    },
+    "f1170993-eed5-4e7e-98cb-1ddb7f8a708a": {
+      "type": "feature-text-with-rich-text",
+      "settings": {
+        "feature_text": "<h2>“For any lover of vintage couture, plan to spend a few hours here marveling at all the wares.”<br\/><\/h2><h2><\/h2><p>- VOGUE<\/p>",
+        "font": "font-heading",
+        "desktop_text_scale": 0,
+        "mobile_text_scale": 0,
+        "feature_text_position_on_desktop": "left",
+        "feature_text_width_on_desktop": "9",
+        "richtext": "",
+        "cta_link": "",
+        "cta_label": "",
+        "show_top_border": false,
+        "color_scheme": "",
+        "space_above": 1,
+        "space_below": 1
       }
     },
     "b90d0582-1386-4ede-acfa-e726be1cf1f4": {
@@ -117,24 +151,6 @@
         "space_below": 1.5,
         "disable_left_and_right_margins": true,
         "remove_grid_gaps": true
-      }
-    },
-    "f1170993-eed5-4e7e-98cb-1ddb7f8a708a": {
-      "type": "feature-text-with-rich-text",
-      "settings": {
-        "feature_text": "<p><strong>“For any lover of vintage couture, plan to spend a few hours here marveling at all the wares.”<br\/><\/strong><\/p>",
-        "font": "font-heading",
-        "desktop_text_scale": 3,
-        "mobile_text_scale": 2,
-        "feature_text_position_on_desktop": "right",
-        "feature_text_width_on_desktop": "9",
-        "richtext": "<p>- VOGUE<\/p>",
-        "cta_link": "",
-        "cta_label": "",
-        "show_top_border": false,
-        "color_scheme": "",
-        "space_above": 1,
-        "space_below": 1
       }
     },
     "105903cc-d1ae-41c6-9335-76c5c5235186": {
@@ -364,8 +380,9 @@
   },
   "order": [
     "105e1b66-1a94-44c3-832f-2a59cb1169d2",
-    "b90d0582-1386-4ede-acfa-e726be1cf1f4",
+    "fa77e93a-5aff-4a84-a161-6caa60b3ae16",
     "f1170993-eed5-4e7e-98cb-1ddb7f8a708a",
+    "b90d0582-1386-4ede-acfa-e726be1cf1f4",
     "105903cc-d1ae-41c6-9335-76c5c5235186",
     "8f386aa6-a2c0-404b-aaa6-52c0ca860668",
     "scrolling-text",
