@@ -278,10 +278,10 @@
         "collection_list": [
           "new-arrivals",
           "staff-picks",
-          "the-bridal-edit",
           "rare-iconic-vintage",
-          "the-party-edit",
-          "the-winter-edit"
+          "the-bridal-edit",
+          "the-winter-edit",
+          "the-party-edit"
         ],
         "grid_type": "standard",
         "mobile_columns": "1",
