@@ -245,7 +245,7 @@
         "741801c1-4783-4604-8ec5-e7fc99a49be9"
       ],
       "settings": {
-        "title": "",
+        "title": "GUCCI ALESSANDRO MICHELE PRINT MAXI SKIRT",
         "grid_type": "standard",
         "mobile_columns": "2",
         "desktop_columns": 2,
@@ -262,8 +262,8 @@
         "labels_always_show_on_mobile": false,
         "color_scheme": "",
         "space_above": 0,
-        "space_below": 2,
-        "disable_left_and_right_margins": false,
+        "space_below": 0,
+        "disable_left_and_right_margins": true,
         "remove_grid_gaps": true
       }
     },
