@@ -56,9 +56,9 @@
         "font": "rte font-main",
         "desktop_text_scale": 1,
         "mobile_text_scale": 2,
-        "text_alignment": "text-left",
+        "text_alignment": "text-center",
         "content_width_on_desktop": "6",
-        "content_position_on_desktop": "left",
+        "content_position_on_desktop": "center",
         "show_top_border": false,
         "color_scheme": "",
         "space_above": 0.5,
@@ -119,13 +119,22 @@
             "caption": "Chanel Spring 2006 Fashion Show",
             "link": ""
           }
+        },
+        "35a02d2c-7efb-4591-9c68-89260acb8644": {
+          "type": "image",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/Longline_Jacket_2.jpg",
+            "caption": "",
+            "link": ""
+          }
         }
       },
       "block_order": [
         "c24f62f6-9da2-4435-bd1f-9d5f74cb78ff",
         "0023dfc3-bf11-461a-b909-ad2842d32b06",
         "71fc2da2-6e19-442f-97b3-8a64574b0cf0",
-        "37169fde-5065-4055-9223-100933aca8fa"
+        "37169fde-5065-4055-9223-100933aca8fa",
+        "35a02d2c-7efb-4591-9c68-89260acb8644"
       ],
       "settings": {
         "title": "",
