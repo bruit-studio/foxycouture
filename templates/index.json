@@ -50,7 +50,7 @@
     "f1170993-eed5-4e7e-98cb-1ddb7f8a708a": {
       "type": "feature-text-with-rich-text",
       "settings": {
-        "feature_text": "<h4>“For any lover of vintage couture, plan to spend a few hours here marveling at all the wares.”<br\/><\/h4><h2><\/h2><p>- VOGUE<\/p>",
+        "feature_text": "<h5>“For any lover of vintage couture, plan to spend a few hours here marveling at all the wares.”<br\/><\/h5><h2><\/h2><p>- VOGUE<\/p>",
         "font": "font-heading",
         "desktop_text_scale": 0,
         "mobile_text_scale": 0,
@@ -133,8 +133,8 @@
         "labels_display": "text_overlay_on_hover",
         "labels_always_show_on_mobile": true,
         "color_scheme": "",
-        "space_above": 2,
-        "space_below": 1.5,
+        "space_above": 0,
+        "space_below": 0,
         "disable_left_and_right_margins": true,
         "remove_grid_gaps": true
       }
