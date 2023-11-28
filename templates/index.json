@@ -221,7 +221,7 @@
       "settings": {
         "text": "Chanel, Gucci, Prada, Alexander McQueen, Chloe,  Givenchy, Fendi, Christian Dior, Lagerfeld, Louis Vuitton, Tom Ford",
         "repeat_text": true,
-        "link": "",
+        "link": "shopify:\/\/pages\/shop-by-designer",
         "desktop_text_scale": 7,
         "mobile_text_scale": 4,
         "font": "font-heading",
