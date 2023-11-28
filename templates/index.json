@@ -162,9 +162,9 @@
     "105903cc-d1ae-41c6-9335-76c5c5235186": {
       "type": "feature-text",
       "settings": {
-        "richtext": "<h3>NEW ARRIVALS<br\/>Layer up in our favorite winter pieces. <\/h3>",
-        "cta_link": "",
-        "cta_label": "",
+        "richtext": "<h3>Layer up in our favorite winter pieces. <\/h3>",
+        "cta_link": "shopify:\/\/collections\/new-arrivals",
+        "cta_label": "Shop New Arrivals",
         "font": "font-heading",
         "desktop_text_scale": 4,
         "mobile_text_scale": 3,
