@@ -220,6 +220,24 @@
         "space_below": 2
       }
     },
+    "70317feb-f0cc-4280-927b-f3af6c9918b5": {
+      "type": "feature-text",
+      "settings": {
+        "richtext": "<h3>Layer up in our favorite winter pieces. <\/h3>",
+        "cta_link": "shopify:\/\/collections\/new-arrivals",
+        "cta_label": "Shop New Arrivals",
+        "font": "font-heading",
+        "desktop_text_scale": 4,
+        "mobile_text_scale": 3,
+        "text_alignment": "text-center",
+        "content_width_on_desktop": "6",
+        "content_position_on_desktop": "center",
+        "show_top_border": false,
+        "color_scheme": "",
+        "space_above": 1.5,
+        "space_below": 0
+      }
+    },
     "94fa4807-c5a1-4f1d-b497-a4ba75caa07d": {
       "type": "collage",
       "blocks": {
@@ -262,6 +280,53 @@
         "labels_always_show_on_mobile": false,
         "color_scheme": "",
         "space_above": 0,
+        "space_below": 0,
+        "disable_left_and_right_margins": true,
+        "remove_grid_gaps": true
+      }
+    },
+    "44147a42-3c9a-4a2c-88db-c22645a949bc": {
+      "type": "collage",
+      "blocks": {
+        "a97778d5-2c2a-441a-a963-f984c2bb1440": {
+          "type": "image",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/IMG_4489.jpg",
+            "caption": "",
+            "link": ""
+          }
+        },
+        "cc000c0c-1f98-460f-bf5b-0dcff3a18b7c": {
+          "type": "image",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/DSC08319_1800x1800-Close-Crop-BG.jpg",
+            "caption": "Shop Now",
+            "link": "shopify:\/\/products\/gucci-red-and-blue-iconic-circle-tweed-button-front-maxi-skirt-nwt"
+          }
+        }
+      },
+      "block_order": [
+        "a97778d5-2c2a-441a-a963-f984c2bb1440",
+        "cc000c0c-1f98-460f-bf5b-0dcff3a18b7c"
+      ],
+      "settings": {
+        "title": "GUCCI ALESSANDRO MICHELE PRINT MAXI SKIRT",
+        "grid_type": "standard",
+        "mobile_columns": "2",
+        "desktop_columns": 2,
+        "standard_layout_align_items": "items-start",
+        "modular_layout_variation": 1,
+        "modular_grid_item_aspect_ratio": 1,
+        "irregular_layout_variation": 1,
+        "irregular_alignment_of_items": "items-center justify-center",
+        "media_aspect_ratio": "0.6667",
+        "media_fill_space": false,
+        "labels_show_titles_and_captions": true,
+        "labels_show_product_prices": true,
+        "labels_display": "text_overlay_on_hover",
+        "labels_always_show_on_mobile": false,
+        "color_scheme": "",
+        "space_above": 1,
         "space_below": 0,
         "disable_left_and_right_margins": true,
         "remove_grid_gaps": true
@@ -455,7 +520,9 @@
     "8f386aa6-a2c0-404b-aaa6-52c0ca860668",
     "scrolling-text",
     "ae8745c0-3f54-453b-85a7-f4905731bab9",
+    "70317feb-f0cc-4280-927b-f3af6c9918b5",
     "94fa4807-c5a1-4f1d-b497-a4ba75caa07d",
+    "44147a42-3c9a-4a2c-88db-c22645a949bc",
     "3f3b8370-7d3d-4f0b-ab6b-84d75b0fea1e",
     "34a77569-b513-4661-bac9-f9dfbc461d9c",
     "40e59f3a-391c-4dc3-921b-687def71a658",
