@@ -32,7 +32,7 @@
     "popup": {
       "type": "popup",
       "custom_css": [
-        ".text-heading-secondary {color: red !important;}"
+        "h2 {font-size: 80px;}"
       ],
       "settings": {
         "enable": true,
