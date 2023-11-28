@@ -56,9 +56,9 @@
         "font": "font-heading",
         "desktop_text_scale": 0,
         "mobile_text_scale": 2,
-        "text_alignment": "text-center",
+        "text_alignment": "text-left",
         "content_width_on_desktop": "6",
-        "content_position_on_desktop": "center",
+        "content_position_on_desktop": "left",
         "show_top_border": false,
         "color_scheme": "",
         "space_above": 0,
@@ -180,7 +180,10 @@
       "settings": {
         "title": "",
         "product_list": [
-
+          "gucci-burnt-orange-running-gg-platform-leather-sandals",
+          "gucci-red-and-blue-iconic-circle-tweed-button-front-maxi-skirt-nwt",
+          "maison-margiela-crystal-fringe-leather-crossbody-bag",
+          "chanel-car-scarf"
         ],
         "section_height": "h-screen-80",
         "max_width_of_slides": 40,
@@ -189,7 +192,7 @@
         "labels_display": "text_overlay_on_hover",
         "labels_always_show_on_mobile": true,
         "show_index_and_total_slides": true,
-        "auto_rotate": false,
+        "auto_rotate": true,
         "change_slides_speed": 3,
         "quick_view": "disabled",
         "color_scheme": "scheme1"
