@@ -31,13 +31,16 @@
     },
     "popup": {
       "type": "popup",
+      "custom_css": [
+        "h2.font-heading.text-heading-secondary.break-words {color: red !important;}"
+      ],
       "settings": {
         "enable": true,
         "delay": 4,
-        "frequency": 30,
+        "frequency": 10,
         "title": "Sign up to our newsletter",
         "text": "<p>Receive special offers and first look at new products.<\/p>",
-        "call_to_action": "button",
+        "call_to_action": "newsletter",
         "cta_url": "",
         "cta_text": "Shop Now"
       }
