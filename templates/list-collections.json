@@ -43,7 +43,7 @@
         "media_aspect_ratio": "0.6667",
         "media_fill_space": false,
         "labels_show_titles_and_captions": true,
-        "labels_display": "text_overlay_on_hover",
+        "labels_display": "follow_mouse_on_hover",
         "labels_always_show_on_mobile": true,
         "color_scheme": "primary",
         "space_above": 0.5,

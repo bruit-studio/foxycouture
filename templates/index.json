@@ -6,7 +6,7 @@
         "bc830f03-1b0e-41bb-8a33-0a3531257f36": {
           "type": "image",
           "settings": {
-            "image": "shopify:\/\/shop_images\/Group_373.png",
+            "image": "shopify:\/\/shop_images\/Foxy-Test-02.png",
             "caption": "",
             "link": ""
           }
@@ -14,7 +14,7 @@
         "7c54e1a8-659d-40e3-9d63-5587855eb18f": {
           "type": "image",
           "settings": {
-            "image": "shopify:\/\/shop_images\/Group_372_3fdd4ec5-f8b5-40ee-a52d-7b7c1760237e.png",
+            "image": "shopify:\/\/shop_images\/Foxy-Test-01.png",
             "caption": "",
             "link": ""
           }
@@ -50,85 +50,92 @@
     "59a77197-b648-41a7-8068-a765ca0024b0": {
       "type": "feature-text",
       "settings": {
-        "richtext": "<p>“For any lover of vintage couture, plan to spend a few hours here marveling at all the wares.”<\/p><h6>- VOGUE<\/h6>",
+        "richtext": "<h5>“For any lover of vintage couture, plan to spend a few hours here marveling at all the wares.”<\/h5><p>- VOGUE<\/p>",
+        "cta_link": "",
+        "cta_label": "",
+        "font": "font-heading",
+        "desktop_text_scale": 0,
+        "mobile_text_scale": 2,
+        "text_alignment": "text-left",
+        "content_width_on_desktop": "6",
+        "content_position_on_desktop": "left",
+        "show_top_border": false,
+        "color_scheme": "",
+        "space_above": 0,
+        "space_below": 0.5
+      }
+    },
+    "a786e919-1885-407f-a7f9-8926d94569d8": {
+      "type": "feature-text",
+      "settings": {
+        "richtext": "<h3>Rare & Iconic Vintage<\/h3>",
         "cta_link": "",
         "cta_label": "",
         "font": "font-heading",
         "desktop_text_scale": 0,
         "mobile_text_scale": 0,
-        "text_alignment": "text-center",
-        "content_width_on_desktop": "6",
-        "content_position_on_desktop": "center",
+        "text_alignment": "text-left",
+        "content_width_on_desktop": "12",
+        "content_position_on_desktop": "left",
         "show_top_border": false,
         "color_scheme": "",
-        "space_above": 0.5,
-        "space_below": 2
+        "space_above": 1.5,
+        "space_below": 0
       }
     },
     "b90d0582-1386-4ede-acfa-e726be1cf1f4": {
       "type": "collage",
       "blocks": {
-        "c24f62f6-9da2-4435-bd1f-9d5f74cb78ff": {
-          "type": "image",
-          "settings": {
-            "image": "shopify:\/\/shop_images\/52_ca67ba8b-0ae1-4b97-9dd0-47db06ba2aa3.png",
-            "caption": "SHOP ALL CHANEL",
-            "link": ""
-          }
-        },
         "0023dfc3-bf11-461a-b909-ad2842d32b06": {
           "type": "image",
           "settings": {
-            "image": "shopify:\/\/shop_images\/Longline_Jacket.png",
-            "caption": "SHOP CHANEL 2006 LEATHER LONGLINE JACKET",
-            "link": ""
-          }
-        },
-        "71fc2da2-6e19-442f-97b3-8a64574b0cf0": {
-          "type": "video",
-          "settings": {
-            "video": "shopify:\/\/files\/videos\/CC-Longline-test.mov",
-            "mode": "autoplay",
-            "playback": "inline",
-            "caption": "Chanel Spring 2006 Fashion Show",
-            "link": ""
-          }
-        },
-        "37169fde-5065-4055-9223-100933aca8fa": {
-          "type": "image",
-          "settings": {
-            "image": "shopify:\/\/shop_images\/german-fashion-designer-karl-lagerfeld-acknowledges-applause-following-the-presentation-of-his-chanel-springsummer-2006-ready-to-wear-collection-in-paris-on-october-7-2005-upi-photowi_52f57301-cec4-4ed6-9bcf-42e273817322.jpg",
             "caption": "",
             "link": ""
           }
         },
-        "6ea0b02e-fae1-4873-b382-01d1522d18e3": {
+        "fc1f9b4a-168c-4acd-b83c-e4fb7f92ee86": {
+          "type": "product",
+          "settings": {
+            "product": "chanel-in-love-heart-crossbody-bag-2022"
+          }
+        },
+        "b4a83b46-ad39-48e7-aab0-d7f3f983bed3": {
           "type": "image",
           "settings": {
-            "image": "shopify:\/\/shop_images\/53_cbddfc09-93e0-40e8-8ef8-ccbe682a3c1b.png",
             "caption": "",
             "link": ""
           }
         },
-        "35a02d2c-7efb-4591-9c68-89260acb8644": {
+        "2203cb1d-050d-4cfb-bcbf-52be295c4426": {
+          "type": "product",
+          "settings": {
+            "product": "gucci-maroon-s-m"
+          }
+        },
+        "6b61ed28-5476-4e4a-9d95-abc25dd52eb5": {
+          "type": "collection",
+          "settings": {
+            "collection": ""
+          }
+        },
+        "2d3296da-5e79-4cc0-81ab-7cc7b6dd4e2a": {
           "type": "image",
           "settings": {
-            "image": "shopify:\/\/shop_images\/Cuff.png",
-            "caption": "",
+            "caption": "Test",
             "link": ""
           }
         }
       },
       "block_order": [
-        "c24f62f6-9da2-4435-bd1f-9d5f74cb78ff",
         "0023dfc3-bf11-461a-b909-ad2842d32b06",
-        "71fc2da2-6e19-442f-97b3-8a64574b0cf0",
-        "37169fde-5065-4055-9223-100933aca8fa",
-        "6ea0b02e-fae1-4873-b382-01d1522d18e3",
-        "35a02d2c-7efb-4591-9c68-89260acb8644"
+        "fc1f9b4a-168c-4acd-b83c-e4fb7f92ee86",
+        "b4a83b46-ad39-48e7-aab0-d7f3f983bed3",
+        "2203cb1d-050d-4cfb-bcbf-52be295c4426",
+        "6b61ed28-5476-4e4a-9d95-abc25dd52eb5",
+        "2d3296da-5e79-4cc0-81ab-7cc7b6dd4e2a"
       ],
       "settings": {
-        "title": "Rare and Iconic Vintage",
+        "title": "",
         "grid_type": "standard",
         "mobile_columns": "2",
         "desktop_columns": 3,
@@ -138,11 +145,11 @@
         "irregular_layout_variation": 1,
         "irregular_alignment_of_items": "items-center justify-center",
         "media_aspect_ratio": "0.6667",
-        "media_fill_space": true,
+        "media_fill_space": false,
         "labels_show_titles_and_captions": true,
         "labels_show_product_prices": true,
         "labels_display": "text_overlay_on_hover",
-        "labels_always_show_on_mobile": false,
+        "labels_always_show_on_mobile": true,
         "color_scheme": "",
         "space_above": 0,
         "space_below": 0,
@@ -153,9 +160,9 @@
     "105903cc-d1ae-41c6-9335-76c5c5235186": {
       "type": "feature-text",
       "settings": {
-        "richtext": "<h3>Layer up in our favorite winter pieces. <\/h3>",
-        "cta_link": "shopify:\/\/collections\/new-arrivals",
-        "cta_label": "Shop New Arrivals",
+        "richtext": "<h3>NEW ARRIVALS<br\/>Layer up in our favorite winter pieces. <\/h3>",
+        "cta_link": "",
+        "cta_label": "",
         "font": "font-heading",
         "desktop_text_scale": 4,
         "mobile_text_scale": 3,
@@ -168,43 +175,17 @@
         "space_below": 0
       }
     },
-    "d8c21fd1-43d1-44eb-89d4-729b87904d8d": {
-      "type": "products-carousel",
-      "settings": {
-        "title": "",
-        "product_list": [
-          "chrome-hearts-black-leather-vest",
-          "gucci-vintage-large-diana-pigskin-bamboo-handle-tote-1990s",
-          "comme-des-garcon-lace-jacket-ad-2011"
-        ],
-        "item_width_mobile": 80,
-        "item_width_desktop": 40,
-        "snap_alignment": "snap-start",
-        "align_items": "items-start",
-        "labels_show_titles_and_captions": true,
-        "labels_show_product_prices": false,
-        "labels_display": "below_media",
-        "labels_show_product_vendor": false,
-        "labels_always_show_on_mobile": false,
-        "show_index_and_total_slides": true,
-        "quick_view": "disabled",
-        "color_scheme": "",
-        "space_above": 1,
-        "space_below": 1
-      }
-    },
     "8f386aa6-a2c0-404b-aaa6-52c0ca860668": {
       "type": "products-slideshow",
-      "disabled": true,
       "settings": {
         "title": "",
         "product_list": [
-          "2019-gg-wool-button-cape",
+          "gucci-red-and-blue-iconic-circle-tweed-button-front-maxi-skirt-nwt",
           "gucci-vintage-large-diana-pigskin-bamboo-handle-tote-1990s",
           "chrome-hearts-black-leather-vest"
         ],
         "section_height": "h-screen-80",
-        "max_width_of_slides": 100,
+        "max_width_of_slides": 40,
         "labels_show_titles_and_captions": true,
         "labels_show_product_prices": true,
         "labels_display": "footer",
@@ -212,7 +193,7 @@
         "show_index_and_total_slides": true,
         "auto_rotate": false,
         "change_slides_speed": 3,
-        "quick_view": "enabled_on_desktop",
+        "quick_view": "disabled",
         "color_scheme": "scheme1"
       }
     },
@@ -221,14 +202,14 @@
       "settings": {
         "text": "Chanel, Gucci, Prada, Alexander McQueen, Chloe,  Givenchy, Fendi, Christian Dior, Lagerfeld, Louis Vuitton, Tom Ford",
         "repeat_text": true,
-        "link": "shopify:\/\/pages\/shop-by-designer",
+        "link": "",
         "desktop_text_scale": 7,
         "mobile_text_scale": 4,
         "font": "font-heading",
         "speed": 120,
         "direction": "",
         "color_scheme": "",
-        "space_above": 1.5,
+        "space_above": 2,
         "space_below": 0.5
       }
     },
@@ -249,41 +230,29 @@
     "94fa4807-c5a1-4f1d-b497-a4ba75caa07d": {
       "type": "collage",
       "blocks": {
-        "741801c1-4783-4604-8ec5-e7fc99a49be9": {
-          "type": "image",
+        "6befb905-06bd-4653-bb95-d30915f773aa": {
+          "type": "product",
           "settings": {
-            "image": "shopify:\/\/shop_images\/DSC08319_1800x1800-Close-Crop-BG.jpg",
-            "caption": "Shop Now",
-            "link": "shopify:\/\/products\/gucci-red-and-blue-iconic-circle-tweed-button-front-maxi-skirt-nwt"
+            "product": "chanel-in-love-heart-crossbody-bag-2022"
           }
         },
         "531e6524-6a9b-4211-9c59-ae77922e1910": {
           "type": "image",
           "settings": {
-            "image": "shopify:\/\/shop_images\/IMG_4489.jpg",
-            "caption": "",
-            "link": ""
-          }
-        },
-        "4c8522ff-8e3b-4555-aae3-ee43dce1eeee": {
-          "type": "image",
-          "settings": {
-            "image": "shopify:\/\/shop_images\/54-7.png",
             "caption": "",
             "link": ""
           }
         }
       },
       "block_order": [
-        "741801c1-4783-4604-8ec5-e7fc99a49be9",
-        "531e6524-6a9b-4211-9c59-ae77922e1910",
-        "4c8522ff-8e3b-4555-aae3-ee43dce1eeee"
+        "6befb905-06bd-4653-bb95-d30915f773aa",
+        "531e6524-6a9b-4211-9c59-ae77922e1910"
       ],
       "settings": {
         "title": "",
         "grid_type": "standard",
-        "mobile_columns": "1",
-        "desktop_columns": 3,
+        "mobile_columns": "2",
+        "desktop_columns": 2,
         "standard_layout_align_items": "items-start",
         "modular_layout_variation": 1,
         "modular_grid_item_aspect_ratio": 1,
@@ -297,23 +266,22 @@
         "labels_always_show_on_mobile": false,
         "color_scheme": "",
         "space_above": 0,
-        "space_below": 0,
+        "space_below": 2,
         "disable_left_and_right_margins": true,
         "remove_grid_gaps": true
       }
     },
     "3f3b8370-7d3d-4f0b-ab6b-84d75b0fea1e": {
       "type": "collection-list",
-      "disabled": true,
       "settings": {
-        "title": "",
+        "title": "Collections",
         "collection_list": [
+          "rare-iconic-vintage",
           "new-arrivals",
           "staff-picks",
-          "rare-iconic-vintage",
           "the-bridal-edit",
-          "the-winter-edit",
-          "the-party-edit"
+          "the-party-edit",
+          "the-winter-edit"
         ],
         "grid_type": "standard",
         "mobile_columns": "2",
@@ -324,87 +292,14 @@
         "irregular_layout_variation": 1,
         "irregular_alignment_of_items": "items-center justify-center",
         "media_aspect_ratio": "0.6667",
-        "media_fill_space": true,
-        "labels_show_titles_and_captions": false,
-        "labels_display": "below_media",
+        "media_fill_space": false,
+        "labels_show_titles_and_captions": true,
+        "labels_display": "follow_mouse_on_hover",
         "labels_always_show_on_mobile": false,
         "color_scheme": "",
-        "space_above": 1.5,
+        "space_above": 0,
         "space_below": 0,
-        "disable_left_and_right_margins": true,
-        "remove_grid_gaps": true
-      }
-    },
-    "d76d4ba8-753c-4d29-8243-1edb0acff425": {
-      "type": "collage",
-      "blocks": {
-        "d52eceab-4c4c-4e75-ad1b-2169018fbec9": {
-          "type": "image",
-          "settings": {
-            "image": "shopify:\/\/shop_images\/53-4.png",
-            "caption": "",
-            "link": ""
-          }
-        },
-        "b7e261f9-9973-483a-a46f-30e6723e84ec": {
-          "type": "collection",
-          "settings": {
-            "collection": "rare-iconic-vintage"
-          }
-        },
-        "f9ac347f-9bf1-4f1d-9b05-c3a539943d92": {
-          "type": "collection",
-          "settings": {
-            "collection": "new-arrivals"
-          }
-        },
-        "e4917957-7a73-4d11-873a-eaaf661fa581": {
-          "type": "collection",
-          "settings": {
-            "collection": "staff-picks"
-          }
-        },
-        "ff453f8e-694a-47ca-824f-b2b5d4241e7d": {
-          "type": "collection",
-          "settings": {
-            "collection": "the-winter-edit"
-          }
-        },
-        "29ceeeee-a4f6-4164-bb10-abe2a2ceb5e2": {
-          "type": "collection",
-          "settings": {
-            "collection": "the-party-edit"
-          }
-        }
-      },
-      "block_order": [
-        "d52eceab-4c4c-4e75-ad1b-2169018fbec9",
-        "b7e261f9-9973-483a-a46f-30e6723e84ec",
-        "f9ac347f-9bf1-4f1d-9b05-c3a539943d92",
-        "e4917957-7a73-4d11-873a-eaaf661fa581",
-        "ff453f8e-694a-47ca-824f-b2b5d4241e7d",
-        "29ceeeee-a4f6-4164-bb10-abe2a2ceb5e2"
-      ],
-      "settings": {
-        "title": "",
-        "grid_type": "standard",
-        "mobile_columns": "2",
-        "desktop_columns": 3,
-        "standard_layout_align_items": "items-start",
-        "modular_layout_variation": 1,
-        "modular_grid_item_aspect_ratio": 1,
-        "irregular_layout_variation": 1,
-        "irregular_alignment_of_items": "items-center justify-center",
-        "media_aspect_ratio": "0.6667",
-        "media_fill_space": true,
-        "labels_show_titles_and_captions": false,
-        "labels_show_product_prices": false,
-        "labels_display": "below_media",
-        "labels_always_show_on_mobile": false,
-        "color_scheme": "",
-        "space_above": 1.5,
-        "space_below": 0,
-        "disable_left_and_right_margins": true,
+        "disable_left_and_right_margins": false,
         "remove_grid_gaps": true
       }
     },
@@ -491,6 +386,24 @@
         "remove_grid_gaps": true
       }
     },
+    "b2a91ef8-0367-4fe6-acb2-72ee9f4d039f": {
+      "type": "feature-text",
+      "settings": {
+        "richtext": "<h3>Never Miss a Drop @foxycouturecarmel<\/h3>",
+        "cta_link": "",
+        "cta_label": "",
+        "font": "font-heading",
+        "desktop_text_scale": 0,
+        "mobile_text_scale": 0,
+        "text_alignment": "text-center",
+        "content_width_on_desktop": "12",
+        "content_position_on_desktop": "center",
+        "show_top_border": false,
+        "color_scheme": "",
+        "space_above": 1.5,
+        "space_below": 0
+      }
+    },
     "f6375ede-753f-4db8-86ab-ac084a6f4718": {
       "type": "collage",
       "blocks": {
@@ -514,7 +427,6 @@
         "b898d3c7-b125-426a-ba53-ef8aae2e46c2",
         "75331a48-5811-410f-a1f7-796e85488bfd"
       ],
-      "disabled": true,
       "settings": {
         "title": "",
         "grid_type": "standard",
@@ -542,17 +454,17 @@
   "order": [
     "105e1b66-1a94-44c3-832f-2a59cb1169d2",
     "59a77197-b648-41a7-8068-a765ca0024b0",
+    "a786e919-1885-407f-a7f9-8926d94569d8",
     "b90d0582-1386-4ede-acfa-e726be1cf1f4",
     "105903cc-d1ae-41c6-9335-76c5c5235186",
-    "d8c21fd1-43d1-44eb-89d4-729b87904d8d",
     "8f386aa6-a2c0-404b-aaa6-52c0ca860668",
     "scrolling-text",
     "ae8745c0-3f54-453b-85a7-f4905731bab9",
     "94fa4807-c5a1-4f1d-b497-a4ba75caa07d",
     "3f3b8370-7d3d-4f0b-ab6b-84d75b0fea1e",
-    "d76d4ba8-753c-4d29-8243-1edb0acff425",
     "34a77569-b513-4661-bac9-f9dfbc461d9c",
     "40e59f3a-391c-4dc3-921b-687def71a658",
+    "b2a91ef8-0367-4fe6-acb2-72ee9f4d039f",
     "f6375ede-753f-4db8-86ab-ac084a6f4718"
   ]
 }

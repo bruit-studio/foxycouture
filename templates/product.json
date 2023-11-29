@@ -81,7 +81,7 @@
       "settings": {
         "desktop_layout": "two_column",
         "desktop_media_position": "left",
-        "media_width_on_desktop": "8",
+        "media_width_on_desktop": "7",
         "mobile_media_layout": "carousel_with_thumbnails",
         "desktop_media_layout": "carousel_with_thumbnails",
         "media_fit": "fill_to_portrait",
@@ -90,7 +90,7 @@
         "enable_video_looping": true,
         "enable_video_autoplay": true,
         "single_media_mode": false,
-        "product_content_width_on_desktop": "1.0",
+        "product_content_width_on_desktop": "0.5",
         "product_content_alignment": "top_right",
         "product_content_sticky": true,
         "color_scheme": "scheme1",
