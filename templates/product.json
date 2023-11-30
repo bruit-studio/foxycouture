@@ -320,8 +320,8 @@
         "color_scheme": "scheme1",
         "space_above": 1,
         "space_below": 1,
-        "disable_left_and_right_margins": true,
-        "remove_grid_gaps": true
+        "disable_left_and_right_margins": false,
+        "remove_grid_gaps": false
       }
     }
   },
