@@ -84,7 +84,7 @@
         "media_width_on_desktop": "7",
         "mobile_media_layout": "carousel_with_thumbnails",
         "desktop_media_layout": "carousel_with_thumbnails",
-        "media_fit": "fill_to_portrait",
+        "media_fit": "contain_to_square",
         "media_full_bleed": "mobile_only",
         "enable_image_zoom": true,
         "enable_video_looping": true,
