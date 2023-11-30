@@ -81,7 +81,7 @@
       "settings": {
         "desktop_layout": "two_column",
         "desktop_media_position": "left",
-        "media_width_on_desktop": "8",
+        "media_width_on_desktop": "9",
         "mobile_media_layout": "carousel",
         "desktop_media_layout": "single_column",
         "media_fit": "contain_to_square",
@@ -310,7 +310,7 @@
         "irregular_layout_variation": 1,
         "irregular_alignment_of_items": "items-center justify-center",
         "media_aspect_ratio": "0.6667",
-        "media_fill_space": true,
+        "media_fill_space": false,
         "labels_show_titles_and_captions": true,
         "labels_show_product_prices": true,
         "labels_display": "below_media",
