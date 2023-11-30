@@ -306,7 +306,7 @@
         "desktop_columns": 3,
         "standard_layout_align_items": "items-center",
         "modular_layout_variation": 1,
-        "modular_grid_item_aspect_ratio": 1,
+        "modular_grid_item_aspect_ratio": 1.2,
         "irregular_layout_variation": 1,
         "irregular_alignment_of_items": "items-center justify-center",
         "media_aspect_ratio": "0.6667",
