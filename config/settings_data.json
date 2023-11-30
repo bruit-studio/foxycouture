@@ -41,7 +41,7 @@
     "grid_row_gap": 24,
     "media_grid_column_gap": 12,
     "media_grid_row_gap": 12,
-    "enable_max_grid_width": true,
+    "enable_max_grid_width": false,
     "max_grid_width": 1408,
     "vertical_space_between_sections": 128,
     "inset_sections_additional_color_schemes": true,
