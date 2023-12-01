@@ -91,7 +91,7 @@
         "enable_video_autoplay": true,
         "single_media_mode": false,
         "product_content_width_on_desktop": "1.0",
-        "product_content_alignment": "bottom_right",
+        "product_content_alignment": "center_left",
         "product_content_sticky": true,
         "color_scheme": "scheme1",
         "space_above": 0.5,
