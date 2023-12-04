@@ -9,8 +9,8 @@
         "enable_full_bleed": true,
         "collection_image_aspect_ratio": "1.778",
         "color_scheme": "primary",
-        "space_above": 1,
-        "space_below": 1
+        "space_above": 1.5,
+        "space_below": 0
       }
     },
     "product-grid": {
