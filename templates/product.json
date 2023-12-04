@@ -37,6 +37,13 @@
             "space_above": 1
           }
         },
+        "1644f749-8d36-411a-9434-68702625c955": {
+          "type": "inventory_status",
+          "settings": {
+            "threshold": 1,
+            "space_above": 1
+          }
+        },
         "buy-buttons": {
           "type": "buy_buttons",
           "settings": {
@@ -48,17 +55,16 @@
         },
         "9c54f9f9-5edf-4fd8-87e4-b7dcd2626a29": {
           "type": "collapsible_tabs",
-          "disabled": true,
           "settings": {
             "show_borders": true,
             "space_above": 1,
-            "heading_1": "Measurements",
-            "content_1": "<p>{{ product.metafields.custom.measurements | metafield_tag }}<\/p>",
-            "page_1": "",
+            "heading_1": "Questions?",
+            "content_1": "",
+            "page_1": "contact",
             "icon_1": "none",
-            "enable_2": true,
+            "enable_2": false,
             "heading_2": "Details",
-            "content_2": "<p>{{ product.metafields.custom.product_details | metafield_tag }}<\/p>",
+            "content_2": "",
             "page_2": "",
             "icon_2": "none",
             "enable_3": false,
@@ -77,6 +83,25 @@
             "text_color": "text-scheme-secondary",
             "space_above": 2
           }
+        },
+        "8f476983-87c0-4263-b069-62a0f2dfff63": {
+          "type": "supporting_links",
+          "settings": {
+            "linklist": "",
+            "layout": "horizontal",
+            "text_color": "text-scheme-text",
+            "space_above": 1
+          }
+        },
+        "47bf7825-369f-4bd5-8bd5-1b9d9c85f3a6": {
+          "type": "complementary",
+          "settings": {
+            "heading": "Pairs well with",
+            "product_list_limit": 10,
+            "products_per_row_desktop": "2",
+            "products_per_row_mobile": "1",
+            "space_above": 1
+          }
         }
       },
       "block_order": [
@@ -85,9 +110,12 @@
         "price",
         "description",
         "fc95014b-38cf-420e-915c-904621072113",
+        "1644f749-8d36-411a-9434-68702625c955",
         "buy-buttons",
         "9c54f9f9-5edf-4fd8-87e4-b7dcd2626a29",
-        "75972ab2-0c39-47a9-9c49-61c290c651f0"
+        "75972ab2-0c39-47a9-9c49-61c290c651f0",
+        "8f476983-87c0-4263-b069-62a0f2dfff63",
+        "47bf7825-369f-4bd5-8bd5-1b9d9c85f3a6"
       ],
       "settings": {
         "desktop_layout": "two_column",
