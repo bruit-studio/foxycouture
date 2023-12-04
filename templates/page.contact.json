@@ -54,7 +54,7 @@
           "type": "column",
           "settings": {
             "icon": "none",
-            "title": "HOURS",
+            "title": "Hours",
             "text": "<p>Monday: 11-5<\/p><p>Tuesday: CLOSED<\/p><p>Wednesday: CLOSED<\/p><p>Thursday: 11-5<\/p><p>Friday: 11-5<\/p><p>Saturday: 11-5<\/p><p>Sunday: 11-5<\/p>",
             "cta_link": "",
             "cta_label": ""
