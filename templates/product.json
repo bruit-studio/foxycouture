@@ -67,6 +67,16 @@
             "page_3": "",
             "icon_3": "none"
           }
+        },
+        "75972ab2-0c39-47a9-9c49-61c290c651f0": {
+          "type": "popup",
+          "settings": {
+            "icon": "none",
+            "text": "Pop-up link text",
+            "page": "contact",
+            "text_color": "text-scheme-secondary",
+            "space_above": 2
+          }
         }
       },
       "block_order": [
@@ -76,7 +86,8 @@
         "description",
         "fc95014b-38cf-420e-915c-904621072113",
         "buy-buttons",
-        "9c54f9f9-5edf-4fd8-87e4-b7dcd2626a29"
+        "9c54f9f9-5edf-4fd8-87e4-b7dcd2626a29",
+        "75972ab2-0c39-47a9-9c49-61c290c651f0"
       ],
       "settings": {
         "desktop_layout": "two_column",
