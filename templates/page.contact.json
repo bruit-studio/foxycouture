@@ -26,42 +26,10 @@
         "space_above": 0,
         "space_below": 0
       }
-    },
-    "d1a3e9a1-8593-449a-88ef-5b518c147229": {
-      "type": "collection-list",
-      "custom_css": [
-        "label.block {display: none;}"
-      ],
-      "settings": {
-        "title": "",
-        "collection_list": [
-          "staff-picks",
-          "rare-iconic-vintage"
-        ],
-        "grid_type": "irregular",
-        "mobile_columns": "1",
-        "desktop_columns": 4,
-        "standard_layout_align_items": "items-start",
-        "modular_layout_variation": 3,
-        "modular_grid_item_aspect_ratio": 1,
-        "irregular_layout_variation": 1,
-        "irregular_alignment_of_items": "items-center justify-between",
-        "media_aspect_ratio": "natural",
-        "media_fill_space": false,
-        "labels_show_titles_and_captions": true,
-        "labels_display": "below_media",
-        "labels_always_show_on_mobile": false,
-        "color_scheme": "",
-        "space_above": 1,
-        "space_below": 1,
-        "disable_left_and_right_margins": false,
-        "remove_grid_gaps": false
-      }
     }
   },
   "order": [
     "38023d8e-99a2-4b0f-be0b-e617b272b36e",
-    "main",
-    "d1a3e9a1-8593-449a-88ef-5b518c147229"
+    "main"
   ]
 }
