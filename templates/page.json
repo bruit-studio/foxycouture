@@ -2,6 +2,7 @@
   "sections": {
     "main": {
       "type": "main-page",
+      "disabled": true,
       "settings": {
         "text_alignment": "text-left",
         "color_scheme": "",
@@ -9,11 +10,28 @@
         "space_below": 1
       }
     },
-    "86b8bd58-c8bb-49ea-9cff-9a500425ec3a": {
+    "d8ea6aa2-0192-4f24-818b-07e663720720": {
       "type": "custom-liquid",
       "settings": {
+        "title": "Heading",
+        "custom_liquid": "{% assign counter = 0 %}\n{% for vendor in shop.vendors %}\n  {% assign counter = counter | plus: 1 %}\n{% endfor %}\n\n{% assign counter_divided_by_3 = counter | divided_by: 3 | floor %}\n<ul class=\"vendor-list block-grid three-up mobile one-up\">\n{% for product_vendor in shop.vendors %}\n{% assign its_a_match = false %}\n{% capture my_collection_handle %} {{ product_vendor | handleize | strip | escape  }} {% endcapture %}\n{% assign my_collection_handle_stripped = my_collection_handle | strip | escape %}\n\n{% for collection in collections %}\n{% if my_collection_handle_stripped == collection.handle %}\n{% assign its_a_match = true %}\n{% endif %}\n{% endfor %}\n\n{% if its_a_match %}\n<li class=\"vendor-list-item\"><a href=\"\/collections\/{{ product_vendor | handleize }}\">{{ product_vendor }}<\/a><\/li>\n{% else %}\n<li class=\"vendor-list-item\">{{ product_vendor | link_to_vendor }}<\/li>\n{% endif %}\n{% endfor %}\n<\/ul>",
+        "text_alignment": "text-left",
+        "liquid_only": true,
+        "show_top_border": false,
+        "color_scheme": "",
+        "space_above": 1,
+        "space_below": 1
+      }
+    },
+    "86b8bd58-c8bb-49ea-9cff-9a500425ec3a": {
+      "type": "custom-liquid",
+      "custom_css": [
+        "h1 {text-transform: uppercase; padding-bottom: 2rem;}",
+        "h2.vendor {font-size: 5vw; text-transform: uppercase; letter-spacing: -0.1rem;}"
+      ],
+      "settings": {
         "title": "",
-        "custom_liquid": "<ul>\n  {%- for product_vendor in shop.vendors -%}\n    <li class= \"vendor-large\">{{ product_vendor | link_to_vendor }}<\/li>\n  {%- endfor -%}\n<\/ul>",
+        "custom_liquid": "<h1> SHOP BY DESIGNER <\/h1>\n<h2 class =\"vendor\">\n<ul>\n  {%- for product_vendor in shop.vendors -%}\n    <li class= \"vendor-large\">{{ product_vendor | link_to_vendor }}<\/li>\n  {%- endfor -%}\n<\/ul>\n<\/h2>",
         "text_alignment": "text-left",
         "liquid_only": false,
         "show_top_border": false,
@@ -25,6 +43,7 @@
   },
   "order": [
     "main",
+    "d8ea6aa2-0192-4f24-818b-07e663720720",
     "86b8bd58-c8bb-49ea-9cff-9a500425ec3a"
   ]
 }
