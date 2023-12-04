@@ -3,10 +3,33 @@
     "main": {
       "type": "main-page-contact",
       "settings": {
+        "text_alignment": "text-left",
+        "color_scheme": "",
+        "space_above": 1,
+        "space_below": 1
+      }
+    },
+    "38023d8e-99a2-4b0f-be0b-e617b272b36e": {
+      "type": "feature-text-with-rich-text",
+      "settings": {
+        "feature_text": "<p>We would love to hear from you<\/p>",
+        "font": "font-heading",
+        "desktop_text_scale": 4,
+        "mobile_text_scale": 2,
+        "feature_text_position_on_desktop": "left",
+        "feature_text_width_on_desktop": "6",
+        "richtext": "<p>831-625-9995<br\/>Foxycouturecarmel@gmail.com<\/p><p><br\/>San Carlos St. 2SW of 5th Ave<br\/>Carmel-by-the-Sea, CA <br\/>93921<br\/><br\/><span style=\"text-decoration:underline\"><strong><br\/><\/strong><\/span>Monday: 11-5<br\/>Tuesday: CLOSED<br\/>Wednesday: CLOSED<br\/>Thursday: 11-5<br\/>Friday: 11-5<br\/>Saturday: 11-5<br\/>Sunday: 11-5<\/p>",
+        "cta_link": "",
+        "cta_label": "",
+        "show_top_border": true,
+        "color_scheme": "",
+        "space_above": 1,
+        "space_below": 1
       }
     }
   },
   "order": [
-    "main"
+    "main",
+    "38023d8e-99a2-4b0f-be0b-e617b272b36e"
   ]
 }
