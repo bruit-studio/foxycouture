@@ -44,8 +44,8 @@
           "type": "column",
           "settings": {
             "icon": "none",
-            "title": "ADDRESS",
-            "text": "<p>San Carlos St. 2SW of 5th Ave<br\/>Carmel-by-the-Sea, CA <br\/>93921<\/p>",
+            "title": "Address",
+            "text": "<p>San Carlos St. 2SW of 5th Ave<br\/>Carmel-by-the-Sea, CA <\/p>",
             "cta_link": "",
             "cta_label": ""
           }
