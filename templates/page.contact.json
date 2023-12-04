@@ -34,10 +34,10 @@
         "cta_link": "",
         "cta_label": "",
         "font": "font-heading",
-        "desktop_text_scale": 2,
-        "mobile_text_scale": 2,
-        "text_alignment": "text-left",
-        "content_width_on_desktop": "8",
+        "desktop_text_scale": 0,
+        "mobile_text_scale": 0,
+        "text_alignment": "text-center",
+        "content_width_on_desktop": "12",
         "content_position_on_desktop": "left",
         "show_top_border": true,
         "color_scheme": "",
@@ -45,33 +45,24 @@
         "space_below": 0
       }
     },
-    "d9c06dd9-b6e5-49b7-aaf3-53f667f09ad4": {
-      "type": "collection-list",
+    "9a71f674-6e2f-4ad9-9bdd-c7ebf8d63740": {
+      "type": "collection-list-slideshow",
       "settings": {
-        "title": "Collection list",
+        "title": "",
         "collection_list": [
           "new-arrivals",
           "rare-iconic-vintage",
           "staff-picks"
         ],
-        "grid_type": "irregular",
-        "mobile_columns": "1",
-        "desktop_columns": 4,
-        "standard_layout_align_items": "items-start",
-        "modular_layout_variation": 1,
-        "modular_grid_item_aspect_ratio": 1,
-        "irregular_layout_variation": 1,
-        "irregular_alignment_of_items": "items-center justify-center",
-        "media_aspect_ratio": "natural",
-        "media_fill_space": false,
+        "section_height": "h-screen-adaptive",
+        "max_width_of_slides": 80,
         "labels_show_titles_and_captions": true,
-        "labels_display": "below_media",
+        "labels_display": "footer",
         "labels_always_show_on_mobile": false,
-        "color_scheme": "",
-        "space_above": 1,
-        "space_below": 1,
-        "disable_left_and_right_margins": false,
-        "remove_grid_gaps": false
+        "show_index_and_total_slides": true,
+        "auto_rotate": false,
+        "change_slides_speed": 5,
+        "color_scheme": ""
       }
     }
   },
@@ -79,6 +70,6 @@
     "main",
     "38023d8e-99a2-4b0f-be0b-e617b272b36e",
     "0ea0752e-8f1a-4eb0-8c21-b4afafe12eca",
-    "d9c06dd9-b6e5-49b7-aaf3-53f667f09ad4"
+    "9a71f674-6e2f-4ad9-9bdd-c7ebf8d63740"
   ]
 }
