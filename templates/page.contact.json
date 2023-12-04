@@ -45,24 +45,32 @@
         "space_below": 0
       }
     },
-    "9a71f674-6e2f-4ad9-9bdd-c7ebf8d63740": {
-      "type": "collection-list-slideshow",
+    "d1a3e9a1-8593-449a-88ef-5b518c147229": {
+      "type": "collection-list",
       "settings": {
-        "title": "",
+        "title": "Collection list",
         "collection_list": [
-          "new-arrivals",
-          "rare-iconic-vintage",
-          "staff-picks"
+          "staff-picks",
+          "rare-iconic-vintage"
         ],
-        "section_height": "h-screen-adaptive",
-        "max_width_of_slides": 80,
+        "grid_type": "irregular",
+        "mobile_columns": "1",
+        "desktop_columns": 4,
+        "standard_layout_align_items": "items-start",
+        "modular_layout_variation": 3,
+        "modular_grid_item_aspect_ratio": 1,
+        "irregular_layout_variation": 1,
+        "irregular_alignment_of_items": "items-center justify-between",
+        "media_aspect_ratio": "natural",
+        "media_fill_space": false,
         "labels_show_titles_and_captions": true,
-        "labels_display": "footer",
+        "labels_display": "below_media",
         "labels_always_show_on_mobile": false,
-        "show_index_and_total_slides": true,
-        "auto_rotate": false,
-        "change_slides_speed": 5,
-        "color_scheme": ""
+        "color_scheme": "",
+        "space_above": 1,
+        "space_below": 1,
+        "disable_left_and_right_margins": false,
+        "remove_grid_gaps": false
       }
     }
   },
@@ -70,6 +78,6 @@
     "main",
     "38023d8e-99a2-4b0f-be0b-e617b272b36e",
     "0ea0752e-8f1a-4eb0-8c21-b4afafe12eca",
-    "9a71f674-6e2f-4ad9-9bdd-c7ebf8d63740"
+    "d1a3e9a1-8593-449a-88ef-5b518c147229"
   ]
 }
