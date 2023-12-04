@@ -14,7 +14,8 @@
       "type": "custom-liquid",
       "custom_css": [
         "h1 {text-transform: uppercase; padding-bottom: 2rem;}",
-        "h3.vendor {font-size: 9vw; text-transform: uppercase; letter-spacing: -0.1rem;}"
+        "h3.vendor {font-size: 9vw; text-transform: uppercase; letter-spacing: -0.1rem;}",
+        "@media screen and (max-width: 600px) {h3.vendor {font-size: 10vw; text-transform: uppercase; letter-spacing: -0.05rem; }}"
       ],
       "settings": {
         "title": "",
