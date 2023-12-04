@@ -44,7 +44,7 @@
           "type": "column",
           "settings": {
             "icon": "none",
-            "title": "",
+            "title": "ADDRESS",
             "text": "<p>San Carlos St. 2SW of 5th Ave<br\/>Carmel-by-the-Sea, CA <br\/>93921<\/p>",
             "cta_link": "",
             "cta_label": ""
@@ -54,8 +54,8 @@
           "type": "column",
           "settings": {
             "icon": "none",
-            "title": "Heading",
-            "text": "<p>Share blog posts, products, or promotions with your customers. Use this text to describe products, share details on availability and style, or as a space to display recent reviews or FAQs.<\/p>",
+            "title": "HOURS",
+            "text": "<p>Monday: 11-5<\/p><p>Tuesday: CLOSED<\/p><p>Wednesday: CLOSED<\/p><p>Thursday: 11-5<\/p><p>Friday: 11-5<\/p><p>Saturday: 11-5<\/p><p>Sunday: 11-5<\/p>",
             "cta_link": "",
             "cta_label": ""
           }
