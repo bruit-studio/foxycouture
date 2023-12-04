@@ -14,10 +14,10 @@
       "settings": {
         "feature_text": "<p>We would love to hear from you<\/p>",
         "font": "font-heading",
-        "desktop_text_scale": 4,
-        "mobile_text_scale": 2,
+        "desktop_text_scale": 3,
+        "mobile_text_scale": 0,
         "feature_text_position_on_desktop": "left",
-        "feature_text_width_on_desktop": "6",
+        "feature_text_width_on_desktop": "4",
         "richtext": "<p>831-625-9995<br\/>Foxycouturecarmel@gmail.com<\/p><p><br\/>San Carlos St. 2SW of 5th Ave<br\/>Carmel-by-the-Sea, CA <br\/>93921<br\/><br\/><span style=\"text-decoration:underline\"><strong><br\/><\/strong><\/span>Monday: 11-5<br\/>Tuesday: CLOSED<br\/>Wednesday: CLOSED<br\/>Thursday: 11-5<br\/>Friday: 11-5<br\/>Saturday: 11-5<br\/>Sunday: 11-5<\/p>",
         "cta_link": "",
         "cta_label": "",
@@ -26,10 +26,115 @@
         "space_above": 1,
         "space_below": 1
       }
+    },
+    "0ea0752e-8f1a-4eb0-8c21-b4afafe12eca": {
+      "type": "feature-text",
+      "settings": {
+        "richtext": "<p>Follow Along <a href=\"https:\/\/www.instagram.com\/foxycouturecarmel\" target=\"_blank\" title=\"https:\/\/www.instagram.com\/foxycouturecarmel\">@Foxycouturecarmel<\/a><\/p>",
+        "cta_link": "",
+        "cta_label": "",
+        "font": "font-heading",
+        "desktop_text_scale": 2,
+        "mobile_text_scale": 2,
+        "text_alignment": "text-left",
+        "content_width_on_desktop": "8",
+        "content_position_on_desktop": "left",
+        "show_top_border": true,
+        "color_scheme": "",
+        "space_above": 0,
+        "space_below": 0
+      }
+    },
+    "e146af74-525d-497f-ba17-9582b2a9aac0": {
+      "type": "image-carousel",
+      "blocks": {
+        "template--16441889882302__e146af74-525d-497f-ba17-9582b2a9aac0-image-1": {
+          "type": "image",
+          "settings": {
+            "caption": "",
+            "link": ""
+          }
+        },
+        "template--16441889882302__e146af74-525d-497f-ba17-9582b2a9aac0-image-2": {
+          "type": "image",
+          "settings": {
+            "caption": "",
+            "link": ""
+          }
+        },
+        "template--16441889882302__e146af74-525d-497f-ba17-9582b2a9aac0-image-3": {
+          "type": "image",
+          "settings": {
+            "caption": "",
+            "link": ""
+          }
+        },
+        "template--16441889882302__e146af74-525d-497f-ba17-9582b2a9aac0-image-4": {
+          "type": "image",
+          "settings": {
+            "caption": "",
+            "link": ""
+          }
+        },
+        "template--16441889882302__e146af74-525d-497f-ba17-9582b2a9aac0-image-5": {
+          "type": "image",
+          "settings": {
+            "caption": "",
+            "link": ""
+          }
+        },
+        "template--16441889882302__e146af74-525d-497f-ba17-9582b2a9aac0-image-6": {
+          "type": "image",
+          "settings": {
+            "caption": "",
+            "link": ""
+          }
+        },
+        "template--16441889882302__e146af74-525d-497f-ba17-9582b2a9aac0-image-7": {
+          "type": "image",
+          "settings": {
+            "caption": "",
+            "link": ""
+          }
+        },
+        "template--16441889882302__e146af74-525d-497f-ba17-9582b2a9aac0-image-8": {
+          "type": "image",
+          "settings": {
+            "caption": "",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "template--16441889882302__e146af74-525d-497f-ba17-9582b2a9aac0-image-1",
+        "template--16441889882302__e146af74-525d-497f-ba17-9582b2a9aac0-image-2",
+        "template--16441889882302__e146af74-525d-497f-ba17-9582b2a9aac0-image-3",
+        "template--16441889882302__e146af74-525d-497f-ba17-9582b2a9aac0-image-4",
+        "template--16441889882302__e146af74-525d-497f-ba17-9582b2a9aac0-image-5",
+        "template--16441889882302__e146af74-525d-497f-ba17-9582b2a9aac0-image-6",
+        "template--16441889882302__e146af74-525d-497f-ba17-9582b2a9aac0-image-7",
+        "template--16441889882302__e146af74-525d-497f-ba17-9582b2a9aac0-image-8"
+      ],
+      "settings": {
+        "title": "",
+        "item_width_mobile": 80,
+        "item_width_desktop": 40,
+        "snap_alignment": "snap-center",
+        "align_items": "items-start",
+        "labels_show_titles_and_captions": true,
+        "labels_display": "below_media",
+        "labels_always_show_on_mobile": false,
+        "show_index_and_total_slides": true,
+        "color_scheme": "",
+        "space_above": 0,
+        "space_below": 1
+      }
     }
   },
   "order": [
     "main",
-    "38023d8e-99a2-4b0f-be0b-e617b272b36e"
+    "38023d8e-99a2-4b0f-be0b-e617b272b36e",
+    "0ea0752e-8f1a-4eb0-8c21-b4afafe12eca",
+    "e146af74-525d-497f-ba17-9582b2a9aac0"
   ]
 }
