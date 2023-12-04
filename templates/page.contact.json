@@ -9,7 +9,7 @@
         "mobile_text_scale": 2,
         "feature_text_position_on_desktop": "left",
         "feature_text_width_on_desktop": "6",
-        "richtext": "<p><\/p><p><\/p><p><br\/>San Carlos St. 2SW of 5th Ave<br\/>Carmel-by-the-Sea, CA <br\/>93921<br\/><br\/><span style=\"text-decoration:underline\"><strong><br\/><\/strong><\/span>Monday: 11-5<br\/>Tuesday: CLOSED<br\/>Wednesday: CLOSED<br\/>Thursday: 11-5<br\/>Friday: 11-5<br\/>Saturday: 11-5<br\/>Sunday: 11-5<\/p>",
+        "richtext": "<p><\/p><p><\/p><p><br\/><br\/><br\/><span style=\"text-decoration:underline\"><strong><br\/><\/strong><\/span>Monday: 11-5<br\/>Tuesday: CLOSED<br\/>Wednesday: CLOSED<br\/>Thursday: 11-5<br\/>Friday: 11-5<br\/>Saturday: 11-5<br\/>Sunday: 11-5<\/p>",
         "cta_link": "",
         "cta_label": "",
         "show_top_border": false,
@@ -34,8 +34,8 @@
           "type": "column",
           "settings": {
             "icon": "none",
-            "title": "Heading",
-            "text": "<p>Share blog posts, products, or promotions with your customers. Use this text to describe products, share details on availability and style, or as a space to display recent reviews or FAQs.<\/p>",
+            "title": "",
+            "text": "<p>831-625-9995<br\/>Foxycouturecarmel@gmail.com<\/p>",
             "cta_link": "",
             "cta_label": ""
           }
@@ -44,8 +44,8 @@
           "type": "column",
           "settings": {
             "icon": "none",
-            "title": "Heading",
-            "text": "<p>Share blog posts, products, or promotions with your customers. Use this text to describe products, share details on availability and style, or as a space to display recent reviews or FAQs.<\/p>",
+            "title": "",
+            "text": "<p>San Carlos St. 2SW of 5th Ave<br\/>Carmel-by-the-Sea, CA <br\/>93921<\/p>",
             "cta_link": "",
             "cta_label": ""
           }
