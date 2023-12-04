@@ -45,89 +45,33 @@
         "space_below": 0
       }
     },
-    "e146af74-525d-497f-ba17-9582b2a9aac0": {
-      "type": "image-carousel",
-      "blocks": {
-        "template--16441889882302__e146af74-525d-497f-ba17-9582b2a9aac0-image-1": {
-          "type": "image",
-          "settings": {
-            "caption": "",
-            "link": ""
-          }
-        },
-        "template--16441889882302__e146af74-525d-497f-ba17-9582b2a9aac0-image-2": {
-          "type": "image",
-          "settings": {
-            "caption": "",
-            "link": ""
-          }
-        },
-        "template--16441889882302__e146af74-525d-497f-ba17-9582b2a9aac0-image-3": {
-          "type": "image",
-          "settings": {
-            "caption": "",
-            "link": ""
-          }
-        },
-        "template--16441889882302__e146af74-525d-497f-ba17-9582b2a9aac0-image-4": {
-          "type": "image",
-          "settings": {
-            "caption": "",
-            "link": ""
-          }
-        },
-        "template--16441889882302__e146af74-525d-497f-ba17-9582b2a9aac0-image-5": {
-          "type": "image",
-          "settings": {
-            "caption": "",
-            "link": ""
-          }
-        },
-        "template--16441889882302__e146af74-525d-497f-ba17-9582b2a9aac0-image-6": {
-          "type": "image",
-          "settings": {
-            "caption": "",
-            "link": ""
-          }
-        },
-        "template--16441889882302__e146af74-525d-497f-ba17-9582b2a9aac0-image-7": {
-          "type": "image",
-          "settings": {
-            "caption": "",
-            "link": ""
-          }
-        },
-        "template--16441889882302__e146af74-525d-497f-ba17-9582b2a9aac0-image-8": {
-          "type": "image",
-          "settings": {
-            "caption": "",
-            "link": ""
-          }
-        }
-      },
-      "block_order": [
-        "template--16441889882302__e146af74-525d-497f-ba17-9582b2a9aac0-image-1",
-        "template--16441889882302__e146af74-525d-497f-ba17-9582b2a9aac0-image-2",
-        "template--16441889882302__e146af74-525d-497f-ba17-9582b2a9aac0-image-3",
-        "template--16441889882302__e146af74-525d-497f-ba17-9582b2a9aac0-image-4",
-        "template--16441889882302__e146af74-525d-497f-ba17-9582b2a9aac0-image-5",
-        "template--16441889882302__e146af74-525d-497f-ba17-9582b2a9aac0-image-6",
-        "template--16441889882302__e146af74-525d-497f-ba17-9582b2a9aac0-image-7",
-        "template--16441889882302__e146af74-525d-497f-ba17-9582b2a9aac0-image-8"
-      ],
+    "d9c06dd9-b6e5-49b7-aaf3-53f667f09ad4": {
+      "type": "collection-list",
       "settings": {
-        "title": "",
-        "item_width_mobile": 80,
-        "item_width_desktop": 40,
-        "snap_alignment": "snap-center",
-        "align_items": "items-start",
+        "title": "Collection list",
+        "collection_list": [
+          "new-arrivals",
+          "rare-iconic-vintage",
+          "staff-picks"
+        ],
+        "grid_type": "irregular",
+        "mobile_columns": "1",
+        "desktop_columns": 4,
+        "standard_layout_align_items": "items-start",
+        "modular_layout_variation": 1,
+        "modular_grid_item_aspect_ratio": 1,
+        "irregular_layout_variation": 1,
+        "irregular_alignment_of_items": "items-center justify-center",
+        "media_aspect_ratio": "natural",
+        "media_fill_space": false,
         "labels_show_titles_and_captions": true,
         "labels_display": "below_media",
         "labels_always_show_on_mobile": false,
-        "show_index_and_total_slides": true,
         "color_scheme": "",
-        "space_above": 0,
-        "space_below": 1
+        "space_above": 1,
+        "space_below": 1,
+        "disable_left_and_right_margins": false,
+        "remove_grid_gaps": false
       }
     }
   },
@@ -135,6 +79,6 @@
     "main",
     "38023d8e-99a2-4b0f-be0b-e617b272b36e",
     "0ea0752e-8f1a-4eb0-8c21-b4afafe12eca",
-    "e146af74-525d-497f-ba17-9582b2a9aac0"
+    "d9c06dd9-b6e5-49b7-aaf3-53f667f09ad4"
   ]
 }
