@@ -9,7 +9,7 @@
         "mobile_text_scale": 2,
         "feature_text_position_on_desktop": "left",
         "feature_text_width_on_desktop": "6",
-        "richtext": "<p><\/p><p>831-625-9995<br\/>Foxycouturecarmel@gmail.com<\/p><p><br\/>San Carlos St. 2SW of 5th Ave<br\/>Carmel-by-the-Sea, CA <br\/>93921<br\/><br\/><span style=\"text-decoration:underline\"><strong><br\/><\/strong><\/span>Monday: 11-5<br\/>Tuesday: CLOSED<br\/>Wednesday: CLOSED<br\/>Thursday: 11-5<br\/>Friday: 11-5<br\/>Saturday: 11-5<br\/>Sunday: 11-5<\/p>",
+        "richtext": "<p><\/p><p><\/p><p><br\/>San Carlos St. 2SW of 5th Ave<br\/>Carmel-by-the-Sea, CA <br\/>93921<br\/><br\/><span style=\"text-decoration:underline\"><strong><br\/><\/strong><\/span>Monday: 11-5<br\/>Tuesday: CLOSED<br\/>Wednesday: CLOSED<br\/>Thursday: 11-5<br\/>Friday: 11-5<br\/>Saturday: 11-5<br\/>Sunday: 11-5<\/p>",
         "cta_link": "",
         "cta_label": "",
         "show_top_border": false,
@@ -26,10 +26,60 @@
         "space_above": 0,
         "space_below": 0
       }
+    },
+    "7af38cc8-0703-4063-864d-0931025eac88": {
+      "type": "text-columns",
+      "blocks": {
+        "template--16441889882302__7af38cc8-0703-4063-864d-0931025eac88-column-1": {
+          "type": "column",
+          "settings": {
+            "icon": "none",
+            "title": "Heading",
+            "text": "<p>Share blog posts, products, or promotions with your customers. Use this text to describe products, share details on availability and style, or as a space to display recent reviews or FAQs.<\/p>",
+            "cta_link": "",
+            "cta_label": ""
+          }
+        },
+        "template--16441889882302__7af38cc8-0703-4063-864d-0931025eac88-column-2": {
+          "type": "column",
+          "settings": {
+            "icon": "none",
+            "title": "Heading",
+            "text": "<p>Share blog posts, products, or promotions with your customers. Use this text to describe products, share details on availability and style, or as a space to display recent reviews or FAQs.<\/p>",
+            "cta_link": "",
+            "cta_label": ""
+          }
+        },
+        "template--16441889882302__7af38cc8-0703-4063-864d-0931025eac88-column-3": {
+          "type": "column",
+          "settings": {
+            "icon": "none",
+            "title": "Heading",
+            "text": "<p>Share blog posts, products, or promotions with your customers. Use this text to describe products, share details on availability and style, or as a space to display recent reviews or FAQs.<\/p>",
+            "cta_link": "",
+            "cta_label": ""
+          }
+        }
+      },
+      "block_order": [
+        "template--16441889882302__7af38cc8-0703-4063-864d-0931025eac88-column-1",
+        "template--16441889882302__7af38cc8-0703-4063-864d-0931025eac88-column-2",
+        "template--16441889882302__7af38cc8-0703-4063-864d-0931025eac88-column-3"
+      ],
+      "settings": {
+        "desktop_columns": 3,
+        "text_alignment": "text-left",
+        "max_width_of_icons": 50,
+        "show_top_border": false,
+        "color_scheme": "",
+        "space_above": 1,
+        "space_below": 1
+      }
     }
   },
   "order": [
     "38023d8e-99a2-4b0f-be0b-e617b272b36e",
-    "main"
+    "main",
+    "7af38cc8-0703-4063-864d-0931025eac88"
   ]
 }
