@@ -73,7 +73,7 @@
         "77d9fa82-9211-4ce8-b73b-042629545d3c": {
           "type": "liquid",
           "settings": {
-            "liquid": "<p style=\"text-align: left;\">Questions? Send us an <a href=\"mailto:kat@bruit.studio?subject={{ product.title }} - {{ product.vendor }} - {{ shop.name }}\">email<\/a><\/p>",
+            "liquid": "<p style=\"text-align: left;\">Questions? Send us an <a href=\"mailto:foxycouturecarmel@gmail.com?subject={{ product.vendor }}{{ product.title }}\">email<\/a><\/p>",
             "space_above": 1
           }
         }
