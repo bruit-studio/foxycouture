@@ -179,8 +179,8 @@
         "content_position_on_desktop": "center",
         "show_top_border": false,
         "color_scheme": "",
-        "space_above": 1.5,
-        "space_below": 0
+        "space_above": 2,
+        "space_below": 2
       }
     },
     "8f386aa6-a2c0-404b-aaa6-52c0ca860668": {
