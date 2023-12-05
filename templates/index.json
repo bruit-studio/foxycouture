@@ -377,6 +377,24 @@
         "remove_grid_gaps": true
       }
     },
+    "302bac7f-f0ed-4c7f-943d-d4b27ae1876d": {
+      "type": "feature-text",
+      "settings": {
+        "richtext": "<p>As Seen In<\/p>",
+        "cta_link": "",
+        "cta_label": "",
+        "font": "rte font-main",
+        "desktop_text_scale": 0,
+        "mobile_text_scale": 0,
+        "text_alignment": "text-center",
+        "content_width_on_desktop": "12",
+        "content_position_on_desktop": "center",
+        "show_top_border": false,
+        "color_scheme": "",
+        "space_above": 2,
+        "space_below": 0
+      }
+    },
     "6df74d79-214c-40e8-bd21-edbfb81a09e6": {
       "type": "image-gallery",
       "blocks": {
@@ -435,7 +453,7 @@
         "labels_display": "below_media",
         "labels_always_show_on_mobile": false,
         "color_scheme": "",
-        "space_above": 0.5,
+        "space_above": 0,
         "space_below": 2
       }
     }
@@ -451,6 +469,7 @@
     "ae8745c0-3f54-453b-85a7-f4905731bab9",
     "3a11f3f1-c3c7-4be5-a804-d8f226652848",
     "94fa4807-c5a1-4f1d-b497-a4ba75caa07d",
+    "302bac7f-f0ed-4c7f-943d-d4b27ae1876d",
     "6df74d79-214c-40e8-bd21-edbfb81a09e6"
   ]
 }
