@@ -70,7 +70,7 @@
     "quick_view_color_scheme": "scheme2",
     "quick_view_drawer_max_width_on_desktop": 42,
     "drawers_color_scheme": "scheme2",
-    "modal_color_scheme": "scheme1",
+    "modal_color_scheme": "scheme2",
     "modals_overlay_background_color": "bg-scheme-background",
     "modals_overlay_opacity": 1,
     "modals_overlay_saturate": false,

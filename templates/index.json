@@ -271,6 +271,7 @@
         "b004e451-31f2-46f8-bc3c-c78420a3c5ba",
         "d77750ef-c99e-4e11-ac1b-d5d77506c788"
       ],
+      "disabled": true,
       "settings": {
         "title": "",
         "grid_type": "standard",
@@ -289,7 +290,7 @@
         "labels_always_show_on_mobile": true,
         "color_scheme": "",
         "space_above": 2,
-        "space_below": 2,
+        "space_below": 0,
         "disable_left_and_right_margins": true,
         "remove_grid_gaps": true
       }
@@ -321,10 +322,10 @@
             "link": ""
           }
         },
-        "6375b2e6-1e53-4400-bf9a-dc644bd2d516": {
+        "cc780369-edac-4064-ad59-b82fc565846b": {
           "type": "image",
           "settings": {
-            "image": "shopify:\/\/shop_images\/Winter_Edit-4.png",
+            "image": "shopify:\/\/shop_images\/New_Arrivals.jpg",
             "caption": "",
             "link": ""
           }
@@ -332,15 +333,15 @@
         "dce3543f-fb7f-42ce-b50a-8afd72c8b824": {
           "type": "image",
           "settings": {
-            "image": "shopify:\/\/shop_images\/Party_Edit-4.png",
+            "image": "shopify:\/\/shop_images\/54-7.png",
             "caption": "",
             "link": ""
           }
         },
-        "cc780369-edac-4064-ad59-b82fc565846b": {
+        "6375b2e6-1e53-4400-bf9a-dc644bd2d516": {
           "type": "image",
           "settings": {
-            "image": "shopify:\/\/shop_images\/New_Arrivals.jpg",
+            "image": "shopify:\/\/shop_images\/IMG_4489.jpg",
             "caption": "",
             "link": ""
           }
@@ -350,9 +351,9 @@
         "531e6524-6a9b-4211-9c59-ae77922e1910",
         "34ace3a3-5257-4598-a196-2530e026165b",
         "daf57fa8-22fc-4cc4-8a5a-521308d76ff1",
-        "6375b2e6-1e53-4400-bf9a-dc644bd2d516",
+        "cc780369-edac-4064-ad59-b82fc565846b",
         "dce3543f-fb7f-42ce-b50a-8afd72c8b824",
-        "cc780369-edac-4064-ad59-b82fc565846b"
+        "6375b2e6-1e53-4400-bf9a-dc644bd2d516"
       ],
       "settings": {
         "title": "",
@@ -375,6 +376,31 @@
         "space_below": 2,
         "disable_left_and_right_margins": true,
         "remove_grid_gaps": true
+      }
+    },
+    "b163b20d-f5ca-4c08-b8b4-5698d75e448a": {
+      "type": "products-carousel",
+      "settings": {
+        "title": "Staff Picks",
+        "product_list": [
+          "chrome-hearts-black-leather-vest",
+          "valentino-white-roman-stud-sunglasses",
+          "bottega-veneta-zebra-print-leather-clutch"
+        ],
+        "item_width_mobile": 65,
+        "item_width_desktop": 35,
+        "snap_alignment": "snap-center",
+        "align_items": "items-start",
+        "labels_show_titles_and_captions": true,
+        "labels_show_product_prices": true,
+        "labels_display": "below_media",
+        "labels_show_product_vendor": true,
+        "labels_always_show_on_mobile": true,
+        "show_index_and_total_slides": true,
+        "quick_view": "disabled",
+        "color_scheme": "",
+        "space_above": 2,
+        "space_below": 2
       }
     },
     "302bac7f-f0ed-4c7f-943d-d4b27ae1876d": {
@@ -469,6 +495,7 @@
     "ae8745c0-3f54-453b-85a7-f4905731bab9",
     "3a11f3f1-c3c7-4be5-a804-d8f226652848",
     "94fa4807-c5a1-4f1d-b497-a4ba75caa07d",
+    "b163b20d-f5ca-4c08-b8b4-5698d75e448a",
     "302bac7f-f0ed-4c7f-943d-d4b27ae1876d",
     "6df74d79-214c-40e8-bd21-edbfb81a09e6"
   ]

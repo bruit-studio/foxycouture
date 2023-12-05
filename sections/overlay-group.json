@@ -8,24 +8,39 @@
         "menu": {
           "type": "menu",
           "settings": {
-            "menu": "main-menu",
+            "menu": "main-menu-1",
             "nested_navigation_style": "accordion",
             "accordion_icon": "plus_minus",
-            "show_cart": false,
-            "show_collection_products_count": true
+            "show_cart": true,
+            "show_collection_products_count": false
+          }
+        },
+        "e99bd7ab-c5b7-4efe-ae4b-6b7a8af875c4": {
+          "type": "rich_text",
+          "settings": {
+            "richtext": "<h6>{{ shop.brand.slogan }}<\/h6>",
+            "text_alignment": "text-left"
+          }
+        },
+        "7a4adcf0-d59a-473e-bda1-6f04bbbbbb9e": {
+          "type": "social_media",
+          "settings": {
+            "display": "text"
           }
         }
       },
       "block_order": [
-        "menu"
+        "menu",
+        "e99bd7ab-c5b7-4efe-ae4b-6b7a8af875c4",
+        "7a4adcf0-d59a-473e-bda1-6f04bbbbbb9e"
       ],
       "settings": {
         "show_search": true,
         "show_locale_selector": true,
         "show_country_selector": true,
         "drawer_position": "rightDrawer",
-        "vertical_space_between_blocks": 0,
-        "desktop_text_scale": 3,
+        "vertical_space_between_blocks": 2,
+        "desktop_text_scale": 2,
         "mobile_text_scale": 2
       }
     },
