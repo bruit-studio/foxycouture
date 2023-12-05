@@ -61,7 +61,7 @@
         "content_position_on_desktop": "left",
         "show_top_border": false,
         "color_scheme": "",
-        "space_above": 0,
+        "space_above": 0.5,
         "space_below": 0.5
       }
     },
