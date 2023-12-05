@@ -63,17 +63,10 @@
             "space_above": 2
           }
         },
-        "88b206a6-77aa-4915-b511-f00d91e385e4": {
-          "type": "rich_text",
-          "settings": {
-            "content": "<p>Questions? Send us an <a href=\"mailto:foxycouturecarmel@gmail.com\" target=\"_blank\" title=\"foxycouturecarmel@gmail.com\">email<\/a><\/p>",
-            "space_above": 2
-          }
-        },
         "77d9fa82-9211-4ce8-b73b-042629545d3c": {
           "type": "liquid",
           "settings": {
-            "liquid": "<p style=\"text-align: left;\">Questions? Send us an <a href=\"mailto:foxycouturecarmel@gmail.com?subject={{ product.vendor }}{{ product.title }}\">email<\/a><\/p>",
+            "liquid": "<p style=\"text-align: left;\">Questions? Send us an <a href=\"mailto:foxycouturecarmel@gmail.com?subject={{ product.vendor }} {{ product.title }}\">email<\/a><\/p>",
             "space_above": 1
           }
         }
@@ -87,7 +80,6 @@
         "1644f749-8d36-411a-9434-68702625c955",
         "buy-buttons",
         "8f476983-87c0-4263-b069-62a0f2dfff63",
-        "88b206a6-77aa-4915-b511-f00d91e385e4",
         "77d9fa82-9211-4ce8-b73b-042629545d3c"
       ],
       "settings": {
