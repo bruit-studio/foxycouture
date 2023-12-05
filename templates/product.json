@@ -3,6 +3,13 @@
     "main": {
       "type": "main-product",
       "blocks": {
+        "1644f749-8d36-411a-9434-68702625c955": {
+          "type": "inventory_status",
+          "settings": {
+            "threshold": 1,
+            "space_above": 1
+          }
+        },
         "b19fb94c-1080-4c01-bc62-6bfc1713af2c": {
           "type": "vendor",
           "disabled": true,
@@ -38,13 +45,6 @@
             "space_above": 1
           }
         },
-        "1644f749-8d36-411a-9434-68702625c955": {
-          "type": "inventory_status",
-          "settings": {
-            "threshold": 1,
-            "space_above": 1
-          }
-        },
         "buy-buttons": {
           "type": "buy_buttons",
           "settings": {
@@ -52,6 +52,13 @@
             "space_above": 2,
             "show_pickup_availability": true,
             "show_gift_card_recipient": false
+          }
+        },
+        "77d9fa82-9211-4ce8-b73b-042629545d3c": {
+          "type": "liquid",
+          "settings": {
+            "liquid": "<div style=\"padding-top: 1rem; padding-bottom: 1rem; opacity: .6;><a href=\"mailto:foxycouturecarmel@gmail.com?subject={{ product.vendor }} {{ product.title }}\">ASK A QUESTION<\/a>\n<\/div>",
+            "space_above": 1
           }
         },
         "8f476983-87c0-4263-b069-62a0f2dfff63": {
@@ -62,25 +69,18 @@
             "text_color": "text-scheme-text",
             "space_above": 2
           }
-        },
-        "77d9fa82-9211-4ce8-b73b-042629545d3c": {
-          "type": "liquid",
-          "settings": {
-            "liquid": "<p style=\"text-align: left;\">Questions? Send us an <a href=\"mailto:foxycouturecarmel@gmail.com?subject={{ product.vendor }} {{ product.title }}\">email<\/a><\/p>",
-            "space_above": 1
-          }
         }
       },
       "block_order": [
+        "1644f749-8d36-411a-9434-68702625c955",
         "b19fb94c-1080-4c01-bc62-6bfc1713af2c",
         "title",
         "price",
         "description",
         "fc95014b-38cf-420e-915c-904621072113",
-        "1644f749-8d36-411a-9434-68702625c955",
         "buy-buttons",
-        "8f476983-87c0-4263-b069-62a0f2dfff63",
-        "77d9fa82-9211-4ce8-b73b-042629545d3c"
+        "77d9fa82-9211-4ce8-b73b-042629545d3c",
+        "8f476983-87c0-4263-b069-62a0f2dfff63"
       ],
       "settings": {
         "desktop_layout": "two_column",
