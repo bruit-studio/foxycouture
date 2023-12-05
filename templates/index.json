@@ -195,7 +195,7 @@
           "gucci-red-and-blue-iconic-circle-tweed-button-front-maxi-skirt-nwt",
           "valentino-white-roman-stud-sunglasses"
         ],
-        "section_height": "h-screen-80",
+        "section_height": "h-screen-60",
         "max_width_of_slides": 40,
         "labels_show_titles_and_captions": true,
         "labels_show_product_prices": true,
@@ -377,53 +377,65 @@
         "remove_grid_gaps": true
       }
     },
-    "70840c21-05c0-4d71-ab06-1f5f989f6747": {
-      "type": "logo-list",
+    "6df74d79-214c-40e8-bd21-edbfb81a09e6": {
+      "type": "image-gallery",
       "blocks": {
-        "template--16441890242750__70840c21-05c0-4d71-ab06-1f5f989f6747-logo-4": {
-          "type": "logo",
+        "template--16441890242750__6df74d79-214c-40e8-bd21-edbfb81a09e6-image-1": {
+          "type": "image",
           "settings": {
-            "image": "shopify:\/\/shop_images\/Vogue-Logo_f59a7e3f-b66f-44ea-a622-35b287aa873d.svg",
+            "image": "shopify:\/\/shop_images\/InStyle.svg",
+            "caption": "",
             "link": ""
           }
         },
-        "template--16441890242750__70840c21-05c0-4d71-ab06-1f5f989f6747-logo-1": {
-          "type": "logo",
+        "template--16441890242750__6df74d79-214c-40e8-bd21-edbfb81a09e6-image-2": {
+          "type": "image",
           "settings": {
-            "image": "shopify:\/\/shop_images\/InStyle-Logo_89ce20c2-7abe-4d75-b3ce-5c5e17771ae7.svg",
+            "image": "shopify:\/\/shop_images\/The_Knot.svg",
+            "caption": "",
             "link": ""
           }
         },
-        "template--16441890242750__70840c21-05c0-4d71-ab06-1f5f989f6747-logo-2": {
-          "type": "logo",
+        "template--16441890242750__6df74d79-214c-40e8-bd21-edbfb81a09e6-image-3": {
+          "type": "image",
           "settings": {
-            "image": "shopify:\/\/shop_images\/Knot-Logo_995fedc4-1959-4c5c-a83a-273ffae48cb2.svg",
+            "image": "shopify:\/\/shop_images\/Vogue.svg",
+            "caption": "",
             "link": ""
           }
         },
-        "template--16441890242750__70840c21-05c0-4d71-ab06-1f5f989f6747-logo-3": {
-          "type": "logo",
+        "template--16441890242750__6df74d79-214c-40e8-bd21-edbfb81a09e6-image-4": {
+          "type": "image",
           "settings": {
-            "image": "shopify:\/\/shop_images\/Today-Logo_c07a4fc0-4ca2-461d-98fb-993eb076636a.svg",
+            "image": "shopify:\/\/shop_images\/Today.svg",
+            "caption": "",
             "link": ""
           }
         }
       },
       "block_order": [
-        "template--16441890242750__70840c21-05c0-4d71-ab06-1f5f989f6747-logo-4",
-        "template--16441890242750__70840c21-05c0-4d71-ab06-1f5f989f6747-logo-1",
-        "template--16441890242750__70840c21-05c0-4d71-ab06-1f5f989f6747-logo-2",
-        "template--16441890242750__70840c21-05c0-4d71-ab06-1f5f989f6747-logo-3"
+        "template--16441890242750__6df74d79-214c-40e8-bd21-edbfb81a09e6-image-1",
+        "template--16441890242750__6df74d79-214c-40e8-bd21-edbfb81a09e6-image-2",
+        "template--16441890242750__6df74d79-214c-40e8-bd21-edbfb81a09e6-image-3",
+        "template--16441890242750__6df74d79-214c-40e8-bd21-edbfb81a09e6-image-4"
       ],
       "settings": {
-        "title": "As Seen In",
-        "max_width": 100,
-        "grayscale": false,
-        "luminosity": false,
-        "invert": false,
-        "show_top_border": false,
+        "title": "",
+        "grid_type": "standard",
+        "mobile_columns": "2",
+        "desktop_columns": 4,
+        "standard_layout_align_items": "items-start",
+        "modular_layout_variation": 1,
+        "modular_grid_item_aspect_ratio": 1,
+        "irregular_layout_variation": 1,
+        "irregular_alignment_of_items": "items-center justify-center",
+        "media_aspect_ratio": "1.778",
+        "media_fill_space": false,
+        "labels_show_titles_and_captions": false,
+        "labels_display": "below_media",
+        "labels_always_show_on_mobile": false,
         "color_scheme": "",
-        "space_above": 2,
+        "space_above": 0.5,
         "space_below": 2
       }
     }
@@ -439,6 +451,6 @@
     "ae8745c0-3f54-453b-85a7-f4905731bab9",
     "3a11f3f1-c3c7-4be5-a804-d8f226652848",
     "94fa4807-c5a1-4f1d-b497-a4ba75caa07d",
-    "70840c21-05c0-4d71-ab06-1f5f989f6747"
+    "6df74d79-214c-40e8-bd21-edbfb81a09e6"
   ]
 }
