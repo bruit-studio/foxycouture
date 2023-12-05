@@ -79,8 +79,8 @@
         "content_position_on_desktop": "left",
         "show_top_border": false,
         "color_scheme": "",
-        "space_above": 1.5,
-        "space_below": 0
+        "space_above": 2,
+        "space_below": 0.5
       }
     },
     "b90d0582-1386-4ede-acfa-e726be1cf1f4": {
