@@ -57,7 +57,7 @@
         "77d9fa82-9211-4ce8-b73b-042629545d3c": {
           "type": "liquid",
           "settings": {
-            "liquid": "<div style=\"padding-top: 1rem; padding-bottom: 1rem; opacity: .6;><a href=\"mailto:foxycouturecarmel@gmail.com?subject={{ product.vendor }} {{ product.title }}\">ASK A QUESTION<\/a>\n<\/div>",
+            "liquid": "<a href=\"mailto:foxycouturecarmel@gmail.com?subject={{ product.vendor }} {{ product.title }}\">ASK A QUESTION<\/a>",
             "space_above": 1
           }
         },
