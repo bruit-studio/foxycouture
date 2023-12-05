@@ -186,6 +186,32 @@
         "space_below": 2
       }
     },
+    "b163b20d-f5ca-4c08-b8b4-5698d75e448a": {
+      "type": "products-carousel",
+      "disabled": true,
+      "settings": {
+        "title": "",
+        "product_list": [
+          "chrome-hearts-black-leather-vest",
+          "valentino-white-roman-stud-sunglasses",
+          "bottega-veneta-zebra-print-leather-clutch"
+        ],
+        "item_width_mobile": 70,
+        "item_width_desktop": 30,
+        "snap_alignment": "snap-center",
+        "align_items": "items-center",
+        "labels_show_titles_and_captions": true,
+        "labels_show_product_prices": true,
+        "labels_display": "below_media",
+        "labels_show_product_vendor": true,
+        "labels_always_show_on_mobile": true,
+        "show_index_and_total_slides": true,
+        "quick_view": "disabled",
+        "color_scheme": "",
+        "space_above": 2,
+        "space_below": 2
+      }
+    },
     "8f386aa6-a2c0-404b-aaa6-52c0ca860668": {
       "type": "products-slideshow",
       "settings": {
@@ -378,31 +404,6 @@
         "remove_grid_gaps": true
       }
     },
-    "b163b20d-f5ca-4c08-b8b4-5698d75e448a": {
-      "type": "products-carousel",
-      "settings": {
-        "title": "Staff Picks",
-        "product_list": [
-          "chrome-hearts-black-leather-vest",
-          "valentino-white-roman-stud-sunglasses",
-          "bottega-veneta-zebra-print-leather-clutch"
-        ],
-        "item_width_mobile": 65,
-        "item_width_desktop": 35,
-        "snap_alignment": "snap-center",
-        "align_items": "items-start",
-        "labels_show_titles_and_captions": true,
-        "labels_show_product_prices": true,
-        "labels_display": "below_media",
-        "labels_show_product_vendor": true,
-        "labels_always_show_on_mobile": true,
-        "show_index_and_total_slides": true,
-        "quick_view": "disabled",
-        "color_scheme": "",
-        "space_above": 2,
-        "space_below": 2
-      }
-    },
     "302bac7f-f0ed-4c7f-943d-d4b27ae1876d": {
       "type": "feature-text",
       "settings": {
@@ -490,12 +491,12 @@
     "67a9ebd5-f1e1-4516-802f-e2fa10621372",
     "b90d0582-1386-4ede-acfa-e726be1cf1f4",
     "105903cc-d1ae-41c6-9335-76c5c5235186",
+    "b163b20d-f5ca-4c08-b8b4-5698d75e448a",
     "8f386aa6-a2c0-404b-aaa6-52c0ca860668",
     "scrolling-text",
     "ae8745c0-3f54-453b-85a7-f4905731bab9",
     "3a11f3f1-c3c7-4be5-a804-d8f226652848",
     "94fa4807-c5a1-4f1d-b497-a4ba75caa07d",
-    "b163b20d-f5ca-4c08-b8b4-5698d75e448a",
     "302bac7f-f0ed-4c7f-943d-d4b27ae1876d",
     "6df74d79-214c-40e8-bd21-edbfb81a09e6"
   ]
