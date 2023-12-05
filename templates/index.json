@@ -160,7 +160,7 @@
         "labels_always_show_on_mobile": true,
         "color_scheme": "",
         "space_above": 0,
-        "space_below": 0,
+        "space_below": 2,
         "disable_left_and_right_margins": true,
         "remove_grid_gaps": true
       }
