@@ -374,22 +374,54 @@
         "remove_grid_gaps": true
       }
     },
-    "34a77569-b513-4661-bac9-f9dfbc461d9c": {
-      "type": "feature-text",
+    "70840c21-05c0-4d71-ab06-1f5f989f6747": {
+      "type": "logo-list",
+      "blocks": {
+        "template--16441890242750__70840c21-05c0-4d71-ab06-1f5f989f6747-logo-4": {
+          "type": "logo",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/Vogue-Logo_f59a7e3f-b66f-44ea-a622-35b287aa873d.svg",
+            "link": ""
+          }
+        },
+        "template--16441890242750__70840c21-05c0-4d71-ab06-1f5f989f6747-logo-1": {
+          "type": "logo",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/InStyle-Logo_89ce20c2-7abe-4d75-b3ce-5c5e17771ae7.svg",
+            "link": ""
+          }
+        },
+        "template--16441890242750__70840c21-05c0-4d71-ab06-1f5f989f6747-logo-2": {
+          "type": "logo",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/Knot-Logo_995fedc4-1959-4c5c-a83a-273ffae48cb2.svg",
+            "link": ""
+          }
+        },
+        "template--16441890242750__70840c21-05c0-4d71-ab06-1f5f989f6747-logo-3": {
+          "type": "logo",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/Today-Logo_c07a4fc0-4ca2-461d-98fb-993eb076636a.svg",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "template--16441890242750__70840c21-05c0-4d71-ab06-1f5f989f6747-logo-4",
+        "template--16441890242750__70840c21-05c0-4d71-ab06-1f5f989f6747-logo-1",
+        "template--16441890242750__70840c21-05c0-4d71-ab06-1f5f989f6747-logo-2",
+        "template--16441890242750__70840c21-05c0-4d71-ab06-1f5f989f6747-logo-3"
+      ],
       "settings": {
-        "richtext": "<p>As Seen In<\/p>",
-        "cta_link": "",
-        "cta_label": "",
-        "font": "rte font-main",
-        "desktop_text_scale": 0,
-        "mobile_text_scale": 0,
-        "text_alignment": "text-center",
-        "content_width_on_desktop": "12",
-        "content_position_on_desktop": "left",
+        "title": "As Seen In",
+        "max_width": 100,
+        "grayscale": false,
+        "luminosity": false,
+        "invert": false,
         "show_top_border": false,
         "color_scheme": "",
-        "space_above": 1.5,
-        "space_below": 0
+        "space_above": 2,
+        "space_below": 2
       }
     }
   },
@@ -404,6 +436,6 @@
     "ae8745c0-3f54-453b-85a7-f4905731bab9",
     "3a11f3f1-c3c7-4be5-a804-d8f226652848",
     "94fa4807-c5a1-4f1d-b497-a4ba75caa07d",
-    "34a77569-b513-4661-bac9-f9dfbc461d9c"
+    "70840c21-05c0-4d71-ab06-1f5f989f6747"
   ]
 }

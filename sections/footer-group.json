@@ -15,7 +15,7 @@
         "enable_overlay": false,
         "overlay_offset": 100,
         "color_scheme": "",
-        "space_above": 1,
+        "space_above": 2,
         "space_below": 0
       }
     },
