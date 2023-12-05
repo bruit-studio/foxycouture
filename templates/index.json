@@ -52,7 +52,7 @@
       "settings": {
         "richtext": "<h5>“For any lover of vintage couture, plan to spend a few hours here marveling at all the wares.”<\/h5><p>- VOGUE<\/p>",
         "cta_link": "",
-        "cta_label": "",
+        "cta_label": "Test",
         "font": "font-heading",
         "desktop_text_scale": 0,
         "mobile_text_scale": 2,
@@ -65,21 +65,21 @@
         "space_below": 2
       }
     },
-    "a786e919-1885-407f-a7f9-8926d94569d8": {
-      "type": "feature-text",
+    "67a9ebd5-f1e1-4516-802f-e2fa10621372": {
+      "type": "feature-text-with-rich-text",
       "settings": {
-        "richtext": "<h3>Rare & Iconic Vintage<\/h3>",
-        "cta_link": "",
-        "cta_label": "",
+        "feature_text": "<p><a href=\"\/collections\/rare-iconic-vintage\" title=\"Rare & Iconic Vintage\"><strong>Rare & Iconic Vintage<\/strong><\/a><\/p>",
         "font": "font-heading",
         "desktop_text_scale": 0,
         "mobile_text_scale": 0,
-        "text_alignment": "text-left",
-        "content_width_on_desktop": "12",
-        "content_position_on_desktop": "left",
+        "feature_text_position_on_desktop": "left",
+        "feature_text_width_on_desktop": "9",
+        "richtext": "",
+        "cta_link": "",
+        "cta_label": "",
         "show_top_border": false,
         "color_scheme": "",
-        "space_above": 2,
+        "space_above": 1,
         "space_below": 0.5
       }
     },
@@ -112,16 +112,10 @@
             "link": ""
           }
         },
-        "5c31e8ce-ff3f-4e66-bacc-e61dccb99f4e": {
+        "df8e10bf-8f74-4b23-9e41-1137cba2d740": {
           "type": "image",
           "settings": {
-            "caption": "",
-            "link": ""
-          }
-        },
-        "bddae9d4-7f2e-425f-aeca-60b4aadfb928": {
-          "type": "image",
-          "settings": {
+            "image": "shopify:\/\/shop_images\/Untitled_design.jpg",
             "caption": "",
             "link": ""
           }
@@ -129,6 +123,15 @@
         "1c7cd0c3-4c12-4fae-b884-2738be4026e2": {
           "type": "image",
           "settings": {
+            "image": "shopify:\/\/shop_images\/53_cbddfc09-93e0-40e8-8ef8-ccbe682a3c1b.png",
+            "caption": "",
+            "link": ""
+          }
+        },
+        "bddae9d4-7f2e-425f-aeca-60b4aadfb928": {
+          "type": "image",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/Cuff.png",
             "caption": "",
             "link": ""
           }
@@ -138,9 +141,9 @@
         "0023dfc3-bf11-461a-b909-ad2842d32b06",
         "b4a83b46-ad39-48e7-aab0-d7f3f983bed3",
         "e094c77a-6fef-472a-8c04-c96c5f805539",
-        "5c31e8ce-ff3f-4e66-bacc-e61dccb99f4e",
-        "bddae9d4-7f2e-425f-aeca-60b4aadfb928",
-        "1c7cd0c3-4c12-4fae-b884-2738be4026e2"
+        "df8e10bf-8f74-4b23-9e41-1137cba2d740",
+        "1c7cd0c3-4c12-4fae-b884-2738be4026e2",
+        "bddae9d4-7f2e-425f-aeca-60b4aadfb928"
       ],
       "settings": {
         "title": "",
@@ -428,7 +431,7 @@
   "order": [
     "105e1b66-1a94-44c3-832f-2a59cb1169d2",
     "59a77197-b648-41a7-8068-a765ca0024b0",
-    "a786e919-1885-407f-a7f9-8926d94569d8",
+    "67a9ebd5-f1e1-4516-802f-e2fa10621372",
     "b90d0582-1386-4ede-acfa-e726be1cf1f4",
     "105903cc-d1ae-41c6-9335-76c5c5235186",
     "8f386aa6-a2c0-404b-aaa6-52c0ca860668",
