@@ -5,6 +5,7 @@
       "blocks": {
         "b19fb94c-1080-4c01-bc62-6bfc1713af2c": {
           "type": "vendor",
+          "disabled": true,
           "settings": {
             "text_color": "text-scheme-text",
             "space_above": 1
@@ -57,7 +58,7 @@
           "type": "popup",
           "settings": {
             "icon": "none",
-            "text": "Questions?",
+            "text": "",
             "page": "contact",
             "text_color": "text-scheme-secondary",
             "space_above": 2
@@ -67,9 +68,9 @@
           "type": "supporting_links",
           "settings": {
             "linklist": "",
-            "layout": "horizontal",
+            "layout": "vertical",
             "text_color": "text-scheme-text",
-            "space_above": 1
+            "space_above": 2
           }
         }
       },
