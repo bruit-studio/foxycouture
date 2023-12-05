@@ -53,32 +53,11 @@
             "show_gift_card_recipient": false
           }
         },
-        "9c54f9f9-5edf-4fd8-87e4-b7dcd2626a29": {
-          "type": "collapsible_tabs",
-          "settings": {
-            "show_borders": true,
-            "space_above": 1,
-            "heading_1": "Questions?",
-            "content_1": "",
-            "page_1": "contact",
-            "icon_1": "none",
-            "enable_2": false,
-            "heading_2": "Details",
-            "content_2": "",
-            "page_2": "",
-            "icon_2": "none",
-            "enable_3": false,
-            "heading_3": "Collapsible tab",
-            "content_3": "<p>Use this text to share additional information about your products with your customers.<\/p>",
-            "page_3": "",
-            "icon_3": "none"
-          }
-        },
         "75972ab2-0c39-47a9-9c49-61c290c651f0": {
           "type": "popup",
           "settings": {
             "icon": "none",
-            "text": "Pop-up link text",
+            "text": "Questions?",
             "page": "contact",
             "text_color": "text-scheme-secondary",
             "space_above": 2
@@ -92,16 +71,6 @@
             "text_color": "text-scheme-text",
             "space_above": 1
           }
-        },
-        "47bf7825-369f-4bd5-8bd5-1b9d9c85f3a6": {
-          "type": "complementary",
-          "settings": {
-            "heading": "Pairs well with",
-            "product_list_limit": 10,
-            "products_per_row_desktop": "2",
-            "products_per_row_mobile": "1",
-            "space_above": 1
-          }
         }
       },
       "block_order": [
@@ -112,10 +81,8 @@
         "fc95014b-38cf-420e-915c-904621072113",
         "1644f749-8d36-411a-9434-68702625c955",
         "buy-buttons",
-        "9c54f9f9-5edf-4fd8-87e4-b7dcd2626a29",
         "75972ab2-0c39-47a9-9c49-61c290c651f0",
-        "8f476983-87c0-4263-b069-62a0f2dfff63",
-        "47bf7825-369f-4bd5-8bd5-1b9d9c85f3a6"
+        "8f476983-87c0-4263-b069-62a0f2dfff63"
       ],
       "settings": {
         "desktop_layout": "two_column",
