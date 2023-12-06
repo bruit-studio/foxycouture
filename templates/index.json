@@ -67,6 +67,7 @@
     },
     "67a9ebd5-f1e1-4516-802f-e2fa10621372": {
       "type": "feature-text-with-rich-text",
+      "disabled": true,
       "settings": {
         "feature_text": "<p><a href=\"\/collections\/rare-iconic-vintage\" title=\"Rare & Iconic Vintage\"><strong>Rare & Iconic Vintage<\/strong><\/a><\/p>",
         "font": "font-heading",
@@ -162,7 +163,7 @@
         "labels_display": "text_overlay_on_hover",
         "labels_always_show_on_mobile": true,
         "color_scheme": "",
-        "space_above": 0,
+        "space_above": 2,
         "space_below": 2,
         "disable_left_and_right_margins": true,
         "remove_grid_gaps": true
