@@ -3,14 +3,6 @@
     "main": {
       "type": "main-product",
       "blocks": {
-        "b19fb94c-1080-4c01-bc62-6bfc1713af2c": {
-          "type": "vendor",
-          "disabled": true,
-          "settings": {
-            "text_color": "text-scheme-text",
-            "space_above": 1
-          }
-        },
         "title": {
           "type": "title",
           "settings": {
@@ -31,13 +23,6 @@
             "space_above": 2
           }
         },
-        "fc95014b-38cf-420e-915c-904621072113": {
-          "type": "rich_text",
-          "settings": {
-            "content": "<p><strong>{{ product.metafields.custom.condition_tag.value.condition.value }}<\/strong> {{ product.metafields.custom.condition | metafield_tag }}<\/p>",
-            "space_above": 0.5
-          }
-        },
         "buy-buttons": {
           "type": "buy_buttons",
           "settings": {
@@ -53,6 +38,13 @@
             "text": "Only 1, don't miss out.",
             "icon": "none",
             "text_color": "text-scheme-text",
+            "space_above": 2
+          }
+        },
+        "560376cc-9261-4977-85bf-702747cb3ab0": {
+          "type": "liquid",
+          "settings": {
+            "liquid": "<p style=\"text-align: left;\">Mini Bag, Gucci<\/p>",
             "space_above": 1
           }
         },
@@ -62,56 +54,16 @@
             "liquid": "<a href=\"mailto:foxycouturecarmel@gmail.com?subject={{ product.vendor }} {{ product.title }}\">ASK A QUESTION<\/a>",
             "space_above": 1
           }
-        },
-        "8f476983-87c0-4263-b069-62a0f2dfff63": {
-          "type": "supporting_links",
-          "disabled": true,
-          "settings": {
-            "linklist": "",
-            "layout": "vertical",
-            "text_color": "text-scheme-text",
-            "space_above": 2
-          }
-        },
-        "c055b977-2975-452b-b867-c335c4a2f31d": {
-          "type": "rich_text",
-          "settings": {
-            "content": "<p>CONDITION<\/p>",
-            "space_above": 2
-          }
-        },
-        "abfd7e77-063f-4ae3-80f2-a6c7e9546101": {
-          "type": "specifications",
-          "settings": {
-            "content_text_alignment": "text-left",
-            "text_color": "text-scheme-text",
-            "show_borders": false,
-            "space_above": 0,
-            "heading_1": "{{ product.metafields.custom.condition_tag.value.condition.value }}",
-            "content_1": "<p>{{ product.metafields.custom.condition | metafield_tag }}<\/p>",
-            "heading_2": "",
-            "content_2": "",
-            "heading_3": "",
-            "content_3": "",
-            "heading_4": "",
-            "content_4": "",
-            "heading_5": "",
-            "content_5": ""
-          }
         }
       },
       "block_order": [
-        "b19fb94c-1080-4c01-bc62-6bfc1713af2c",
         "title",
         "price",
         "description",
-        "fc95014b-38cf-420e-915c-904621072113",
         "buy-buttons",
         "af40e30f-4722-4d9d-97fd-9f04501899e0",
-        "77d9fa82-9211-4ce8-b73b-042629545d3c",
-        "8f476983-87c0-4263-b069-62a0f2dfff63",
-        "c055b977-2975-452b-b867-c335c4a2f31d",
-        "abfd7e77-063f-4ae3-80f2-a6c7e9546101"
+        "560376cc-9261-4977-85bf-702747cb3ab0",
+        "77d9fa82-9211-4ce8-b73b-042629545d3c"
       ],
       "settings": {
         "desktop_layout": "two_column",
