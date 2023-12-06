@@ -75,7 +75,7 @@
         "94846a2f-4449-429c-935c-375d6f1d3e71": {
           "type": "rich_text",
           "settings": {
-            "content": "<p>{{ product.vendor }}  - {{ product.metafields.custom.era.value.era.value }}<\/p>",
+            "content": "<p>{{ product.vendor }},  {{ product.metafields.custom.era.value.era.value }}<\/p>",
             "space_above": 1
           }
         }
