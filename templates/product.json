@@ -71,6 +71,13 @@
             "text_color": "text-scheme-text",
             "space_above": 2
           }
+        },
+        "94846a2f-4449-429c-935c-375d6f1d3e71": {
+          "type": "rich_text",
+          "settings": {
+            "content": "<p>{{ product.vendor }}  - {{ product.metafields.custom.era.value.era.value }}<\/p>",
+            "space_above": 1
+          }
         }
       },
       "block_order": [
@@ -82,7 +89,8 @@
         "fc95014b-38cf-420e-915c-904621072113",
         "buy-buttons",
         "77d9fa82-9211-4ce8-b73b-042629545d3c",
-        "8f476983-87c0-4263-b069-62a0f2dfff63"
+        "8f476983-87c0-4263-b069-62a0f2dfff63",
+        "94846a2f-4449-429c-935c-375d6f1d3e71"
       ],
       "settings": {
         "desktop_layout": "two_column",
